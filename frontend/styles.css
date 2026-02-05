@@ -1,0 +1,563 @@
+:root {
+    --primary: #2563eb;
+    --primary-dark: #1d4ed8;
+    --success: #10b981;
+    --success-light: #d1fae5;
+    --warning: #f59e0b;
+    --danger: #ef4444;
+    --gray-50: #f9fafb;
+    --gray-100: #f3f4f6;
+    --gray-200: #e5e7eb;
+    --gray-300: #d1d5db;
+    --gray-400: #9ca3af;
+    --gray-500: #6b7280;
+    --gray-600: #4b5563;
+    --gray-700: #374151;
+    --gray-800: #1f2937;
+    --gray-900: #111827;
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    --radius: 8px;
+    --radius-lg: 12px;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: var(--gray-50);
+    color: var(--gray-800);
+    line-height: 1.6;
+    min-height: 100vh;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 16px;
+}
+
+/* Header */
+.header {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+    color: white;
+    padding: 24px 0;
+    box-shadow: var(--shadow-md);
+}
+
+.header-content {
+    text-align: center;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 8px;
+}
+
+.logo-icon {
+    font-size: 32px;
+}
+
+.logo h1 {
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+}
+
+.tagline {
+    font-size: 16px;
+    opacity: 0.9;
+    font-weight: 400;
+}
+
+/* Stats Banner */
+.stats-banner {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    background: white;
+    padding: 20px;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow);
+    margin: -24px 0 24px 0;
+    position: relative;
+    z-index: 10;
+}
+
+.stat-item {
+    text-align: center;
+}
+
+.stat-value {
+    display: block;
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--primary);
+    line-height: 1.2;
+}
+
+.stat-label {
+    display: block;
+    font-size: 12px;
+    color: var(--gray-500);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-top: 4px;
+}
+
+/* Filters */
+.filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-bottom: 24px;
+    background: white;
+    padding: 16px;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-sm);
+}
+
+.filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    flex: 1;
+    min-width: 140px;
+}
+
+.filter-group label {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--gray-600);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.filter-group select {
+    padding: 10px 12px;
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius);
+    background: white;
+    font-size: 14px;
+    color: var(--gray-800);
+    cursor: pointer;
+    transition: border-color 0.2s;
+}
+
+.filter-group select:hover,
+.filter-group select:focus {
+    border-color: var(--primary);
+    outline: none;
+}
+
+/* Main Content */
+.main {
+    padding-bottom: 48px;
+}
+
+/* Loading State */
+.loading-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 64px 24px;
+    color: var(--gray-500);
+}
+
+.spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid var(--gray-200);
+    border-top-color: var(--primary);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 16px;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Error State */
+.error-state {
+    text-align: center;
+    padding: 48px 24px;
+    color: var(--danger);
+}
+
+.error-state button {
+    margin-top: 16px;
+    padding: 10px 20px;
+    background: var(--primary);
+    color: white;
+    border: none;
+    border-radius: var(--radius);
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.error-state button:hover {
+    background: var(--primary-dark);
+}
+
+/* Empty State */
+.empty-state {
+    text-align: center;
+    padding: 64px 24px;
+    color: var(--gray-500);
+}
+
+.empty-icon {
+    font-size: 48px;
+    margin-bottom: 16px;
+}
+
+.empty-state h3 {
+    color: var(--gray-700);
+    margin-bottom: 8px;
+}
+
+/* Deals Grid */
+.deals-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 20px;
+}
+
+/* Deal Card */
+.deal-card {
+    background: white;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    transition: transform 0.2s, box-shadow 0.2s;
+    border: 1px solid var(--gray-100);
+}
+
+.deal-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+}
+
+.deal-header {
+    padding: 16px;
+    background: linear-gradient(135deg, var(--success) 0%, #059669 100%);
+    color: white;
+    position: relative;
+}
+
+.deal-header.deal-5star {
+    background: linear-gradient(135deg, #7c3aed 0%, #5b21b6 100%);
+}
+
+.deal-header.deal-4star {
+    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+}
+
+.deal-header.deal-3star {
+    background: linear-gradient(135deg, #0891b2 0%, #0e7490 100%);
+}
+
+.savings-badge {
+    display: flex;
+    align-items: baseline;
+    gap: 4px;
+}
+
+.savings-value {
+    font-size: 36px;
+    font-weight: 700;
+    line-height: 1;
+}
+
+.savings-label {
+    font-size: 14px;
+    opacity: 0.9;
+}
+
+.savings-amount {
+    font-size: 14px;
+    opacity: 0.9;
+    margin-top: 4px;
+}
+
+.rating-stars {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    font-size: 16px;
+    letter-spacing: 2px;
+}
+
+.deal-body {
+    padding: 16px;
+}
+
+.price-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+    padding-bottom: 16px;
+    border-bottom: 1px dashed var(--gray-200);
+}
+
+.price-item {
+    text-align: center;
+}
+
+.price-label {
+    font-size: 11px;
+    color: var(--gray-500);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+}
+
+.auction-price {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--success);
+}
+
+.market-price {
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--gray-500);
+    text-decoration: line-through;
+}
+
+.price-arrow {
+    color: var(--gray-300);
+    font-size: 20px;
+}
+
+.property-info {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.info-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+}
+
+.info-icon {
+    font-size: 16px;
+    width: 20px;
+    text-align: center;
+}
+
+.info-label {
+    color: var(--gray-500);
+}
+
+.info-value {
+    font-weight: 600;
+    color: var(--gray-800);
+}
+
+.location-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    font-size: 14px;
+    color: var(--gray-600);
+    margin-bottom: 12px;
+    padding: 12px;
+    background: var(--gray-50);
+    border-radius: var(--radius);
+}
+
+.deadline-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: var(--gray-600);
+    margin-bottom: 16px;
+}
+
+.deadline-urgent {
+    color: var(--danger);
+    font-weight: 600;
+}
+
+.deal-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.btn {
+    flex: 1;
+    padding: 12px 16px;
+    border-radius: var(--radius);
+    font-size: 14px;
+    font-weight: 600;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: none;
+}
+
+.btn-primary {
+    background: var(--primary);
+    color: white;
+}
+
+.btn-primary:hover {
+    background: var(--primary-dark);
+}
+
+.btn-secondary {
+    background: var(--gray-100);
+    color: var(--gray-700);
+}
+
+.btn-secondary:hover {
+    background: var(--gray-200);
+}
+
+/* Footer */
+.footer {
+    background: var(--gray-800);
+    color: var(--gray-400);
+    padding: 24px 0;
+    text-align: center;
+    font-size: 13px;
+}
+
+.footer a {
+    color: var(--gray-300);
+    text-decoration: none;
+}
+
+.footer a:hover {
+    color: white;
+}
+
+.disclaimer {
+    margin-top: 8px;
+    font-size: 12px;
+    color: var(--gray-500);
+}
+
+/* Utility Classes */
+.hidden {
+    display: none !important;
+}
+
+/* Mobile Responsive */
+@media (max-width: 640px) {
+    .container {
+        padding: 0 12px;
+    }
+
+    .logo h1 {
+        font-size: 22px;
+    }
+
+    .logo-icon {
+        font-size: 24px;
+    }
+
+    .tagline {
+        font-size: 14px;
+    }
+
+    .stats-banner {
+        grid-template-columns: 1fr;
+        gap: 12px;
+        margin: -16px 0 16px 0;
+        padding: 16px;
+    }
+
+    .stat-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        text-align: left;
+    }
+
+    .stat-value {
+        font-size: 20px;
+    }
+
+    .stat-label {
+        margin-top: 0;
+    }
+
+    .filters {
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .filter-group {
+        min-width: 100%;
+    }
+
+    .deals-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .deal-card {
+        border-radius: var(--radius);
+    }
+
+    .savings-value {
+        font-size: 28px;
+    }
+
+    .price-row {
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .price-arrow {
+        transform: rotate(90deg);
+    }
+
+    .deal-actions {
+        flex-direction: column;
+    }
+}
+
+/* Animation for card entry */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.deal-card {
+    animation: fadeInUp 0.4s ease-out;
+}
+
+.deal-card:nth-child(1) { animation-delay: 0.05s; }
+.deal-card:nth-child(2) { animation-delay: 0.1s; }
+.deal-card:nth-child(3) { animation-delay: 0.15s; }
+.deal-card:nth-child(4) { animation-delay: 0.2s; }
+.deal-card:nth-child(5) { animation-delay: 0.25s; }
+.deal-card:nth-child(6) { animation-delay: 0.3s; }

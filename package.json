@@ -1,0 +1,20 @@
+{
+  "name": "real-estate-price-matching",
+  "version": "1.0.0",
+  "description": "Scrape КЧСИ auctions and compare to market prices",
+  "main": "src/index.js",
+  "scripts": {
+    "scrape:kchsi": "node src/scrapers/kchsi.js",
+    "scrape:imot": "node src/scrapers/imot-bg.js",
+    "scrape:all": "npm run scrape:kchsi && npm run scrape:imot",
+    "analyze": "node src/matching/analyzer.js",
+    "start": "npm run scrape:all && npm run analyze"
+  },
+  "dependencies": {
+    "better-sqlite3": "^9.4.3",
+    "cheerio": "^1.0.0-rc.12",
+    "puppeteer": "^22.0.0"
+  },
+  "author": "Cookie & Martin",
+  "license": "MIT"
+}

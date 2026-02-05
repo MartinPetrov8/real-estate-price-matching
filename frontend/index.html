@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>КЧСИ Имотни Сделки | Намерете изгодни имоти на търг</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <span class="logo-icon">🏛️</span>
+                    <h1>КЧСИ Сделки</h1>
+                </div>
+                <p class="tagline">Изгодни имоти от принудителни търгове</p>
+            </div>
+        </div>
+    </header>
+
+    <main class="main">
+        <div class="container">
+            <!-- Stats Banner -->
+            <div class="stats-banner" id="statsBanner">
+                <div class="stat-item">
+                    <span class="stat-value" id="totalDeals">0</span>
+                    <span class="stat-label">Намерени сделки</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value" id="avgSavings">0%</span>
+                    <span class="stat-label">Средна отстъпка</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value" id="activeAuctions">0</span>
+                    <span class="stat-label">Активни търгове</span>
+                </div>
+            </div>
+
+            <!-- Filters -->
+            <div class="filters">
+                <div class="filter-group">
+                    <label for="cityFilter">Град:</label>
+                    <select id="cityFilter">
+                        <option value="all">Всички градове</option>
+                        <option value="София">София</option>
+                        <option value="Пловдив">Пловдив</option>
+                        <option value="Варна">Варна</option>
+                        <option value="Бургас">Бургас</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="ratingFilter">Рейтинг:</label>
+                    <select id="ratingFilter">
+                        <option value="all">Всички</option>
+                        <option value="5" selected>⭐⭐⭐⭐⭐ (40%+)</option>
+                        <option value="4">⭐⭐⭐⭐ (30-40%)</option>
+                        <option value="3">⭐⭐⭐ (20-30%)</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="sortBy">Сортиране:</label>
+                    <select id="sortBy">
+                        <option value="savings">Най-голяма отстъпка</option>
+                        <option value="price">Най-ниска цена</option>
+                        <option value="deadline">Крайна дата</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Loading State -->
+            <div id="loadingState" class="loading-state">
+                <div class="spinner"></div>
+                <p>Зареждане на сделки...</p>
+            </div>
+
+            <!-- Error State -->
+            <div id="errorState" class="error-state hidden">
+                <p>⚠️ Грешка при зареждане на данните</p>
+                <button onclick="loadDeals()">Опитай отново</button>
+            </div>
+
+            <!-- Deals Grid -->
+            <div id="dealsGrid" class="deals-grid hidden"></div>
+
+            <!-- Empty State -->
+            <div id="emptyState" class="empty-state hidden">
+                <div class="empty-icon">🔍</div>
+                <h3>Няма намерени сделки</h3>
+                <p>Опитайте да промените филтрите</p>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>Данните са от <a href="https://sales.bcpea.org" target="_blank" rel="noopener">sales.bcpea.org</a></p>
+            <p class="disclaimer">Пазарните цени са сравнение с обяви от alo.bg, imot.bg и imoti.net</p>
+        </div>
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+</html>

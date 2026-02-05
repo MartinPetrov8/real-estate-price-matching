@@ -1,0 +1,6 @@
+data/*.db
+data/*.json
+node_modules/
+__pycache__/
+*.pyc
+.env
