@@ -17,6 +17,42 @@ import sys
 BASE_URL = "https://sales.bcpea.org"
 DB_PATH = "data/auctions.db"
 
+
+def extract_rooms(text_lower):
+    """
+    Extract room count from Bulgarian property text.
+    Handles: едностаен, 2-стаен, 3 стаи, гарсониера, etc.
+    """
+    word_patterns = [
+        (r'\bедностаен', 1),
+        (r'\bдвустаен', 2),
+        (r'\bтристаен', 3),
+        (r'\bчетиристаен', 4),
+        (r'\bпетстаен', 5),
+        (r'\bшестстаен', 6),
+        (r'\bмногостаен', 4),
+        (r'\bгарсониера', 1),
+        (r'\bмезонет', 3),
+        (r'\bатически', 3),
+    ]
+    
+    for pattern, rooms in word_patterns:
+        if re.search(pattern, text_lower):
+            return rooms
+    
+    # Numeric: "2-стаен", "3-ст.", "2ст"
+    numeric_match = re.search(r'\b(\d)\s*[-]?\s*ст(?:аен|айн|\.?)', text_lower)
+    if numeric_match:
+        return int(numeric_match.group(1))
+    
+    # "2 стаи", "3 стаи"
+    rooms_match = re.search(r'\b(\d)\s*ста(?:и|я)', text_lower)
+    if rooms_match:
+        return int(rooms_match.group(1))
+    
+    return None
+
+
 def fetch_detail(prop_id):
     try:
         url = f"{BASE_URL}/properties/{prop_id}"
@@ -92,6 +128,11 @@ def parse_detail(prop_id, html_text, url):
     
     # Property type detection - use full page text
     text_lower = decoded.lower()
+    
+    # Extract rooms using enhanced function
+    rooms = extract_rooms(text_lower)
+    if rooms:
+        data['rooms'] = rooms
     
     # Apartments/Units (Bulgarian legal terms)
     if any(x in text_lower for x in ['самостоятелен обект', 'жилищен етаж', 'жилище,', 'жилище ']):
