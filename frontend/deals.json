@@ -1,24 +1,5 @@
 [
   {
-    "id": "85849",
-    "city": "Варна",
-    "neighborhood": "ул. Скопие 3",
-    "address": "ул. Скопие 3",
-    "price": 20000,
-    "effective_price": 20000,
-    "sqm": 76.0,
-    "price_per_sqm": 263,
-    "market_avg": 1500,
-    "discount": 70,
-    "rooms": 1,
-    "property_type": "apartment",
-    "auction_start": "2026-02-23",
-    "auction_end": "2026-03-23",
-    "url": "https://sales.bcpea.org/properties/85849",
-    "partial_ownership": null,
-    "score": 5
-  },
-  {
     "id": "85495",
     "city": "София",
     "neighborhood": "слатина",
