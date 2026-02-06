@@ -17,7 +17,7 @@ import sys
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'scrapers'))
 from neighborhood_caps import get_price_cap, extract_neighborhood as extract_hood, is_valid_apartment, MAX_REALISTIC_DISCOUNT
 
-DB_PATH = "data/auctions.db"
+DB_PATH = "data/properties.db"
 OUTPUT_PATH = "frontend/deals.json"
 
 
