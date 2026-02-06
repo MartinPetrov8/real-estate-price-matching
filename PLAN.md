@@ -5,26 +5,37 @@ Compare КЧСИ auction prices against market prices to identify bargains.
 
 ## Core Flow
 ```
-1. Scrape ALL КЧСИ listings (1,097+ auctions)
+1. INCREMENTAL SCAN - only new listings since last run
    ↓
-2. For each residential property:
+2. Filter out expired auctions (auction_end < today)
+   ↓
+3. For each residential property:
    - Extract: city, neighborhood, size (m²), property type
+   - Parse room count from description (едностаен=1, двустаен=2, тристаен=3, etc.)
+   - Mark garages (гараж) - track but skip price comparison
    ↓
-3. Find comparable listings from market sources:
+4. Find comparable listings from market sources:
    - imot.bg
    - imoti.net  
    - alo.bg
+   - homes.bg
    ↓
-4. Calculate price deviation:
+5. Calculate price deviation:
    - vs Median price in area
    - vs Mean price in area
    - Show % difference
    ↓
-5. Display on web app:
+6. Display on web app:
    - Bargain score
    - Price comparison chart
    - Similar listings
+   - NEW DEALS highlighted
 ```
+
+## Scanning Modes
+- **Full scan**: All active КЧСИ listings (for initial load or reset)
+- **Incremental scan**: Only listings announced since last scan (daily runs)
+- **Active-only**: Filter out expired auctions automatically
 
 ## Data Requirements
 

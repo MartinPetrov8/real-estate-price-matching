@@ -3,6 +3,7 @@
 Export deals to frontend-compatible JSON format.
 
 Joins auctions with comparisons and outputs to frontend/deals.json
+Uses neighborhood-aware pricing caps for accurate estimates.
 """
 
 import json
@@ -10,6 +11,11 @@ import re
 import sqlite3
 from datetime import datetime
 import os
+import sys
+
+# Add scrapers to path
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'scrapers'))
+from neighborhood_caps import get_price_cap, extract_neighborhood as extract_hood
 
 DB_PATH = "data/auctions.db"
 OUTPUT_PATH = "frontend/deals.json"
@@ -77,16 +83,35 @@ def export_deals(min_score=15, min_price=10000, min_comparables=3):
     for row in conn.execute(query, (min_score, min_price, min_comparables)):
         row = dict(row)
         
-        # Calculate prices
+        # Calculate prices with neighborhood-aware caps
         auction_price = row['auction_price'] or 0
         size = row['size_sqm'] or 1
-        market_sqm = row['market_median_sqm'] or 0
-        market_price = size * market_sqm
-        savings = market_price - auction_price
-        discount = abs(row['deviation_pct']) if row['deviation_pct'] else 0
+        raw_market_sqm = row['market_median_sqm'] or 0
         
         # Clean city name
         city = (row['city'] or '').replace('гр. ', '').replace('с. ', '').strip()
+        address = row['address'] or ''
+        
+        # Get realistic price cap for this neighborhood
+        caps = get_price_cap(row['city'] or '', address)
+        
+        # Apply cap if market estimate is unrealistic
+        if raw_market_sqm > caps['max']:
+            market_sqm = caps['median']  # Use neighborhood median
+            price_capped = True
+        elif raw_market_sqm < caps['min']:
+            market_sqm = caps['median']  # Use neighborhood median
+            price_capped = True
+        else:
+            market_sqm = raw_market_sqm
+            price_capped = False
+        
+        market_price = size * market_sqm
+        savings = market_price - auction_price
+        auction_sqm = auction_price / size if size > 0 else 0
+        
+        # Recalculate discount based on capped price
+        discount = ((market_sqm - auction_sqm) / market_sqm * 100) if market_sqm > 0 else 0
         
         # Extract neighborhood
         neighborhood = row['district'] or extract_neighborhood(row['address'], city)
@@ -110,12 +135,16 @@ def export_deals(min_score=15, min_price=10000, min_comparables=3):
             'floor': None,  # Not in current schema
             'property_type': row['property_type'] or 'Имот',
             'auction_price': round(auction_price),
+            'auction_price_sqm': round(auction_sqm),
             'market_price': round(market_price),
+            'market_price_sqm': round(market_sqm),
             'discount_pct': round(discount),
-            'savings_eur': round(savings),
+            'savings_eur': round(max(0, savings)),  # Don't show negative savings
             'auction_end': auction_end,
             'market_url': None,  # Could link to OLX search
-            'comparables_count': row['market_count']
+            'comparables_count': row['market_count'],
+            'price_capped': price_capped,  # True if we used neighborhood cap
+            'neighborhood_range': f"€{caps['min']}-{caps['max']}/m²"
         }
         
         deals.append(deal)

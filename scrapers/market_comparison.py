@@ -128,10 +128,15 @@ def scrape_market():
     print(f"\n✓ Saved to {MARKET_DB}")
 
 def calculate_comparisons():
-    """Compare auctions to market"""
+    """Compare auctions to market with neighborhood-aware price caps"""
     if not os.path.exists(MARKET_DB):
         print("Market DB not found. Run scrape first.")
         return
+    
+    # Import neighborhood caps
+    import sys
+    sys.path.insert(0, os.path.dirname(__file__))
+    from neighborhood_caps import get_price_cap
     
     auction_conn = sqlite3.connect(DB_PATH)
     market_conn = sqlite3.connect(MARKET_DB)
@@ -141,15 +146,15 @@ def calculate_comparisons():
         CREATE TABLE comparisons (
             auction_id TEXT PRIMARY KEY, city TEXT, auction_price REAL,
             auction_size REAL, auction_price_sqm REAL, market_median_sqm REAL,
-            market_mean_sqm REAL, market_count INTEGER, deviation_median REAL,
-            deviation_mean REAL, bargain_score INTEGER
+            market_mean_sqm REAL, market_count INTEGER, deviation_pct REAL,
+            deviation_mean REAL, bargain_score INTEGER, price_capped INTEGER
         )
     """)
     
-    print("\n=== Price Comparisons ===\n")
+    print("\n=== Price Comparisons (with neighborhood caps) ===\n")
     
     auctions = auction_conn.execute("""
-        SELECT id, city, price_eur, size_sqm FROM auctions 
+        SELECT id, city, address, price_eur, size_sqm FROM auctions 
         WHERE property_type = 'апартамент' AND size_sqm > 0 AND price_eur > 0
     """).fetchall()
     
@@ -157,8 +162,8 @@ def calculate_comparisons():
     bargains = []
     
     for auction in auctions:
-        auction_id, city, price, size = auction
-        city_clean = city.replace('гр. ', '').replace('с. ', '').strip()
+        auction_id, city, address, price, size = auction
+        city_clean = city.replace('гр. ', '').replace('с. ', '').strip() if city else ''
         
         # Get market data for similar sizes (±15 sqm)
         market = market_conn.execute("""
@@ -166,10 +171,26 @@ def calculate_comparisons():
             WHERE city = ? AND size_sqm BETWEEN ? AND ?
         """, (city_clean, size - 15, size + 15)).fetchall()
         
+        # Get neighborhood price cap
+        caps = get_price_cap(city or '', address or '')
+        price_capped = 0
+        
         if market:
             prices = sorted([r[0] for r in market])
-            median = prices[len(prices) // 2]
-            mean = sum(prices) / len(prices)
+            raw_median = prices[len(prices) // 2]
+            raw_mean = sum(prices) / len(prices)
+            
+            # Apply cap if raw median is unrealistic
+            if raw_median > caps['max']:
+                median = caps['median']
+                price_capped = 1
+            elif raw_median < caps['min']:
+                median = caps['median']
+                price_capped = 1
+            else:
+                median = raw_median
+            
+            mean = min(raw_mean, caps['max'])  # Cap mean too
             
             auction_sqm = price / size
             dev_median = ((auction_sqm - median) / median) * 100
@@ -177,8 +198,24 @@ def calculate_comparisons():
             score = max(0, min(100, int(-dev_median)))
             
             auction_conn.execute("""
-                INSERT OR REPLACE INTO comparisons VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-            """, (auction_id, city, price, size, auction_sqm, median, mean, len(prices), dev_median, dev_mean, score))
+                INSERT OR REPLACE INTO comparisons VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            """, (auction_id, city, price, size, auction_sqm, median, mean, len(prices), dev_median, dev_mean, score, price_capped))
+            
+            compared += 1
+            
+            if score > 15:
+                bargains.append((city, price, size, auction_sqm, median, dev_median, score, auction_id))
+        else:
+            # No market data - use neighborhood cap estimates
+            auction_sqm = price / size
+            median = caps['median']
+            mean = caps['median']
+            dev_median = ((auction_sqm - median) / median) * 100
+            score = max(0, min(100, int(-dev_median)))
+            
+            auction_conn.execute("""
+                INSERT OR REPLACE INTO comparisons VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            """, (auction_id, city, price, size, auction_sqm, median, mean, 0, dev_median, dev_median, score, 1))
             
             compared += 1
             
