@@ -133,10 +133,10 @@ def calculate_comparisons():
         print("Market DB not found. Run scrape first.")
         return
     
-    # Import neighborhood caps
+    # Import neighborhood caps and validation
     import sys
     sys.path.insert(0, os.path.dirname(__file__))
-    from neighborhood_caps import get_price_cap
+    from neighborhood_caps import get_price_cap, is_valid_apartment, cap_discount, MAX_REALISTIC_DISCOUNT
     
     auction_conn = sqlite3.connect(DB_PATH)
     market_conn = sqlite3.connect(MARKET_DB)
@@ -154,15 +154,22 @@ def calculate_comparisons():
     print("\n=== Price Comparisons (with neighborhood caps) ===\n")
     
     auctions = auction_conn.execute("""
-        SELECT id, city, address, price_eur, size_sqm FROM auctions 
+        SELECT id, city, address, price_eur, size_sqm, property_type FROM auctions 
         WHERE property_type = 'апартамент' AND size_sqm > 0 AND price_eur > 0
     """).fetchall()
     
     compared = 0
+    skipped = 0
     bargains = []
     
     for auction in auctions:
-        auction_id, city, address, price, size = auction
+        auction_id, city, address, price, size, prop_type = auction
+        
+        # Validate apartment (use address as description proxy)
+        is_valid, reason = is_valid_apartment(size, address, prop_type)
+        if not is_valid:
+            skipped += 1
+            continue
         city_clean = city.replace('гр. ', '').replace('с. ', '').strip() if city else ''
         
         # Get market data for similar sizes (±15 sqm)
@@ -195,7 +202,9 @@ def calculate_comparisons():
             auction_sqm = price / size
             dev_median = ((auction_sqm - median) / median) * 100
             dev_mean = ((auction_sqm - mean) / mean) * 100
-            score = max(0, min(100, int(-dev_median)))
+            # Cap score at MAX_REALISTIC_DISCOUNT (70%)
+            raw_score = int(-dev_median)
+            score = max(0, min(MAX_REALISTIC_DISCOUNT, raw_score))
             
             auction_conn.execute("""
                 INSERT OR REPLACE INTO comparisons VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
@@ -203,7 +212,7 @@ def calculate_comparisons():
             
             compared += 1
             
-            if score > 15:
+            if score >= 15 and score <= MAX_REALISTIC_DISCOUNT:
                 bargains.append((city, price, size, auction_sqm, median, dev_median, score, auction_id))
         else:
             # No market data - use neighborhood cap estimates
@@ -211,7 +220,8 @@ def calculate_comparisons():
             median = caps['median']
             mean = caps['median']
             dev_median = ((auction_sqm - median) / median) * 100
-            score = max(0, min(100, int(-dev_median)))
+            raw_score = int(-dev_median)
+            score = max(0, min(MAX_REALISTIC_DISCOUNT, raw_score))
             
             auction_conn.execute("""
                 INSERT OR REPLACE INTO comparisons VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
@@ -219,22 +229,24 @@ def calculate_comparisons():
             
             compared += 1
             
-            if score > 15:
+            if score >= 15 and score <= MAX_REALISTIC_DISCOUNT:
                 bargains.append((city, price, size, auction_sqm, median, dev_median, score, auction_id))
     
     auction_conn.commit()
     
-    print(f"Compared: {compared} auctions with market data\n")
+    print(f"Compared: {compared} valid apartments")
+    print(f"Skipped: {skipped} (invalid size, garages, fractional shares)")
+    print(f"Max discount capped at: {MAX_REALISTIC_DISCOUNT}%\n")
     
     if bargains:
-        print("🔥 BARGAINS (>15% below market):\n")
+        print(f"🔥 REALISTIC BARGAINS (15-{MAX_REALISTIC_DISCOUNT}% below market):\n")
         bargains.sort(key=lambda x: -x[6])  # Sort by score
         
         for b in bargains[:15]:
             city, price, size, asqm, msqm, dev, score, aid = b
             print(f"  {city}: €{price:,.0f} ({size:.0f}m²)")
             print(f"    Auction: €{asqm:.0f}/m² vs Market: €{msqm:.0f}/m² ({dev:+.1f}%)")
-            print(f"    Bargain Score: {score}/100")
+            print(f"    Bargain Score: {score}%")
             print(f"    URL: https://sales.bcpea.org/properties/{aid}")
             print()
     

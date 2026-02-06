@@ -15,7 +15,7 @@ import sys
 
 # Add scrapers to path
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'scrapers'))
-from neighborhood_caps import get_price_cap, extract_neighborhood as extract_hood
+from neighborhood_caps import get_price_cap, extract_neighborhood as extract_hood, is_valid_apartment, MAX_REALISTIC_DISCOUNT
 
 DB_PATH = "data/auctions.db"
 OUTPUT_PATH = "frontend/deals.json"
@@ -64,7 +64,7 @@ def export_deals(min_score=15, min_price=10000, min_comparables=3):
     conn = sqlite3.connect(DB_PATH)
     conn.row_factory = sqlite3.Row
     
-    # Join auctions with comparisons - filter for quality
+    # Join auctions with comparisons - filter for quality and realistic discounts
     query = """
         SELECT 
             a.id, a.url, a.city, a.address, a.district,
@@ -74,13 +74,14 @@ def export_deals(min_score=15, min_price=10000, min_comparables=3):
         FROM auctions a
         JOIN comparisons c ON a.id = c.auction_id
         WHERE c.bargain_score >= ?
+          AND c.bargain_score <= ?
           AND c.auction_price >= ?
-          AND c.market_count >= ?
+          AND a.size_sqm BETWEEN 35 AND 150
         ORDER BY c.bargain_score DESC
     """
     
     deals = []
-    for row in conn.execute(query, (min_score, min_price, min_comparables)):
+    for row in conn.execute(query, (min_score, MAX_REALISTIC_DISCOUNT, min_price)):
         row = dict(row)
         
         # Calculate prices with neighborhood-aware caps
@@ -110,8 +111,9 @@ def export_deals(min_score=15, min_price=10000, min_comparables=3):
         savings = market_price - auction_price
         auction_sqm = auction_price / size if size > 0 else 0
         
-        # Recalculate discount based on capped price
-        discount = ((market_sqm - auction_sqm) / market_sqm * 100) if market_sqm > 0 else 0
+        # Recalculate discount based on capped price, and cap at MAX_REALISTIC_DISCOUNT
+        raw_discount = ((market_sqm - auction_sqm) / market_sqm * 100) if market_sqm > 0 else 0
+        discount = min(raw_discount, MAX_REALISTIC_DISCOUNT)
         
         # Extract neighborhood
         neighborhood = row['district'] or extract_neighborhood(row['address'], city)
