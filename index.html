@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>КЧСИ Сделки | Изгодни имоти на търг</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <span class="logo-icon">🏛️</span>
+                    <div class="logo-text">
+                        <h1>КЧСИ Сделки</h1>
+                        <span class="logo-tagline">Изгодни имоти от търгове</span>
+                    </div>
+                </div>
+                <nav class="header-nav">
+                    <a href="#deals" class="nav-link">Сделки</a>
+                    <a href="#how-it-works" class="nav-link">Как работи</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h2 class="hero-title">Намерете изгодни имоти на<br>принудителни търгове</h2>
+                <p class="hero-subtitle">Сравняваме тръжни цени с пазарни цени, за да открием най-добрите сделки</p>
+                <div class="hero-stats" id="heroStats">
+                    <div class="hero-stat">
+                        <span class="hero-stat-value" id="heroTotalDeals">0</span>
+                        <span class="hero-stat-label">Активни търга</span>
+                    </div>
+                    <div class="hero-stat-divider"></div>
+                    <div class="hero-stat">
+                        <span class="hero-stat-value" id="heroAvgDiscount">0%</span>
+                        <span class="hero-stat-label">Средна отстъпка</span>
+                    </div>
+                    <div class="hero-stat-divider"></div>
+                    <div class="hero-stat">
+                        <span class="hero-stat-value" id="heroBestDeal">0%</span>
+                        <span class="hero-stat-label">Най-добра сделка</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <main class="main" id="deals">
+        <div class="container">
+            <div class="filters-section">
+                <div class="filter-pills">
+                    <button class="pill pill-active" data-filter="all">
+                        <span class="pill-icon">🏠</span>
+                        <span>Всички</span>
+                    </button>
+                    <button class="pill" data-filter="new">
+                        <span class="pill-icon">✨</span>
+                        <span>Нови</span>
+                    </button>
+                    <button class="pill" data-filter="ending">
+                        <span class="pill-icon">⏰</span>
+                        <span>Приключват скоро</span>
+                    </button>
+                    <button class="pill" data-filter="best">
+                        <span class="pill-icon">🔥</span>
+                        <span>Топ сделки (40%+)</span>
+                    </button>
+                    <button class="pill" data-filter="sofia">
+                        <span class="pill-icon">📍</span>
+                        <span>София</span>
+                    </button>
+                </div>
+
+                <div class="advanced-filters">
+                    <div class="filter-row">
+                        <div class="filter-group">
+                            <label for="cityFilter">Град</label>
+                            <select id="cityFilter">
+                                <option value="all">Всички градове</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label for="typeFilter">Тип имот</label>
+                            <select id="typeFilter">
+                                <option value="all">Всички типове</option>
+                                <option value="апартамент">Апартамент</option>
+                                <option value="къща">Къща</option>
+                                <option value="гараж">Гараж</option>
+                            </select>
+                        </div>
+                        <div class="filter-group filter-range">
+                            <label>Цена (EUR)</label>
+                            <div class="range-inputs">
+                                <input type="number" id="minPrice" placeholder="От" min="0">
+                                <span>-</span>
+                                <input type="number" id="maxPrice" placeholder="До" min="0">
+                            </div>
+                        </div>
+                        <div class="filter-group">
+                            <label for="discountFilter">Отстъпка</label>
+                            <select id="discountFilter">
+                                <option value="0">Всички</option>
+                                <option value="20">20%+</option>
+                                <option value="30">30%+</option>
+                                <option value="40" selected>40%+</option>
+                                <option value="50">50%+</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label for="sortBy">Подреди по</label>
+                            <select id="sortBy">
+                                <option value="best">Най-добри сделки</option>
+                                <option value="ending">Приключват скоро</option>
+                                <option value="newest">Най-нови</option>
+                                <option value="price_asc">Цена: Ниска → Висока</option>
+                                <option value="price_desc">Цена: Висока → Ниска</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="active-filters" id="activeFilters"></div>
+            </div>
+
+            <div class="results-header">
+                <h3 class="results-title">Намерени сделки <span class="results-count" id="resultsCount">0</span></h3>
+                <button class="btn-reset" id="resetFilters">Изчисти филтрите</button>
+            </div>
+
+            <div id="loadingState" class="loading-state">
+                <div class="spinner"></div>
+                <p>Зареждаме най-добрите сделки...</p>
+            </div>
+
+            <div id="errorState" class="error-state hidden">
+                <div class="error-icon">⚠️</div>
+                <h3>Грешка при зареждане</h3>
+                <p>Не можахме да заредим данните. Моля, опитайте отново.</p>
+                <button class="btn btn-primary" onclick="loadDeals()">Опитай отново</button>
+            </div>
+
+            <div id="emptyState" class="empty-state hidden">
+                <div class="empty-icon">🔍</div>
+                <h3>Няма намерени сделки</h3>
+                <p>Опитайте да промените филтрите</p>
+                <button class="btn btn-primary" id="emptyResetFilters">Изчисти филтрите</button>
+            </div>
+
+            <div id="dealsGrid" class="deals-grid hidden"></div>
+        </div>
+    </main>
+
+    <div id="dealModal" class="modal hidden">
+        <div class="modal-overlay" onclick="closeModal()"></div>
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal()">✕</button>
+            <div id="modalBody"></div>
+        </div>
+    </div>
+
+    <section class="how-it-works" id="how-it-works">
+        <div class="container">
+            <h2 class="section-title">Как работи?</h2>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <div class="step-icon">🔍</div>
+                    <h3>Сканираме търговете</h3>
+                    <p>Автоматично следим всички обяви от sales.bcpea.org</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div class="step-icon">📊</div>
+                    <h3>Сравняваме цени</h3>
+                    <p>Сравняваме тръжната цена с реални пазарни цени</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <div class="step-icon">💰</div>
+                    <h3>Намираме сделките</h3>
+                    <p>Показваме имотите с най-голяма отстъпка спрямо пазара</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <span class="footer-logo">🏛️ КЧСИ Сделки</span>
+                    <p class="footer-desc">Намираме изгодни имоти на принудителни търгове в България</p>
+                </div>
+                <div class="footer-links">
+                    <h4>Източници</h4>
+                    <a href="https://sales.bcpea.org" target="_blank">sales.bcpea.org</a>
+                    <a href="https://www.alo.bg" target="_blank">alo.bg</a>
+                    <a href="https://www.imot.bg" target="_blank">imot.bg</a>
+                </div>
+                <div class="footer-links">
+                    <h4>Важно</h4>
+                    <span>Цените са с ориентировъчен характер</span>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© 2025 КЧСИ Сделки. Неофициален инструмент за търсене.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+</html>
