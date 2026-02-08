@@ -16,6 +16,7 @@ CREATE TABLE IF NOT EXISTS kchsi_properties (
     court TEXT,
     executor TEXT,
     cadastral_id TEXT,
+    partial_ownership TEXT,  -- Stores fraction like "1/6", "1/4", "1/2" or NULL if full ownership
     scraped_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
@@ -59,6 +60,7 @@ CREATE TABLE IF NOT EXISTS matches (
 -- Indexes for fast lookups
 CREATE INDEX IF NOT EXISTS idx_kchsi_city ON kchsi_properties(city);
 CREATE INDEX IF NOT EXISTS idx_kchsi_sqm ON kchsi_properties(sqm);
+CREATE INDEX IF NOT EXISTS idx_kchsi_partial ON kchsi_properties(partial_ownership);
 CREATE INDEX IF NOT EXISTS idx_market_city ON market_listings(city);
 CREATE INDEX IF NOT EXISTS idx_market_sqm ON market_listings(sqm);
 CREATE INDEX IF NOT EXISTS idx_market_source ON market_listings(source);

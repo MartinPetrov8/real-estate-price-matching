@@ -16,11 +16,24 @@ class PropertyDatabase {
         this.db = new Database(DB_PATH);
         this.db.pragma('journal_mode = WAL');
         this.initSchema();
+        this.migrateSchema();
     }
 
     initSchema() {
         const schema = fs.readFileSync(SCHEMA_PATH, 'utf8');
         this.db.exec(schema);
+    }
+    
+    migrateSchema() {
+        // Check if partial_ownership column exists, add if not
+        const columns = this.db.prepare("PRAGMA table_info(kchsi_properties)").all();
+        const hasPartialOwnership = columns.some(col => col.name === 'partial_ownership');
+        
+        if (!hasPartialOwnership) {
+            console.log('Migrating: Adding partial_ownership column to kchsi_properties');
+            this.db.exec(`ALTER TABLE kchsi_properties ADD COLUMN partial_ownership TEXT`);
+            this.db.exec(`CREATE INDEX IF NOT EXISTS idx_kchsi_partial ON kchsi_properties(partial_ownership)`);
+        }
     }
 
     // КЧСИ Methods
@@ -30,12 +43,12 @@ class PropertyDatabase {
                 bcpea_id, price_eur, city, address, description,
                 sqm, rooms, floor, property_type,
                 auction_start, auction_end, announcement_date,
-                court, executor, cadastral_id
+                court, executor, cadastral_id, partial_ownership
             ) VALUES (
                 @bcpea_id, @price_eur, @city, @address, @description,
                 @sqm, @rooms, @floor, @property_type,
                 @auction_start, @auction_end, @announcement_date,
-                @court, @executor, @cadastral_id
+                @court, @executor, @cadastral_id, @partial_ownership
             )
             ON CONFLICT(bcpea_id) DO UPDATE SET
                 price_eur = @price_eur,
@@ -46,6 +59,7 @@ class PropertyDatabase {
                 auction_start = @auction_start,
                 auction_end = @auction_end,
                 announcement_date = @announcement_date,
+                partial_ownership = @partial_ownership,
                 updated_at = CURRENT_TIMESTAMP
         `);
         return stmt.run(property);
@@ -56,6 +70,14 @@ class PropertyDatabase {
             return this.db.prepare('SELECT * FROM kchsi_properties WHERE city = ?').all(city);
         }
         return this.db.prepare('SELECT * FROM kchsi_properties').all();
+    }
+    
+    getKchsiPropertiesWithoutPartialOwnership(city = null) {
+        // Get only full ownership properties (partial_ownership IS NULL)
+        if (city) {
+            return this.db.prepare('SELECT * FROM kchsi_properties WHERE city = ? AND partial_ownership IS NULL').all(city);
+        }
+        return this.db.prepare('SELECT * FROM kchsi_properties WHERE partial_ownership IS NULL').all();
     }
 
     getActiveAuctions() {
@@ -143,6 +165,7 @@ class PropertyDatabase {
             JOIN kchsi_properties k ON ma.kchsi_id = k.id
             JOIN market_listings m ON ma.market_id = m.id
             WHERE k.auction_end >= date('now')
+            AND k.partial_ownership IS NULL
             ORDER BY ma.price_difference_pct DESC
             LIMIT ?
         `).all(limit);
@@ -157,6 +180,10 @@ class PropertyDatabase {
             active_auctions: this.db.prepare(`
                 SELECT COUNT(*) as count FROM kchsi_properties 
                 WHERE auction_end >= date('now')
+            `).get().count,
+            partial_ownership: this.db.prepare(`
+                SELECT COUNT(*) as count FROM kchsi_properties 
+                WHERE partial_ownership IS NOT NULL
             `).get().count
         };
     }

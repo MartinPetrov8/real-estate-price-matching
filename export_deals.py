@@ -37,6 +37,38 @@ CITY_MARKET_RATES = {
 }
 
 
+# Partial ownership detection patterns
+PARTIAL_OWNERSHIP_PATTERNS = [
+    # (regex pattern, fraction)
+    (r'½|1\s*/\s*2|една\s+втора|половин\s+идеална\s+част', '1/2'),
+    (r'1\s*/\s*3|една\s+трета', '1/3'),
+    (r'¼|1\s*/\s*4|една\s+четвърт', '1/4'),
+    (r'1\s*/\s*5|една\s+пета', '1/5'),
+    (r'1\s*/\s*6|една\s+шеста', '1/6'),
+    (r'1\s*/\s*8|една\s+осма', '1/8'),
+    (r'2\s*/\s*3|две\s+трети', '2/3'),
+    (r'3\s*/\s*4|три\s+четвърти', '3/4'),
+    (r'идеална\s+част', 'unknown'),  # Generic pattern - catch-all
+]
+
+
+def detect_partial_ownership(description):
+    """Detect partial ownership fractions from property description.
+    
+    Returns fraction string like "1/6", "1/4", "1/2", "1/3" or None if full ownership.
+    """
+    if not description:
+        return None
+    
+    desc_lower = description.lower()
+    
+    for pattern, fraction in PARTIAL_OWNERSHIP_PATTERNS:
+        if re.search(pattern, desc_lower, re.IGNORECASE):
+            return fraction
+    
+    return None
+
+
 def extract_neighborhood(address, city):
     """Extract neighborhood/district from Bulgarian address."""
     if not address:
@@ -82,8 +114,14 @@ def get_market_rate(city, address):
     return 1000
 
 
+def column_exists(conn, table, column):
+    """Check if a column exists in a table."""
+    cursor = conn.execute(f"PRAGMA table_info({table})")
+    return any(row[1] == column for row in cursor.fetchall())
+
+
 def export_deals(min_price=10000):
-    """Export deals - includes all properties with market estimates.
+    """Export deals - includes only FULL ownership properties with market estimates.
     
     Args:
         min_price: Minimum auction price in EUR
@@ -96,38 +134,91 @@ def export_deals(min_price=10000):
     conn = sqlite3.connect(DB_PATH)
     conn.row_factory = sqlite3.Row
     
+    # Check if partial_ownership column exists
+    has_partial_column = column_exists(conn, 'kchsi_properties', 'partial_ownership')
+    
     # Get all KCHSI properties with their match data (if available)
-    query = """
-        SELECT 
-            k.id,
-            k.bcpea_id,
-            k.city,
-            k.address,
-            k.district,
-            k.property_type,
-            k.sqm,
-            k.rooms,
-            k.floor,
-            k.price_eur,
-            k.auction_end,
-            COUNT(d.id) as match_count,
-            AVG(d.market_price_eur) as avg_market_price,
-            AVG(d.savings_pct) as avg_savings_pct,
-            AVG(d.savings_eur) as avg_savings_eur
-        FROM kchsi_properties k
-        LEFT JOIN deal_matches d ON k.bcpea_id = d.kchsi_id
-        WHERE k.price_eur >= ?
-          AND k.sqm BETWEEN 30 AND 200
-        GROUP BY k.id
-        ORDER BY avg_savings_pct DESC
-    """
+    # EXCLUDE partial ownership properties
+    if has_partial_column:
+        query = """
+            SELECT 
+                k.id,
+                k.bcpea_id,
+                k.city,
+                k.address,
+                k.district,
+                k.property_type,
+                k.sqm,
+                k.rooms,
+                k.floor,
+                k.price_eur,
+                k.auction_end,
+                k.description,
+                k.partial_ownership,
+                COUNT(d.id) as match_count,
+                AVG(d.market_price_eur) as avg_market_price,
+                AVG(d.savings_pct) as avg_savings_pct,
+                AVG(d.savings_eur) as avg_savings_eur
+            FROM kchsi_properties k
+            LEFT JOIN deal_matches d ON k.bcpea_id = d.kchsi_id
+            WHERE k.price_eur >= ?
+              AND k.sqm BETWEEN 30 AND 200
+              AND k.partial_ownership IS NULL
+            GROUP BY k.id
+            ORDER BY avg_savings_pct DESC
+        """
+    else:
+        # Fallback for older database schema
+        query = """
+            SELECT 
+                k.id,
+                k.bcpea_id,
+                k.city,
+                k.address,
+                k.district,
+                k.property_type,
+                k.sqm,
+                k.rooms,
+                k.floor,
+                k.price_eur,
+                k.auction_end,
+                k.description,
+                NULL as partial_ownership,
+                COUNT(d.id) as match_count,
+                AVG(d.market_price_eur) as avg_market_price,
+                AVG(d.savings_pct) as avg_savings_pct,
+                AVG(d.savings_eur) as avg_savings_eur
+            FROM kchsi_properties k
+            LEFT JOIN deal_matches d ON k.bcpea_id = d.kchsi_id
+            WHERE k.price_eur >= ?
+              AND k.sqm BETWEEN 30 AND 200
+            GROUP BY k.id
+            ORDER BY avg_savings_pct DESC
+        """
     
     deals = []
+    excluded_count = 0
+    excluded_partial = []
+    
     for row in conn.execute(query, (min_price,)):
         row = dict(row)
         
         auction_price = row['price_eur'] or 0
         size = row['sqm'] or 1
+        description = row['description'] or ''
+        
+        # Double-check for partial ownership in description (safety net)
+        partial_ownership = row['partial_ownership'] or detect_partial_ownership(description)
+        
+        if partial_ownership:
+            excluded_count += 1
+            excluded_partial.append({
+                'id': row['bcpea_id'],
+                'city': row['city'],
+                'fraction': partial_ownership,
+                'price': auction_price
+            })
+            continue  # SKIP this property - it's partial ownership
         
         # Clean city name
         city = (row['city'] or '').replace('гр. ', '').replace('с. ', '').strip()
@@ -193,21 +284,29 @@ def export_deals(min_price=10000):
             'auction_end': auction_end,
             'url': f"https://sales.bcpea.org/properties/{row['bcpea_id']}",
             'comparables_count': comparables,
-            'partial_ownership': None
+            'partial_ownership': partial_ownership  # Will be None for included properties
         }
         
         deals.append(deal)
     
     conn.close()
-    return deals
+    return deals, excluded_count, excluded_partial
 
 
 def main():
     print(f"=== Exporting Deals - {datetime.utcnow().isoformat()} ===\n")
     
-    deals = export_deals(min_price=5000)
+    deals, excluded_count, excluded_partial = export_deals(min_price=5000)
     
-    print(f"Found {len(deals)} deals\n")
+    print(f"Found {len(deals)} deals (excluded {excluded_count} partial ownership properties)\n")
+    
+    if excluded_count > 0:
+        print("Excluded partial ownership properties:")
+        for ex in excluded_partial[:10]:  # Show first 10
+            print(f"  ID {ex['id']}: {ex['city']} - {ex['fraction']} - €{ex['price']:,.0f}")
+        if len(excluded_partial) > 10:
+            print(f"  ... and {len(excluded_partial) - 10} more")
+        print()
     
     if deals:
         # Stats
@@ -234,6 +333,8 @@ def main():
         json.dump(deals, f, ensure_ascii=False, indent=2)
     
     print(f"\n✓ Exported {len(deals)} deals to {OUTPUT_PATH}")
+    if excluded_count > 0:
+        print(f"✓ Excluded {excluded_count} partial ownership properties")
     
     return deals
 

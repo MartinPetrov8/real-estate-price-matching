@@ -98,6 +98,49 @@ function extractCadastralId(description) {
     return match ? match[1] : null;
 }
 
+/**
+ * Detect partial ownership fractions from property description
+ * Returns fraction string like "1/6", "1/4", "1/2", "1/3" or null if full ownership
+ */
+function detectPartialOwnership(description) {
+    if (!description) return null;
+    
+    const descLower = description.toLowerCase();
+    
+    // Pattern mappings: regex -> fraction
+    const patterns = [
+        // 1/2 patterns
+        { regex: /½|1\s*\/\s*2|една\s+втора|половин\s+идеална\s+част/i, fraction: '1/2' },
+        // 1/3 patterns  
+        { regex: /1\s*\/\s*3|една\s+трета/i, fraction: '1/3' },
+        // 1/4 patterns
+        { regex: /¼|1\s*\/\s*4|една\s+четвърт/i, fraction: '1/4' },
+        // 1/5 patterns
+        { regex: /1\s*\/\s*5|една\s+пета/i, fraction: '1/5' },
+        // 1/6 patterns
+        { regex: /1\s*\/\s*6|една\s+шеста/i, fraction: '1/6' },
+        // 1/8 patterns
+        { regex: /1\s*\/\s*8|една\s+осма/i, fraction: '1/8' },
+        // 2/3 patterns
+        { regex: /2\s*\/\s*3|две\s+трети/i, fraction: '2/3' },
+        // 3/4 patterns  
+        { regex: /3\s*\/\s*4|три\s+четвърти/i, fraction: '3/4' },
+    ];
+    
+    for (const pattern of patterns) {
+        if (pattern.regex.test(descLower)) {
+            return pattern.fraction;
+        }
+    }
+    
+    // Check for generic "идеална част" without specific fraction - flag as unknown partial
+    if (/идеална\s+част/.test(descLower)) {
+        return 'unknown';
+    }
+    
+    return null;
+}
+
 function extractPropertyType(description) {
     const descLower = description.toLowerCase();
     
@@ -283,6 +326,12 @@ async function main() {
             const description = detail.description || '';
             const period = prop.period ? parsePeriod(`от ${prop.period.start} до ${prop.period.end}`) : { start: null, end: null };
             
+            // Detect partial ownership
+            const partialOwnership = detectPartialOwnership(description);
+            if (partialOwnership) {
+                console.log(`⚠️ PARTIAL OWNERSHIP DETECTED: ${prop.bcpea_id} - ${partialOwnership}`);
+            }
+            
             const property = {
                 bcpea_id: prop.bcpea_id,
                 price_eur: prop.price_eur,
@@ -298,12 +347,14 @@ async function main() {
                 announcement_date: parseDate(prop.announcement),
                 court: prop.court,
                 executor: prop.executor,
-                cadastral_id: extractCadastralId(description)
+                cadastral_id: extractCadastralId(description),
+                partial_ownership: partialOwnership
             };
             
             try {
                 db.upsertKchsiProperty(property);
-                console.log(`✓ Saved: ${prop.bcpea_id} - ${property.city} - ${property.sqm || '?'}m² - €${property.price_eur}`);
+                const ownershipNote = partialOwnership ? ` [${partialOwnership} ownership]` : '';
+                console.log(`✓ Saved: ${prop.bcpea_id} - ${property.city} - ${property.sqm || '?'}m² - €${property.price_eur}${ownershipNote}`);
             } catch (err) {
                 console.error(`✗ Error saving ${prop.bcpea_id}:`, err.message);
             }
@@ -331,4 +382,4 @@ if (require.main === module) {
     main().catch(console.error);
 }
 
-module.exports = { main, TARGET_CITIES };
+module.exports = { main, TARGET_CITIES, detectPartialOwnership };
