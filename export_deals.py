@@ -1,9 +1,8 @@
 #!/usr/bin/env python3
-"""
-Export deals to frontend-compatible JSON format.
+"""Export deals to frontend-compatible JSON format.
 
-Joins auctions with comparisons and outputs to frontend/deals.json
-Uses neighborhood-aware pricing caps for accurate estimates.
+Outputs to deals.json (root) for GitHub Pages
+Uses deal_matches when available, falls back to neighborhood estimates.
 """
 
 import json
@@ -15,10 +14,27 @@ import sys
 
 # Add scrapers to path
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'scrapers'))
-from neighborhood_caps import get_price_cap, extract_neighborhood as extract_hood, is_valid_apartment, MAX_REALISTIC_DISCOUNT
+try:
+    from neighborhood_caps import get_price_cap, MAX_REALISTIC_DISCOUNT
+except ImportError:
+    # Fallback if module not available
+    def get_price_cap(city, address):
+        return {'min': 800, 'max': 2000, 'median': 1200}
+    MAX_REALISTIC_DISCOUNT = 60
 
 DB_PATH = "data/properties.db"
-OUTPUT_PATH = "frontend/deals.json"
+OUTPUT_PATH = "deals.json"  # Root level for GitHub Pages
+
+# Market price per sqm by city (fallback estimates)
+CITY_MARKET_RATES = {
+    'софия': 1800,
+    'пловдив': 1300,
+    'варна': 1400,
+    'бургас': 1200,
+    'русе': 900,
+    'стара загора': 1000,
+    'плевен': 850,
+}
 
 
 def extract_neighborhood(address, city):
@@ -48,13 +64,29 @@ def extract_neighborhood(address, city):
     return None
 
 
-def export_deals(min_score=15, min_price=10000, min_comparables=3):
-    """Export deals with bargain score >= min_score.
+def get_market_rate(city, address):
+    """Get estimated market price per sqm for a city/neighborhood."""
+    city_lower = city.lower() if city else ''
+    
+    # Try specific neighborhood caps first
+    caps = get_price_cap(city, address)
+    if caps['median'] != 1200:  # Default value was changed
+        return caps['median']
+    
+    # Fall back to city average
+    for key, rate in CITY_MARKET_RATES.items():
+        if key in city_lower:
+            return rate
+    
+    # Default fallback
+    return 1000
+
+
+def export_deals(min_price=10000):
+    """Export deals - includes all properties with market estimates.
     
     Args:
-        min_score: Minimum bargain score (% below market)
-        min_price: Minimum auction price in EUR (filters out rural junk)
-        min_comparables: Minimum number of market comparables for validity
+        min_price: Minimum auction price in EUR
     """
     
     if not os.path.exists(DB_PATH):
@@ -64,56 +96,64 @@ def export_deals(min_score=15, min_price=10000, min_comparables=3):
     conn = sqlite3.connect(DB_PATH)
     conn.row_factory = sqlite3.Row
     
-    # Join auctions with comparisons - filter for quality and realistic discounts
+    # Get all KCHSI properties with their match data (if available)
     query = """
         SELECT 
-            a.id, a.url, a.city, a.address, a.district,
-            a.property_type, a.size_sqm, a.rooms, a.auction_end,
-            c.auction_price, c.market_median_sqm, c.market_count,
-            c.deviation_pct, c.bargain_score
-        FROM auctions a
-        JOIN comparisons c ON a.id = c.auction_id
-        WHERE c.bargain_score >= ?
-          AND c.bargain_score <= ?
-          AND c.auction_price >= ?
-          AND a.size_sqm BETWEEN 35 AND 150
-        ORDER BY c.bargain_score DESC
+            k.id,
+            k.bcpea_id,
+            k.city,
+            k.address,
+            k.district,
+            k.property_type,
+            k.sqm,
+            k.rooms,
+            k.floor,
+            k.price_eur,
+            k.auction_end,
+            COUNT(d.id) as match_count,
+            AVG(d.market_price_eur) as avg_market_price,
+            AVG(d.savings_pct) as avg_savings_pct,
+            AVG(d.savings_eur) as avg_savings_eur
+        FROM kchsi_properties k
+        LEFT JOIN deal_matches d ON k.bcpea_id = d.kchsi_id
+        WHERE k.price_eur >= ?
+          AND k.sqm BETWEEN 30 AND 200
+        GROUP BY k.id
+        ORDER BY avg_savings_pct DESC
     """
     
     deals = []
-    for row in conn.execute(query, (min_score, MAX_REALISTIC_DISCOUNT, min_price)):
+    for row in conn.execute(query, (min_price,)):
         row = dict(row)
         
-        # Calculate prices with neighborhood-aware caps
-        auction_price = row['auction_price'] or 0
-        size = row['size_sqm'] or 1
-        raw_market_sqm = row['market_median_sqm'] or 0
+        auction_price = row['price_eur'] or 0
+        size = row['sqm'] or 1
         
         # Clean city name
         city = (row['city'] or '').replace('гр. ', '').replace('с. ', '').strip()
         address = row['address'] or ''
         
-        # Get realistic price cap for this neighborhood
-        caps = get_price_cap(row['city'] or '', address)
+        # Get market price
+        raw_market_price = row['avg_market_price']
+        comparables = row['match_count'] or 0
         
-        # Apply cap if market estimate is unrealistic
-        if raw_market_sqm > caps['max']:
-            market_sqm = caps['median']  # Use neighborhood median
-            price_capped = True
-        elif raw_market_sqm < caps['min']:
-            market_sqm = caps['median']  # Use neighborhood median
-            price_capped = True
+        if raw_market_price and raw_market_price > 0:
+            # Use actual market data from matches
+            market_price = raw_market_price
+            savings = row['avg_savings_eur'] or (market_price - auction_price)
+            discount = row['avg_savings_pct'] or ((market_price - auction_price) / market_price * 100)
         else:
-            market_sqm = raw_market_sqm
-            price_capped = False
+            # Fallback: use neighborhood/city estimates
+            market_sqm = get_market_rate(city, address)
+            market_price = size * market_sqm
+            savings = market_price - auction_price
+            discount = ((market_price - auction_price) / market_price * 100) if market_price > 0 else 0
         
-        market_price = size * market_sqm
-        savings = market_price - auction_price
+        # Cap discount at realistic level
+        discount = min(discount, MAX_REALISTIC_DISCOUNT)
+        
+        # Calculate price per sqm
         auction_sqm = auction_price / size if size > 0 else 0
-        
-        # Recalculate discount based on capped price, and cap at MAX_REALISTIC_DISCOUNT
-        raw_discount = ((market_sqm - auction_sqm) / market_sqm * 100) if market_sqm > 0 else 0
-        discount = min(raw_discount, MAX_REALISTIC_DISCOUNT)
         
         # Extract neighborhood
         neighborhood = row['district'] or extract_neighborhood(row['address'], city)
@@ -122,31 +162,38 @@ def export_deals(min_score=15, min_price=10000, min_comparables=3):
         auction_end = None
         if row['auction_end']:
             try:
-                # Parse Bulgarian date format DD.MM.YYYY
-                dt = datetime.strptime(row['auction_end'], '%d.%m.%Y')
-                auction_end = dt.strftime('%Y-%m-%dT23:59:59Z')
+                if isinstance(row['auction_end'], str):
+                    # Try parsing various formats
+                    for fmt in ['%Y-%m-%d', '%d.%m.%Y', '%d/%m/%Y']:
+                        try:
+                            dt = datetime.strptime(row['auction_end'], fmt)
+                            auction_end = dt.strftime('%Y-%m-%d')
+                            break
+                        except:
+                            continue
+                else:
+                    auction_end = row['auction_end'].strftime('%Y-%m-%d')
             except:
-                auction_end = row['auction_end']
+                auction_end = str(row['auction_end']) if row['auction_end'] else None
         
         deal = {
-            'bcpea_id': str(row['id']),
+            'bcpea_id': str(row['bcpea_id']),
             'city': city or 'Неизвестен',
             'neighborhood': neighborhood or 'Неизвестен',
+            'address': address,
             'sqm': round(size, 1) if size else None,
             'rooms': row['rooms'],
-            'floor': None,  # Not in current schema
-            'property_type': row['property_type'] or 'Имот',
+            'floor': row['floor'],
+            'property_type': 'апартамент',  # Default for now
             'auction_price': round(auction_price),
-            'auction_price_sqm': round(auction_sqm),
             'market_price': round(market_price),
-            'market_price_sqm': round(market_sqm),
-            'discount_pct': round(discount),
-            'savings_eur': round(max(0, savings)),  # Don't show negative savings
+            'discount_pct': round(discount, 1),
+            'savings_eur': round(max(0, savings)),
+            'price_per_sqm': round(auction_sqm),
             'auction_end': auction_end,
-            'market_url': None,  # Could link to OLX search
-            'comparables_count': row['market_count'],
-            'price_capped': price_capped,  # True if we used neighborhood cap
-            'neighborhood_range': f"€{caps['min']}-{caps['max']}/m²"
+            'url': f"https://sales.bcpea.org/properties/{row['bcpea_id']}",
+            'comparables_count': comparables,
+            'partial_ownership': None
         }
         
         deals.append(deal)
@@ -158,28 +205,31 @@ def export_deals(min_score=15, min_price=10000, min_comparables=3):
 def main():
     print(f"=== Exporting Deals - {datetime.utcnow().isoformat()} ===\n")
     
-    deals = export_deals(min_score=15)
+    deals = export_deals(min_price=5000)
     
-    print(f"Found {len(deals)} deals with score >= 15%\n")
+    print(f"Found {len(deals)} deals\n")
     
     if deals:
         # Stats
         cities = {}
+        discounts = []
         for d in deals:
             cities[d['city']] = cities.get(d['city'], 0) + 1
+            if d['discount_pct'] > 0:
+                discounts.append(d['discount_pct'])
         
         print("By city:")
-        for city, count in sorted(cities.items(), key=lambda x: -x[1])[:10]:
+        for city, count in sorted(cities.items(), key=lambda x: -x[1]):
             print(f"  {city}: {count}")
         
+        avg_discount = sum(discounts) / len(discounts) if discounts else 0
+        print(f"\nAverage discount: {avg_discount:.1f}%")
+        
         print(f"\nTop 5 bargains:")
-        for d in deals[:5]:
+        for d in sorted(deals, key=lambda x: -x['discount_pct'])[:5]:
             print(f"  {d['city']}, {d['neighborhood']}: €{d['auction_price']:,} (-{d['discount_pct']}%)")
     
-    # Ensure frontend directory exists
-    os.makedirs(os.path.dirname(OUTPUT_PATH), exist_ok=True)
-    
-    # Write JSON
+    # Write JSON to root directory
     with open(OUTPUT_PATH, 'w', encoding='utf-8') as f:
         json.dump(deals, f, ensure_ascii=False, indent=2)
     
