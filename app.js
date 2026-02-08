@@ -22,8 +22,8 @@
     };
     const BCPEA_URL = 'https://sales.bcpea.org/properties';
     
-    function fmtPrice(p) { return !p ? '€?' : '€' + Math.round(p).toLocaleString('de-DE'); }
-    function fmtSqm(p, s) { return !p || !s ? '€?/m²' : '€' + Math.round(p/s).toLocaleString('de-DE') + '/m²'; }
+    function fmtPrice(p) { return !p ? '€?' : '€' + Math.round(p).toLocaleString('bg-BG'); }
+    function fmtSqm(p, s) { return !p || !s ? '€?/m²' : '€' + Math.round(p/s).toLocaleString('bg-BG') + '/m²'; }
     function fmtDate(d) { 
         if (!d) return 'Неизвестна';
         const date = new Date(d);
