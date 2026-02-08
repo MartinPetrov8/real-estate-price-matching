@@ -24,20 +24,31 @@
     
     function fmtPrice(p) { return !p ? '€?' : '€' + Math.round(p).toLocaleString('de-DE'); }
     function fmtSqm(p, s) { return !p || !s ? '€?/m²' : '€' + Math.round(p/s).toLocaleString('de-DE') + '/m²'; }
-    function fmtDate(d) { return !d ? 'Неизвестна' : new Date(d).toLocaleDateString('bg-BG', {day:'numeric', month:'short'}); }
+    function fmtDate(d) { 
+        if (!d) return 'Неизвестна';
+        const date = new Date(d);
+        return date.toLocaleDateString('bg-BG', {day:'numeric', month:'short', year:'numeric'});
+    }
     function daysUntil(d) { return !d ? null : Math.ceil((new Date(d) - new Date()) / 86400000); }
+    
+    // A deal is "new" if auction ends far in future (likely newly listed)
     function isNew(d) { const days = daysUntil(d); return days !== null && days > 20; }
+    
     function getRating(pct) {
+        // Handle negative discounts (bad deals)
+        if (pct < 0) return {level:'bad', label:'Неблагоприятна', score:20, stars:1};
         if (pct >= 50) return {level:'excellent', label:'Отлична!', score:100, stars:5};
         if (pct >= 40) return {level:'great', label:'Много добра', score:90, stars:4};
         if (pct >= 30) return {level:'good', label:'Добра', score:75, stars:3};
         if (pct >= 20) return {level:'fair', label:'Приемлива', score:60, stars:2};
         return {level:'low', label:'Стандартна', score:40, stars:1};
     }
+    
     function propIcon(t) {
         const types = {'апартамент':'🏢','къща':'🏠','гараж':'🚗','магазин':'🏪','земя':'🌾','apartment':'🏢'};
         return types[t?.toLowerCase()] || '🏢';
     }
+    
     function startCountdown(id, endDate) {
         const el = document.getElementById(id);
         if (!el || !endDate) return;
@@ -52,13 +63,14 @@
         upd();
         countdownIntervals.push(setInterval(upd, 60000));
     }
+    
     function createCard(deal) {
         // Normalize deal data - support both old and new field names
         const bcpeaId = deal.bcpea_id || deal.id;
         const auctionPrice = deal.auction_price || deal.effective_price || deal.price || 0;
         const marketPrice = deal.market_price || (deal.market_avg ? deal.market_avg * deal.sqm : 0) || auctionPrice * 1.5;
         const discountPct = deal.discount_pct !== undefined ? deal.discount_pct : (deal.discount || 0);
-        const savingsEur = deal.savings_eur !== undefined ? deal.savings_eur : (marketPrice - auctionPrice);
+        const savingsEur = deal.savings_eur !== undefined ? deal.savings_eur : Math.max(0, marketPrice - auctionPrice);
         const pricePerSqm = deal.price_per_sqm || (deal.auction_price && deal.sqm ? deal.auction_price / deal.sqm : 0);
         const auctionEnd = deal.auction_end || null;
         const city = deal.city || 'Неизвестен';
@@ -68,23 +80,44 @@
         const floor = deal.floor;
         const propertyType = deal.property_type || 'апартамент';
         const comparables = deal.comparables_count || 0;
+        const partialOwnership = deal.partial_ownership;
         const url = deal.url || `${BCPEA_URL}/${bcpeaId}`;
         
         const r = getRating(discountPct), days = daysUntil(auctionEnd);
-        const isNewFlag = days !== null && days > 20, isUrgent = days !== null && days <= 5 && days >= 0;
-        const icon = propIcon(propertyType), cid = 'cd-'+bcpeaId;
+        const isNewFlag = days !== null && days > 20;
+        const isUrgent = days !== null && days <= 5 && days >= 0;
+        const icon = propIcon(propertyType);
+        const cid = 'cd-'+bcpeaId;
         const barW = Math.max(10, Math.min(90, (auctionPrice/marketPrice)*100));
+        
+        // Data reliability warnings
+        const hasDataIssues = comparables === 0 || discountPct < 0;
+        const dataWarning = hasDataIssues ? `
+            <div class="data-warning">
+                <span class="warning-icon">⚠️</span>
+                <span class="warning-text">${comparables === 0 ? 'Няма достатъчно данни за сравнение' : 'Тръжната цена е по-висока от пазарната'}</span>
+            </div>
+        ` : '';
+        
+        // Partial ownership warning
+        const ownershipWarning = partialOwnership ? `
+            <div class="ownership-warning">
+                <span class="warning-icon">📋</span>
+                <span class="warning-text">Частна собственост - проверете дела</span>
+            </div>
+        ` : '';
+        
         return `<article class="deal-card">
             <div class="card-header deal-${r.level}">
                 <div class="card-badges">
                     ${isNewFlag ? '<span class="badge badge-new">✨ НОВО</span>' : ''}
                     ${isUrgent ? '<span class="badge badge-urgent">⏰ СКОРО</span>' : ''}
-                    <span class="badge badge-type">${icon} ${propertyType || 'Апартамент'}</span>
+                    <span class="badge badge-type">${icon} ${propertyType.charAt(0).toUpperCase() + propertyType.slice(1)}</span>
                 </div>
                 <div class="discount-badge">
-                    <div class="discount-value">-${Math.round(discountPct)}%</div>
-                    <div class="discount-label">ОТСТЪПКА</div>
-                    <div class="discount-amount">Спестявате ${fmtPrice(savingsEur)}</div>
+                    <div class="discount-value">${discountPct >= 0 ? '-' : '+'}${Math.abs(Math.round(discountPct))}%</div>
+                    <div class="discount-label">${discountPct >= 0 ? 'ОТСТЪПКА' : 'НАД ПАЗАРНАТА'}</div>
+                    ${discountPct >= 0 ? `<div class="discount-amount">Спестявате ${fmtPrice(savingsEur)}</div>` : `<div class="discount-amount">Пазарна: ${fmtPrice(marketPrice)}</div>`}
                 </div>
                 <div class="price-comparison-bar">
                     <div class="price-bar-track"><div class="price-bar-fill" style="width:${barW}%"></div></div>
@@ -92,6 +125,8 @@
                 </div>
             </div>
             <div class="card-body">
+                ${ownershipWarning}
+                ${dataWarning}
                 <div class="price-section">
                     <div class="price-block price-auction">
                         <div class="price-block-label">Тръжна цена</div>
@@ -114,7 +149,7 @@
                     <div class="info-item"><span class="info-icon">📐</span><div class="info-content"><span class="info-label">Площ</span><span class="info-value">${sqm ? sqm+' м²' : 'N/A'}</span></div></div>
                     <div class="info-item"><span class="info-icon">🚪</span><div class="info-content"><span class="info-label">Стаи</span><span class="info-value">${rooms || 'N/A'}</span></div></div>
                     <div class="info-item"><span class="info-icon">🏢</span><div class="info-content"><span class="info-label">Етаж</span><span class="info-value">${floor || 'N/A'}</span></div></div>
-                    <div class="info-item"><span class="info-icon">📊</span><div class="info-content"><span class="info-label">Сравнения</span><span class="info-value">${comparables} имота</span></div></div>
+                    <div class="info-item"><span class="info-icon">📊</span><div class="info-content"><span class="info-label">Сравнения</span><span class="info-value">${comparables > 0 ? comparables + ' имота' : 'Няма данни'}</span></div></div>
                 </div>
                 <div class="location-section">
                     <span class="location-icon">📍</span>
@@ -129,10 +164,13 @@
                         <span>💡 Защо тази сделка?</span><span id="tgl-${bcpeaId}">▼</span>
                     </button>
                     <div class="why-deal-content" id="why-${bcpeaId}">
-                        <div class="why-deal-item"><span class="why-deal-icon">💰</span><span>Цената е с <strong>${Math.round(discountPct)}%</strong> под пазарната ниво</span></div>
+                        ${discountPct >= 0 ? 
+                            `<div class="why-deal-item"><span class="why-deal-icon">💰</span><span>Цената е с <strong>${Math.round(discountPct)}%</strong> под пазарната ниво</span></div>` :
+                            `<div class="why-deal-item"><span class="why-deal-icon">⚠️</span><span>Цената е с <strong>${Math.abs(Math.round(discountPct))}%</strong> над пазарната ниво</span></div>`
+                        }
                         <div class="why-deal-item"><span class="why-deal-icon">📏</span><span>€/м²: <strong>${fmtSqm(auctionPrice, sqm)}</strong> при пазарни <strong>${fmtSqm(marketPrice, sqm)}</strong></span></div>
                         ${deal.neighborhood_range ? `<div class="why-deal-item"><span class="why-deal-icon">🏘️</span><span>Ценови диапазон в района: ${deal.neighborhood_range}</span></div>` : ''}
-                        <div class="why-deal-item"><span class="why-deal-icon">🔍</span><span>Базирано на ${comparables} сравними обяви</span></div>
+                        ${comparables > 0 ? `<div class="why-deal-item"><span class="why-deal-icon">🔍</span><span>Базирано на ${comparables} сравними обяви</span></div>` : '<div class="why-deal-item"><span class="why-deal-icon">⚠️</span><span>Няма достатъчно сравними обяви за надеждна оценка</span></div>'}
                     </div>
                 </div>
                 <div class="card-actions">
@@ -142,6 +180,7 @@
             </div>
         </article>`;
     }
+    
     function render(deals) {
         countdownIntervals.forEach(clearInterval);
         countdownIntervals = [];
@@ -157,15 +196,21 @@
         el.grid.innerHTML = deals.map(createCard).join('');
         deals.forEach(d => startCountdown('cd-'+(d.bcpea_id || d.id), d.auction_end));
     }
+    
     function updateHero() {
         el.heroTotal.textContent = allDeals.length;
         if (allDeals.length > 0) {
-            const discounts = allDeals.map(d => d.discount_pct !== undefined ? d.discount_pct : (d.discount || 0));
-            const avg = discounts.reduce((s, d) => s + d, 0) / discounts.length;
+            // Only count positive discounts for average
+            const discounts = allDeals
+                .map(d => d.discount_pct !== undefined ? d.discount_pct : (d.discount || 0))
+                .filter(d => d > 0);
+            const avg = discounts.length > 0 ? discounts.reduce((s, d) => s + d, 0) / discounts.length : 0;
             el.heroAvg.textContent = Math.round(avg) + '%';
-            el.heroBest.textContent = Math.round(Math.max(...discounts)) + '%';
+            const best = allDeals.map(d => d.discount_pct !== undefined ? d.discount_pct : (d.discount || 0));
+            el.heroBest.textContent = Math.round(Math.max(...best)) + '%';
         }
     }
+    
     function populateCities() {
         const cities = [...new Set(allDeals.map(d => d.city).filter(Boolean))].sort();
         const val = el.city.value;
@@ -173,6 +218,7 @@
         cities.forEach(c => { const o = document.createElement('option'); o.value = c; o.textContent = c; el.city.appendChild(o); });
         el.city.value = val;
     }
+    
     function getActive() {
         const f = [];
         if (el.city.value !== 'all') f.push({type:'city', label:el.city.value});
@@ -182,10 +228,12 @@
         if (parseInt(el.discount.value) > 0) f.push({type:'discount', label:el.discount.value+'%+ отстъпка'});
         return f;
     }
+    
     function renderActive() {
         const f = getActive();
         el.activeFilters.innerHTML = f.length ? f.map(x => `<span class="active-filter">${x.label}<button onclick="rmFilter('${x.type}')">✕</button></span>`).join('') : '';
     }
+    
     window.rmFilter = function(t) {
         if (t === 'city') el.city.value = 'all';
         if (t === 'type') el.type.value = 'all';
@@ -194,6 +242,7 @@
         if (t === 'discount') el.discount.value = '0';
         filter();
     };
+    
     function filter() {
         const city = el.city.value, type = el.type.value;
         const minP = parseInt(el.minPrice.value) || 0, maxP = parseInt(el.maxPrice.value) || Infinity;
@@ -218,8 +267,8 @@
             const bPrice = b.auction_price || b.effective_price || b.price || 0;
             const aDiscount = a.discount_pct !== undefined ? a.discount_pct : (a.discount || 0);
             const bDiscount = b.discount_pct !== undefined ? b.discount_pct : (b.discount || 0);
-            const aSavings = a.savings_eur !== undefined ? a.savings_eur : ((a.market_price || a.market_avg * a.sqm) - aPrice);
-            const bSavings = b.savings_eur !== undefined ? b.savings_eur : ((b.market_price || b.market_avg * b.sqm) - bPrice);
+            const aSavings = Math.max(0, a.savings_eur !== undefined ? a.savings_eur : ((a.market_price || a.market_avg * a.sqm || 0) - aPrice));
+            const bSavings = Math.max(0, b.savings_eur !== undefined ? b.savings_eur : ((b.market_price || b.market_avg * b.sqm || 0) - bPrice));
             
             if (sort === 'best') return (bDiscount * Math.log(bSavings+1)) - (aDiscount * Math.log(aSavings+1));
             if (sort === 'ending') return new Date(a.auction_end) - new Date(b.auction_end);
@@ -231,6 +280,7 @@
         render(filteredDeals);
         renderActive();
     }
+    
     async function load() {
         el.loading.classList.remove('hidden');
         el.error.classList.add('hidden');
@@ -250,11 +300,13 @@
         el.loading.classList.add('hidden');
         filter();
     }
+    
     window.toggleWhy = function(id) {
         const c = document.getElementById('why-'+id), t = document.getElementById('tgl-'+id);
         if (c.classList.contains('show')) { c.classList.remove('show'); t.textContent = '▼'; }
         else { c.classList.add('show'); t.textContent = '▲'; }
     };
+    
     window.showModal = function(id) {
         const d = allDeals.find(x => (x.bcpea_id || x.id) === id);
         if (!d) return;
@@ -264,29 +316,56 @@
         const auctionPrice = d.auction_price || d.effective_price || d.price || 0;
         const marketPrice = d.market_price || (d.market_avg ? d.market_avg * d.sqm : 0) || auctionPrice * 1.5;
         const discountPct = d.discount_pct !== undefined ? d.discount_pct : (d.discount || 0);
-        const savingsEur = d.savings_eur !== undefined ? d.savings_eur : (marketPrice - auctionPrice);
+        const savingsEur = Math.max(0, d.savings_eur !== undefined ? d.savings_eur : (marketPrice - auctionPrice));
         const city = d.city || 'Неизвестен';
         const neighborhood = d.neighborhood || 'Неизвестен';
         const sqm = d.sqm;
         const propertyType = d.property_type || 'Имот';
         const auctionEnd = d.auction_end;
         const comparables = d.comparables_count || 0;
+        const partialOwnership = d.partial_ownership;
         const url = d.url || `${BCPEA_URL}/${bcpeaId}`;
         
         const r = getRating(discountPct), days = daysUntil(auctionEnd);
+        
+        // Warning messages
+        const ownershipHtml = partialOwnership ? `
+            <div style="background:var(--warning-light, #FFF8E1);padding:12px 16px;border-radius:var(--radius);margin-bottom:16px;border-left:4px solid var(--warning);">
+                <strong>⚠️ Частна собственост</strong><br>
+                <span style="font-size:13px;">Този имот е с частна собственост. Моля, проверете размера на дела преди участие в търга.</span>
+            </div>
+        ` : '';
+        
+        const dataWarningHtml = comparables === 0 ? `
+            <div style="background:var(--danger-light);padding:12px 16px;border-radius:var(--radius);margin-bottom:16px;border-left:4px solid var(--danger);">
+                <strong>⚠️ Ограничени данни</strong><br>
+                <span style="font-size:13px;">Няма намерени сравними обяви. Пазарната цена може да не е точна.</span>
+            </div>
+        ` : '';
+        
+        const negativeWarningHtml = discountPct < 0 ? `
+            <div style="background:var(--danger-light);padding:12px 16px;border-radius:var(--radius);margin-bottom:16px;border-left:4px solid var(--danger);">
+                <strong>⚠️ Внимание</strong><br>
+                <span style="font-size:13px;">Тръжната цена е по-висока от оценката на пазарната цена. Това може да не е изгодна сделка.</span>
+            </div>
+        ` : '';
+        
         el.modalBody.innerHTML = `<div style="padding:32px;">
             <div class="card-header deal-${r.level}" style="margin:-32px -32px 24px -32px;padding:32px;">
                 <div class="discount-badge">
-                    <div class="discount-value">-${Math.round(discountPct)}%</div>
-                    <div class="discount-label">ОТСТЪПКА</div>
+                    <div class="discount-value">${discountPct >= 0 ? '-' : '+'}${Math.abs(Math.round(discountPct))}%</div>
+                    <div class="discount-label">${discountPct >= 0 ? 'ОТСТЪПКА' : 'НАД ПАЗАРНАТА'}</div>
                 </div>
             </div>
-            <h2 style="font-size:24px;font-weight:700;margin-bottom:8px;">${propertyType} в ${city}</h2>
+            ${ownershipHtml}
+            ${dataWarningHtml}
+            ${negativeWarningHtml}
+            <h2 style="font-size:24px;font-weight:700;margin-bottom:8px;">${propertyType.charAt(0).toUpperCase() + propertyType.slice(1)} в ${city}</h2>
             <p style="color:var(--gray-500);margin-bottom:24px;">${neighborhood && neighborhood !== 'Неизвестен' ? neighborhood : ''}</p>
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px;">
-                <div style="background:var(--success-light);padding:16px;border-radius:var(--radius);">
+                <div style="background:${discountPct >= 0 ? 'var(--success-light)' : 'var(--danger-light)'};padding:16px;border-radius:var(--radius);">
                     <div style="font-size:12px;color:var(--gray-500);text-transform:uppercase;font-weight:600;">Тръжна цена</div>
-                    <div style="font-size:24px;font-weight:700;color:var(--success);">${fmtPrice(auctionPrice)}</div>
+                    <div style="font-size:24px;font-weight:700;color:${discountPct >= 0 ? 'var(--success)' : 'var(--danger)'};">${fmtPrice(auctionPrice)}</div>
                     <div style="font-size:14px;color:var(--gray-600);">${fmtSqm(auctionPrice, sqm)}</div>
                 </div>
                 <div style="background:var(--gray-100);padding:16px;border-radius:var(--radius);">
@@ -298,10 +377,14 @@
             <div style="background:var(--info-light);padding:20px;border-radius:var(--radius);margin-bottom:24px;">
                 <h4 style="font-size:14px;font-weight:600;margin-bottom:12px;">💡 Анализ на сделката</h4>
                 <ul style="list-style:none;padding:0;margin:0;font-size:14px;line-height:1.8;">
-                    <li>✓ Цената е с <strong>${Math.round(discountPct)}%</strong> под пазарната ниво</li>
-                    <li>✓ Спестявате <strong>${fmtPrice(savingsEur)}</strong> спрямо пазарната цена</li>
+                    ${discountPct >= 0 ? 
+                        `<li>✓ Цената е с <strong>${Math.round(discountPct)}%</strong> под пазарната ниво</li>
+                         <li>✓ Спестявате <strong>${fmtPrice(savingsEur)}</strong> спрямо пазарната цена</li>` :
+                        `<li>⚠ Цената е с <strong>${Math.abs(Math.round(discountPct))}%</strong> над пазарната ниво</li>
+                         <li>⚠ Тръжната цена е с <strong>${fmtPrice(auctionPrice - marketPrice)}</strong> по-висока от пазарната</li>`
+                    }
                     ${d.neighborhood_range ? `<li>✓ Ценови диапазон в района: ${d.neighborhood_range}</li>` : ''}
-                    <li>✓ Базирано на ${comparables} сравними обяви</li>
+                    ${comparables > 0 ? `<li>✓ Базирано на ${comparables} сравними обяви</li>` : '<li>⚠ Няма достатъчно сравними обяви за надеждна оценка</li>'}
                 </ul>
             </div>
             <div style="margin-bottom:24px;">
@@ -309,18 +392,21 @@
                 <div style="font-size:18px;font-weight:600;color:${days !== null && days <= 3 ? 'var(--danger)' : 'var(--gray-700)'};">${fmtDate(auctionEnd)} ${days !== null ? '('+days+' дни)' : ''}</div>
             </div>
             <div style="display:flex;gap:12px;">
-                <a href="${url}" target="_blank" class="btn btn-primary" style="flex:1;justify-content:center;">Виж на КЧСИ →</a>
+                <a href="${url}" target="_blank" class="btn btn-primary" style="flex:1;justify-content:center;">Виж в КЧСИ →</a>
                 <button onclick="closeModal()" class="btn btn-outline">Затвори</button>
             </div>
         </div>`;
         el.modal.classList.remove('hidden');
         document.body.style.overflow = 'hidden';
     };
+    
     window.closeModal = function() {
         el.modal.classList.add('hidden');
         document.body.style.overflow = '';
     };
+    
     window.loadDeals = load;
+    
     function reset() {
         el.city.value = 'all'; el.type.value = 'all';
         el.minPrice.value = ''; el.maxPrice.value = '';
@@ -329,10 +415,12 @@
         document.querySelector('[data-filter="all"]').classList.add('pill-active');
         filter();
     }
+    
     function debounce(fn, ms) {
         let t;
         return (...args) => { clearTimeout(t); t = setTimeout(() => fn(...args), ms); };
     }
+    
     document.querySelectorAll('.pill').forEach(p => {
         p.addEventListener('click', () => {
             document.querySelectorAll('.pill').forEach(x => x.classList.remove('pill-active'));
@@ -340,6 +428,7 @@
             filter();
         });
     });
+    
     el.city.addEventListener('change', filter);
     el.type.addEventListener('change', filter);
     el.minPrice.addEventListener('input', debounce(filter, 300));
@@ -349,5 +438,6 @@
     document.getElementById('resetFilters').addEventListener('click', reset);
     document.getElementById('emptyResetFilters').addEventListener('click', reset);
     document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+    
     load();
 })();

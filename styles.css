@@ -645,3 +645,57 @@ body {
     to { opacity: 1; transform: translateY(0); }
 }
 .deal-card { animation: fadeInUp 0.4s ease-out; }
+
+/* Warning styles for data quality issues */
+.data-warning,
+.ownership-warning {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    padding: var(--space-sm) var(--space-md);
+    border-radius: var(--radius);
+    margin-bottom: var(--space-md);
+    font-size: 13px;
+}
+
+.data-warning {
+    background: var(--danger-light);
+    border-left: 3px solid var(--danger);
+}
+
+.ownership-warning {
+    background: var(--warning-light, #FFF8E1);
+    border-left: 3px solid var(--warning);
+}
+
+.warning-icon {
+    font-size: 16px;
+    flex-shrink: 0;
+}
+
+.warning-text {
+    color: var(--gray-700);
+    font-weight: 500;
+}
+
+.data-warning .warning-text {
+    color: var(--danger);
+}
+
+.ownership-warning .warning-text {
+    color: #B78103;
+}
+
+/* Bad deal styling */
+.card-header.deal-bad {
+    background: linear-gradient(135deg, var(--danger) 0%, #DC2626 100%);
+}
+
+.score-fill.bad {
+    background: linear-gradient(90deg, var(--danger), #FCA5A5);
+}
+
+/* Warning light variable fallback */
+:root {
+    --warning-light: #FFF8E1;
+}
