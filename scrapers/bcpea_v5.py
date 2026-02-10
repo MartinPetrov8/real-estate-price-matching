@@ -230,13 +230,32 @@ def parse_detail(prop_id, html_text, url):
     if 'address' in data:
         data['neighborhood'] = extract_neighborhood_from_address(data['address'])
     
-    # Detect partial ownership (1/6 ид.ч, 1/2, etc.) - can't compare prices accurately
+    # Detect partial ownership - improved patterns (excludes common area shares)
     text_for_ownership_check = (data.get('address', '') + ' ' + decoded).lower()
-    partial_patterns = [
-        r'1/\d+\s*ид\.?\s*ч', r'идеална част', r'идеални части',
-        r'\d+/\d+\s*ид\.?\s*ч', r'\d+/\d+\s*идеална'
+    
+    # Patterns that indicate actual partial ownership of the property itself
+    partial_ownership_patterns = [
+        r'притежава\s+\d+/\d+',  # "owns 1/6"
+        r'\d+/\d+\s*(ид\.?\s*ч\.?|идеална\s+част)\s*(от|на)\s*(апартамент|имот|жилище|сграда)',
+        r'продава\s+\d+/\d+',  # "sells 1/2"
+        r'\d+/\d+\s+ид\.\s*ч\.?\s+от\s+имот',  # "1/2 ид.ч. от имот"
     ]
-    data['is_partial_ownership'] = any(re.search(p, text_for_ownership_check) for p in partial_patterns)
+    
+    # Patterns that indicate common area share (NOT partial ownership - this is normal)
+    common_area_patterns = [
+        r'идеални части от общите части',
+        r'идеални части от правото на строеж',
+        r'%\s*идеални части',
+        r'идеални части от земята',
+    ]
+    
+    # Check if it's a common area mention (not partial ownership)
+    is_common_area = any(re.search(p, text_for_ownership_check) for p in common_area_patterns)
+    
+    # Only mark as partial ownership if:
+    # 1. It matches a partial ownership pattern, AND
+    # 2. It's not just a standard common area share mention
+    data['is_partial_ownership'] = not is_common_area and any(re.search(p, text_for_ownership_check) for p in partial_ownership_patterns)
     
     text_lower = decoded.lower()
     rooms = extract_rooms(text_lower)
