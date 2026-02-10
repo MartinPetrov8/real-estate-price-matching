@@ -338,6 +338,7 @@ body {
 }
 .badge-new { background: #FFD700; color: var(--gray-700); }
 .badge-urgent { background: var(--danger); color: white; }
+.badge-warning { background: #FFA500; color: white; font-size: 11px; }
 .badge-type { background: rgba(255,255,255,0.2); color: white; }
 .discount-badge { text-align: center; }
 .discount-value { font-size: 48px; font-weight: 800; line-height: 1; text-shadow: 0 2px 4px rgba(0,0,0,0.1); }

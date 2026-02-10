@@ -84,6 +84,7 @@
         const rooms = deal.rooms;
         const floor = deal.floor;
         const propertyType = deal.property_type || 'апартамент';
+        const isPartialOwnership = deal.is_partial_ownership || false;
         // comparables already defined above
         const partialOwnership = deal.partial_ownership;
         const url = deal.url || `${BCPEA_URL}/${bcpeaId}`;
@@ -117,7 +118,7 @@
                 <div class="card-badges">
                     ${isNewFlag ? '<span class="badge badge-new">✨ НОВО</span>' : ''}
                     ${isUrgent ? '<span class="badge badge-urgent">⏰ СКОРО</span>' : ''}
-                    <span class="badge badge-type">${icon} ${propertyType.charAt(0).toUpperCase() + propertyType.slice(1)}</span>
+                    <span class="badge badge-type">${icon} ${propertyType.charAt(0).toUpperCase() + propertyType.slice(1)}</span>${isPartialOwnership ? '<span class="badge badge-warning" title="Дробна собственост - цените не са съпоставими">⚠️ Дробна собственост</span>' : ''}
                 </div>
                 <div class="discount-badge">
                     <div class="discount-value">${discountPct >= 0 ? '-' : '+'}${Math.abs(Math.round(discountPct))}%</div>
