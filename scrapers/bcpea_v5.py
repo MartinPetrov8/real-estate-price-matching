@@ -233,8 +233,8 @@ def parse_detail(prop_id, html_text, url):
     # Detect partial ownership (1/6 ид.ч, 1/2, etc.) - can't compare prices accurately
     text_for_ownership_check = (data.get('address', '') + ' ' + decoded).lower()
     partial_patterns = [
-        r'1/\d+\s*ид', r'1/\d+[^0-9]', r'идеална част', r'идеални части',
-        r'\d+/\d+\s*ид', r'\d+/\d+\s*идеална'
+        r'1/\d+\s*ид\.?\s*ч', r'идеална част', r'идеални части',
+        r'\d+/\d+\s*ид\.?\s*ч', r'\d+/\d+\s*идеална'
     ]
     data['is_partial_ownership'] = any(re.search(p, text_for_ownership_check) for p in partial_patterns)
     
