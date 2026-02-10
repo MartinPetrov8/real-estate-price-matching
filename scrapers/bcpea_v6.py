@@ -26,7 +26,7 @@ DB_PATH = "data/auctions.db"
 
 REQUEST_TIMEOUT = 25
 MAX_RETRIES = 2
-MAX_WORKERS = 10
+MAX_WORKERS = 8
 
 COURTS = {
     1: "Благоевград", 2: "Бургас", 3: "Варна", 4: "Велико Търново",
@@ -37,6 +37,10 @@ COURTS = {
     21: "Смолян", 22: "Стара Загора", 23: "Търговище", 24: "Хасково",
     25: "Шумен", 26: "Ямбол", 27: "София окръг", 28: "София град",
 }
+
+# Pre-compiled regex patterns (thread-safe)
+SROK_PATTERN = re.compile(r'СРОК.*?до\s*(\d{2}\.\d{2}\.\d{4})', re.DOTALL | re.I)
+KRAI_PATTERN = re.compile(r'Край[^:]*:?\s*(\d{2}\.\d{2}\.\d{4})')
 
 def log(msg):
     print(msg)
@@ -87,10 +91,16 @@ def parse_property_detail(html_content, prop_id):
         except:
             pass
     
-    # Property type
-    type_match = re.search(r'<div class="title">([^<]*(?:апартамент|къща|гараж|вила|парцел|земя|магазин|офис|ателие|склад)[^<]*)</div>', html_content, re.I)
+    # Property type - look after </ul> to skip dropdown options
+    # The property type appears in the detail section, after the search form
+    type_match = re.search(r'</ul>\s*</div>\s*<div class="title">([^<]+)</div>\s*<div class="date">', html_content, re.DOTALL)
     if type_match:
         data['property_type'] = type_match.group(1).strip()
+    else:
+        # Fallback: look for property type near "Публикувано"
+        type_match = re.search(r'<div class="title">([^<]*(?:апартамент|къща|гараж|вила|парцел|земя|магазин|офис|ателие|склад|земеделска)[^<]*)</div>\s*<div class="(?:date|category)">', html_content, re.I)
+        if type_match:
+            data['property_type'] = type_match.group(1).strip()
     
     # City
     city_match = re.search(r'(гр\.\s*[А-Яа-я\s-]+|с\.\s*[А-Яа-я\s-]+)', html_content)
@@ -112,17 +122,28 @@ def parse_property_detail(html_content, prop_id):
     if rooms_match:
         data['rooms'] = int(rooms_match.group(1))
     
-    # Auction end
-    end_match = re.search(r'Край[^:]*:?\s*(\d{2}\.\d{2}\.\d{4})', html_content)
-    if end_match:
-        data['auction_end'] = end_match.group(1)
+    # Auction end - look for "СРОК" section with "от DD.MM.YYYY до DD.MM.YYYY"
+    # The end date is after "до"
+    srok_match = SROK_PATTERN.search(html_content)
+    if srok_match:
+        data['auction_end'] = srok_match.group(1)
         try:
-            end_date = datetime.strptime(end_match.group(1), '%d.%m.%Y')
+            end_date = datetime.strptime(srok_match.group(1), '%d.%m.%Y')
             data['is_expired'] = end_date < datetime.now()
         except:
             data['is_expired'] = False
     else:
-        data['is_expired'] = False
+        # Fallback: try "Край" pattern
+        end_match = KRAI_PATTERN.search(html_content)
+        if end_match:
+            data['auction_end'] = end_match.group(1)
+            try:
+                end_date = datetime.strptime(end_match.group(1), '%d.%m.%Y')
+                data['is_expired'] = end_date < datetime.now()
+            except:
+                data['is_expired'] = False
+        else:
+            data['is_expired'] = False
     
     # Partial ownership
     data['is_partial_ownership'] = bool(re.search(
@@ -142,7 +163,9 @@ def fetch_property_detail(prop_id):
 
 
 def init_db():
-    conn = sqlite3.connect(DB_PATH)
+    conn = sqlite3.connect(DB_PATH, timeout=30)
+    conn.execute("PRAGMA journal_mode=WAL")
+    conn.execute("PRAGMA busy_timeout=30000")
     conn.execute("""
         CREATE TABLE IF NOT EXISTS auctions (
             id INTEGER PRIMARY KEY,
