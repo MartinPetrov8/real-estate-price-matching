@@ -4,6 +4,9 @@
 - Adds socket timeouts to prevent hanging
 - Extracts neighborhoods from addresses (ж.к., кв. patterns)
 - Better error handling
+- NEW: Configurable property type filters (--include-houses, --include-garages, --include-small-towns)
+- NEW: Configurable sqm filters (--min-sqm, --max-sqm)
+- NEW: Configurable city filtering (--min-population)
 """
 
 import json
@@ -11,6 +14,7 @@ import re
 import html
 import sqlite3
 import urllib.request
+import argparse
 from datetime import datetime
 from concurrent.futures import ThreadPoolExecutor, as_completed
 import os
@@ -23,6 +27,53 @@ DB_PATH = "data/auctions.db"
 REQUEST_TIMEOUT = 25
 SOCKET_TIMEOUT = 30
 MAX_RETRIES = 2
+
+# Major Bulgarian cities with population > 50k (2024 estimates)
+MAJOR_CITIES = {
+    'софия': 1250000,
+    'пловдив': 375000,
+    'варна': 325000,
+    'бургас': 210000,
+    'русе': 145000,
+    'стара загора': 140000,
+    'плевен': 95000,
+    'сливен': 85000,
+    'добрич': 80000,
+    'шумен': 75000,
+    'перник': 70000,
+    'хасково': 70000,
+    'ямбол': 70000,
+    'пазарджик': 65000,
+    'благоевград': 65000,
+    'велико търново': 65000,
+    'враца': 55000,
+    'асеновград': 55000,
+    'габрово': 50000,
+    'кърджали': 55000,
+    'кюстендил': 50000,
+    'монтана': 50000,
+    'търговище': 50000,
+}
+
+
+def is_small_city(city_name, min_population=50000):
+    """Check if a city has population below threshold."""
+    if not city_name:
+        return True  # Unknown cities treated as small
+    
+    city_clean = city_name.lower().replace('гр. ', '').replace('с. ', '').replace('село ', '').strip()
+    
+    # Check for exact match
+    if city_clean in MAJOR_CITIES:
+        return MAJOR_CITIES[city_clean] < min_population
+    
+    # Check for partial match
+    for major_city, pop in MAJOR_CITIES.items():
+        if major_city in city_clean or city_clean in major_city:
+            return pop < min_population
+    
+    # Not in major cities list = small town/village
+    return True
 
 
 def extract_neighborhood_from_address(address):
@@ -185,6 +236,37 @@ def parse_detail(prop_id, html_text, url):
     return data
 
 
+def should_include_property(data, args):
+    """
+    Determine if a property should be included based on filters.
+    Returns (should_include, reason_if_excluded)
+    """
+    property_type = data.get('property_type', 'друго')
+    city = data.get('city', '')
+    size_sqm = data.get('size_sqm', 0) or 0
+    
+    # Check property type filters
+    if property_type == 'къща' and not args.include_houses:
+        return False, f"House excluded (use --include-houses to include)"
+    
+    if property_type == 'гараж' and not args.include_garages:
+        return False, f"Garage excluded (use --include-garages to include)"
+    
+    # Check small towns filter
+    if not args.include_small_towns:
+        if is_small_city(city, min_population=args.min_population):
+            return False, f"Small town/village excluded (use --include-small-towns to include)"
+    
+    # Check size filters
+    if size_sqm > 0:
+        if size_sqm < args.min_sqm:
+            return False, f"Too small ({size_sqm}m² < {args.min_sqm}m²)"
+        if size_sqm > args.max_sqm:
+            return False, f"Too large ({size_sqm}m² > {args.max_sqm}m²)"
+    
+    return True, None
+
+
 def init_db():
     os.makedirs('data', exist_ok=True)
     conn = sqlite3.connect(DB_PATH)
@@ -193,25 +275,47 @@ def init_db():
         CREATE TABLE auctions (
             id TEXT PRIMARY KEY, url TEXT, price_eur REAL, city TEXT, district TEXT,
             neighborhood TEXT, address TEXT, property_type TEXT, size_sqm REAL, 
-            rooms INTEGER, court TEXT, auction_start TEXT, auction_end TEXT, scraped_at DATETIME
+            rooms INTEGER, court TEXT, auction_start TEXT, auction_end TEXT, scraped_at DATETIME,
+            excluded BOOLEAN DEFAULT 0,
+            exclusion_reason TEXT
         )
     """)
     conn.execute("CREATE INDEX idx_city ON auctions(city)")
     conn.execute("CREATE INDEX idx_type ON auctions(property_type)")
     conn.execute("CREATE INDEX idx_neighborhood ON auctions(neighborhood)")
+    conn.execute("CREATE INDEX idx_excluded ON auctions(excluded)")
     conn.commit()
     return conn
 
 
-def scrape_range(start_id=85000, end_id=85100, workers=10):
+def scrape_range(start_id=85000, end_id=85100, workers=10, args=None):
     conn = init_db()
+    
+    # Track filter settings
+    filter_info = {
+        'include_houses': args.include_houses if args else False,
+        'include_garages': args.include_garages if args else False,
+        'include_small_towns': args.include_small_towns if args else False,
+        'min_sqm': args.min_sqm if args else 35,
+        'max_sqm': args.max_sqm if args else 150,
+        'min_population': args.min_population if args else 50000,
+    }
     
     print(f"=== КЧСИ Scraper v5 - {datetime.utcnow().isoformat()} ===")
     print(f"Range: {start_id} to {end_id}")
     print(f"Timeouts: Request={REQUEST_TIMEOUT}s, Socket={SOCKET_TIMEOUT}s")
-    print(f"Workers: {workers}\n")
+    print(f"Workers: {workers}")
+    print(f"\nFilters:")
+    print(f"  - Houses: {'included' if filter_info['include_houses'] else 'EXCLUDED'}")
+    print(f"  - Garages: {'included' if filter_info['include_garages'] else 'EXCLUDED'}")
+    print(f"  - Small towns (<{filter_info['min_population']:,} pop): {'included' if filter_info['include_small_towns'] else 'EXCLUDED'}")
+    print(f"  - Size range: {filter_info['min_sqm']}-{filter_info['max_sqm']}m²")
+    print()
     
     all_data = []
+    included_count = 0
+    excluded_count = 0
+    excluded_by_reason = {}
     
     with ThreadPoolExecutor(max_workers=workers) as executor:
         futures = {executor.submit(fetch_detail_with_timeout, pid): pid for pid in range(start_id, end_id + 1)}
@@ -232,44 +336,70 @@ def scrape_range(start_id=85000, end_id=85100, workers=10):
                     if data.get('neighborhood'):
                         neighborhoods_found += 1
                     
+                    # Apply filters
+                    should_include, exclusion_reason = should_include_property(data, args)
+                    
+                    if should_include:
+                        included_count += 1
+                        excluded_flag = 0
+                    else:
+                        excluded_count += 1
+                        excluded_flag = 1
+                        excluded_by_reason[exclusion_reason] = excluded_by_reason.get(exclusion_reason, 0) + 1
+                    
                     conn.execute("""
                         INSERT OR REPLACE INTO auctions 
                         (id, url, price_eur, city, district, neighborhood, address, property_type, 
-                         size_sqm, rooms, court, auction_start, auction_end, scraped_at)
-                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                         size_sqm, rooms, court, auction_start, auction_end, scraped_at, excluded, exclusion_reason)
+                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                     """, (
                         data.get('id'), data.get('url'), data.get('price_eur'),
                         data.get('city'), data.get('district'), data.get('neighborhood'),
                         data.get('address'), data.get('property_type'), data.get('size_sqm'), 
                         data.get('rooms'), data.get('court'), data.get('auction_start'), 
-                        data.get('auction_end'), data.get('scraped_at')
+                        data.get('auction_end'), data.get('scraped_at'),
+                        excluded_flag, exclusion_reason
                     ))
             except Exception as e:
                 pass
             
             if done % 20 == 0:
                 conn.commit()
-                print(f"  Progress: {done}/{end_id-start_id+1} scanned, {success} valid, {neighborhoods_found} neighborhoods found")
+                print(f"  Progress: {done}/{end_id-start_id+1} scanned, {success} valid, {included_count} included, {excluded_count} excluded")
                 sys.stdout.flush()
     
     conn.commit()
     
     print(f"\nSCRAPED: {success} listings")
-    print(f"Neighborhoods extracted: {neighborhoods_found}")
+    print(f"  → Included: {included_count}")
+    print(f"  → Excluded: {excluded_count}")
+    print(f"  → Neighborhoods extracted: {neighborhoods_found}")
+    
+    if excluded_count > 0:
+        print("\nExcluded by reason:")
+        for reason, count in sorted(excluded_by_reason.items(), key=lambda x: -x[1]):
+            print(f"  - {reason}: {count}")
     
     cursor = conn.cursor()
     
-    print("\nBy property type:")
+    print("\nBy property type (included only):")
     for row in cursor.execute("""
         SELECT property_type, COUNT(*), ROUND(AVG(price_eur), 0), ROUND(AVG(size_sqm), 0)
-        FROM auctions GROUP BY property_type ORDER BY COUNT(*) DESC
+        FROM auctions WHERE excluded = 0 GROUP BY property_type ORDER BY COUNT(*) DESC
     """):
         print(f"  {row[0]:15} : {row[1]:3} listings")
     
-    print("\nTop neighborhoods:")
+    print("\nBy property type (excluded):")
+    for row in cursor.execute("""
+        SELECT property_type, COUNT(*), ROUND(AVG(price_eur), 0)
+        FROM auctions WHERE excluded = 1 GROUP BY property_type ORDER BY COUNT(*) DESC
+    """):
+        print(f"  {row[0]:15} : {row[1]:3} listings")
+    
+    print("\nTop neighborhoods (included only):")
     for row in cursor.execute("""
         SELECT neighborhood, city, COUNT(*), ROUND(AVG(price_eur), 0)
-        FROM auctions WHERE neighborhood IS NOT NULL 
+        FROM auctions WHERE neighborhood IS NOT NULL AND excluded = 0
         GROUP BY neighborhood ORDER BY COUNT(*) DESC LIMIT 10
     """):
         print(f"  {row[0]:20} ({row[1]}): {row[2]:3} listings")
@@ -278,14 +408,76 @@ def scrape_range(start_id=85000, end_id=85100, workers=10):
     
     with open('data/bcpea_v5.json', 'w', encoding='utf-8') as f:
         json.dump({
-            'scraped_at': datetime.utcnow().isoformat(), 
-            'count': len(all_data), 
+            'scraped_at': datetime.utcnow().isoformat(),
+            'filters': filter_info,
+            'count': len(all_data),
+            'included': included_count,
+            'excluded': excluded_count,
             'listings': all_data
         }, f, ensure_ascii=False)
     
     print(f"\n✓ Saved to {DB_PATH}")
-    return success, neighborhoods_found
+    print(f"✓ Summary saved to data/bcpea_v5.json")
+    return success, neighborhoods_found, included_count, excluded_count
+
+
+def main():
+    parser = argparse.ArgumentParser(
+        description='КЧСИ Property Scraper v5 - With configurable filters',
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog="""
+Examples:
+  # Default: apartments only, major cities only, 35-150m²
+  python bcpea_v5.py
+  
+  # Include houses and garages
+  python bcpea_v5.py --include-houses --include-garages
+  
+  # Include small towns (under 50k population)
+  python bcpea_v5.py --include-small-towns
+  
+  # Custom size range
+  python bcpea_v5.py --min-sqm 20 --max-sqm 200
+  
+  # Include everything
+  python bcpea_v5.py --include-houses --include-garages --include-small-towns
+        """
+    )
+    
+    parser.add_argument('--start-id', type=int, default=85000,
+                        help='Start property ID (default: 85000)')
+    parser.add_argument('--end-id', type=int, default=86000,
+                        help='End property ID (default: 85100)')
+    parser.add_argument('--workers', type=int, default=10,
+                        help='Number of parallel workers (default: 10)')
+    
+    # Property type filters
+    parser.add_argument('--include-houses', action='store_true',
+                        help='Include houses (къщи) in results')
+    parser.add_argument('--include-garages', action='store_true',
+                        help='Include garages and parking (гаражи, паркоместа) in results')
+    
+    # City population filter
+    parser.add_argument('--include-small-towns', action='store_true',
+                        help='Include small towns and villages (under --min-population)')
+    parser.add_argument('--min-population', type=int, default=50000,
+                        help='Minimum city population to include (default: 50000)')
+    
+    # Size filters
+    parser.add_argument('--min-sqm', type=int, default=35,
+                        help='Minimum property size in m² (default: 35)')
+    parser.add_argument('--max-sqm', type=int, default=150,
+                        help='Maximum property size in m² (default: 150)')
+    
+    args = parser.parse_args()
+    
+    scrape_range(
+        start_id=args.start_id,
+        end_id=args.end_id,
+        workers=args.workers,
+        args=args
+    )
 
 
 if __name__ == '__main__':
-    scrape_range(start_id=85000, end_id=85100, workers=10)
+    main()

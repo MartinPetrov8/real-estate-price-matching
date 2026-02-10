@@ -8,10 +8,10 @@ import os
 from datetime import datetime
 
 DB_PATH = "data/auctions.db"
-MARKET_DB = "data/market.db"
+MARKET_DB = "data/market_listings.db"
 
-MIN_APARTMENT_SIZE = 35
-MAX_APARTMENT_SIZE = 150
+MIN_APARTMENT_SIZE = 20
+MAX_APARTMENT_SIZE = 500
 
 
 def is_valid_apartment(size_sqm, description=None, property_type=None):

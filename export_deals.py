@@ -3,6 +3,7 @@
 
 Outputs to deals.json (root) for GitHub Pages
 Uses deal_matches when available, falls back to neighborhood estimates.
+Handles properties with no market comparison data gracefully.
 """
 
 import json
@@ -36,6 +37,18 @@ CITY_MARKET_RATES = {
     'плевен': 850,
 }
 
+# Property type multipliers (relative to apartment base price)
+PROPERTY_TYPE_MULTIPLIERS = {
+    'апартамент': 1.0,
+    'къща': 0.8,      # Houses often lower per sqm but larger
+    'гараж': 0.3,     # Garages much cheaper per sqm
+    'магазин': 1.2,   # Commercial higher
+    'офис': 1.1,
+    'склад': 0.6,
+    'търговски': 1.2,
+    'земя': 0.2,      # Land priced differently
+    'друго': 0.8,
+}
 
 # Partial ownership detection patterns
 PARTIAL_OWNERSHIP_PATTERNS = [
@@ -96,22 +109,27 @@ def extract_neighborhood(address, city):
     return None
 
 
-def get_market_rate(city, address):
-    """Get estimated market price per sqm for a city/neighborhood."""
+def get_market_rate(city, address, property_type='апартамент'):
+    """Get estimated market price per sqm for a city/neighborhood/property type."""
     city_lower = city.lower() if city else ''
     
+    # Get base rate from neighborhood or city
     # Try specific neighborhood caps first
     caps = get_price_cap(city, address)
-    if caps['median'] != 1200:  # Default value was changed
-        return caps['median']
+    base_rate = caps['median']
     
-    # Fall back to city average
-    for key, rate in CITY_MARKET_RATES.items():
-        if key in city_lower:
-            return rate
+    # If neighborhood caps returned default, try city averages
+    if base_rate == 1200:  # Default value was returned
+        for key, rate in CITY_MARKET_RATES.items():
+            if key in city_lower:
+                base_rate = rate
+                break
     
-    # Default fallback
-    return 1000
+    # Apply property type multiplier
+    multiplier = PROPERTY_TYPE_MULTIPLIERS.get(property_type, 0.8)
+    adjusted_rate = base_rate * multiplier
+    
+    return adjusted_rate
 
 
 def column_exists(conn, table, column):
@@ -120,11 +138,44 @@ def column_exists(conn, table, column):
     return any(row[1] == column for row in cursor.fetchall())
 
 
-def export_deals(min_price=10000):
-    """Export deals - includes only FULL ownership properties with market estimates.
+def get_comparison_status(match_count, has_market_estimate, property_type):
+    """
+    Determine comparison status for a property.
+    
+    Returns dict with:
+    - status: 'matched', 'estimated', or 'no_comparison'
+    - label: Human-readable label
+    - confidence: 'high', 'medium', or 'low'
+    """
+    if match_count and match_count > 0:
+        return {
+            'status': 'matched',
+            'label': 'Based on market comparables',
+            'confidence': 'high',
+            'has_data': True
+        }
+    elif has_market_estimate:
+        return {
+            'status': 'estimated',
+            'label': 'Based on neighborhood estimates',
+            'confidence': 'medium',
+            'has_data': True
+        }
+    else:
+        return {
+            'status': 'no_comparison',
+            'label': 'No comparison available',
+            'confidence': 'low',
+            'has_data': False
+        }
+
+
+def export_deals(min_price=10000, include_no_comparison=True):
+    """Export deals - includes FULL ownership properties with market estimates.
     
     Args:
         min_price: Minimum auction price in EUR
+        include_no_comparison: Include properties even without market comparison data
     """
     
     if not os.path.exists(DB_PATH):
@@ -137,8 +188,7 @@ def export_deals(min_price=10000):
     # Check if partial_ownership column exists
     has_partial_column = column_exists(conn, 'kchsi_properties', 'partial_ownership')
     
-    # Get all KCHSI properties with their match data (if available)
-    # EXCLUDE partial ownership properties
+    # Build query based on available columns
     if has_partial_column:
         query = """
             SELECT 
@@ -162,10 +212,10 @@ def export_deals(min_price=10000):
             FROM kchsi_properties k
             LEFT JOIN deal_matches d ON k.bcpea_id = d.kchsi_id
             WHERE k.price_eur >= ?
-              AND k.sqm BETWEEN 30 AND 200
-              AND k.partial_ownership IS NULL
             GROUP BY k.id
-            ORDER BY avg_savings_pct DESC
+            ORDER BY 
+                CASE WHEN avg_savings_pct IS NULL THEN 0 ELSE 1 END DESC,
+                avg_savings_pct DESC
         """
     else:
         # Fallback for older database schema
@@ -191,14 +241,16 @@ def export_deals(min_price=10000):
             FROM kchsi_properties k
             LEFT JOIN deal_matches d ON k.bcpea_id = d.kchsi_id
             WHERE k.price_eur >= ?
-              AND k.sqm BETWEEN 30 AND 200
             GROUP BY k.id
-            ORDER BY avg_savings_pct DESC
+            ORDER BY 
+                CASE WHEN avg_savings_pct IS NULL THEN 0 ELSE 1 END DESC,
+                avg_savings_pct DESC
         """
     
     deals = []
     excluded_count = 0
     excluded_partial = []
+    no_comparison_count = 0
     
     for row in conn.execute(query, (min_price,)):
         row = dict(row)
@@ -206,6 +258,7 @@ def export_deals(min_price=10000):
         auction_price = row['price_eur'] or 0
         size = row['sqm'] or 1
         description = row['description'] or ''
+        property_type = row['property_type'] or 'апартамент'
         
         # Double-check for partial ownership in description (safety net)
         partial_ownership = row['partial_ownership'] or detect_partial_ownership(description)
@@ -233,15 +286,31 @@ def export_deals(min_price=10000):
             market_price = raw_market_price
             savings = row['avg_savings_eur'] or (market_price - auction_price)
             discount = row['avg_savings_pct'] or ((market_price - auction_price) / market_price * 100)
+            has_market_estimate = True
         else:
             # Fallback: use neighborhood/city estimates
-            market_sqm = get_market_rate(city, address)
+            market_sqm = get_market_rate(city, address, property_type)
             market_price = size * market_sqm
             savings = market_price - auction_price
             discount = ((market_price - auction_price) / market_price * 100) if market_price > 0 else 0
+            has_market_estimate = True  # We have an estimate
         
         # Cap discount at realistic level
         discount = min(discount, MAX_REALISTIC_DISCOUNT)
+        
+        # Skip if no meaningful market data and include_no_comparison is False
+        comparison_info = get_comparison_status(comparables, has_market_estimate, property_type)
+        
+        if not comparison_info['has_data'] and not include_no_comparison:
+            no_comparison_count += 1
+            continue
+        
+        if not comparison_info['has_data']:
+            # Still include but flag appropriately
+            market_price = None
+            savings = None
+            discount = None
+            no_comparison_count += 1
         
         # Calculate price per sqm
         auction_sqm = auction_price / size if size > 0 else 0
@@ -275,30 +344,38 @@ def export_deals(min_price=10000):
             'sqm': round(size, 1) if size else None,
             'rooms': row['rooms'],
             'floor': row['floor'],
-            'property_type': 'апартамент',  # Default for now
+            'property_type': property_type,
             'auction_price': round(auction_price),
-            'market_price': round(market_price),
-            'discount_pct': round(discount, 1),
-            'savings_eur': round(max(0, savings)),
+            'market_price': round(market_price) if market_price else None,
+            'discount_pct': round(discount, 1) if discount is not None else None,
+            'savings_eur': round(max(0, savings)) if savings is not None else None,
             'price_per_sqm': round(auction_sqm),
             'auction_end': auction_end,
             'url': f"https://sales.bcpea.org/properties/{row['bcpea_id']}",
             'comparables_count': comparables,
+            'comparison_status': comparison_info['status'],
+            'comparison_label': comparison_info['label'],
+            'comparison_confidence': comparison_info['confidence'],
             'partial_ownership': partial_ownership  # Will be None for included properties
         }
         
         deals.append(deal)
     
     conn.close()
-    return deals, excluded_count, excluded_partial
+    return deals, excluded_count, excluded_partial, no_comparison_count
 
 
 def main():
     print(f"=== Exporting Deals - {datetime.utcnow().isoformat()} ===\n")
     
-    deals, excluded_count, excluded_partial = export_deals(min_price=5000)
+    deals, excluded_count, excluded_partial, no_comparison_count = export_deals(
+        min_price=5000, 
+        include_no_comparison=True
+    )
     
-    print(f"Found {len(deals)} deals (excluded {excluded_count} partial ownership properties)\n")
+    print(f"Found {len(deals)} deals")
+    print(f"  - Excluded: {excluded_count} partial ownership properties")
+    print(f"  - No comparison data: {no_comparison_count} properties\n")
     
     if excluded_count > 0:
         print("Excluded partial ownership properties:")
@@ -311,22 +388,49 @@ def main():
     if deals:
         # Stats
         cities = {}
+        property_types = {}
+        comparison_statuses = {}
         discounts = []
+        
         for d in deals:
             cities[d['city']] = cities.get(d['city'], 0) + 1
-            if d['discount_pct'] > 0:
+            property_types[d['property_type']] = property_types.get(d['property_type'], 0) + 1
+            comparison_statuses[d['comparison_status']] = comparison_statuses.get(d['comparison_status'], 0) + 1
+            if d['discount_pct'] is not None and d['discount_pct'] > 0:
                 discounts.append(d['discount_pct'])
         
         print("By city:")
-        for city, count in sorted(cities.items(), key=lambda x: -x[1]):
+        for city, count in sorted(cities.items(), key=lambda x: -x[1])[:10]:
             print(f"  {city}: {count}")
         
-        avg_discount = sum(discounts) / len(discounts) if discounts else 0
-        print(f"\nAverage discount: {avg_discount:.1f}%")
+        print("\nBy property type:")
+        for ptype, count in sorted(property_types.items(), key=lambda x: -x[1]):
+            print(f"  {ptype}: {count}")
         
-        print(f"\nTop 5 bargains:")
-        for d in sorted(deals, key=lambda x: -x['discount_pct'])[:5]:
+        print("\nBy comparison status:")
+        for status, count in sorted(comparison_statuses.items(), key=lambda x: -x[1]):
+            label = {
+                'matched': 'Based on comparables',
+                'estimated': 'Based on estimates',
+                'no_comparison': 'No comparison available'
+            }.get(status, status)
+            print(f"  {label}: {count}")
+        
+        if discounts:
+            avg_discount = sum(discounts) / len(discounts)
+            print(f"\nAverage discount (with data): {avg_discount:.1f}%")
+        
+        # Show sample deals
+        print(f"\nTop 5 bargains (with market data):")
+        deals_with_data = [d for d in deals if d['discount_pct'] is not None]
+        for d in sorted(deals_with_data, key=lambda x: -(x['discount_pct'] or 0))[:5]:
             print(f"  {d['city']}, {d['neighborhood']}: €{d['auction_price']:,} (-{d['discount_pct']}%)")
+        
+        if no_comparison_count > 0:
+            print(f"\nSample properties with no comparison data:")
+            no_data_deals = [d for d in deals if d['comparison_status'] == 'no_comparison']
+            for d in no_data_deals[:3]:
+                print(f"  {d['city']}, {d['neighborhood']}: €{d['auction_price']:,} - {d['comparison_label']}")
     
     # Write JSON to root directory
     with open(OUTPUT_PATH, 'w', encoding='utf-8') as f:
@@ -335,6 +439,8 @@ def main():
     print(f"\n✓ Exported {len(deals)} deals to {OUTPUT_PATH}")
     if excluded_count > 0:
         print(f"✓ Excluded {excluded_count} partial ownership properties")
+    if no_comparison_count > 0:
+        print(f"✓ Included {no_comparison_count} properties flagged as 'no comparison available'")
     
     return deals
 

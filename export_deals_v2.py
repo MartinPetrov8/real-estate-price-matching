@@ -2,6 +2,7 @@
 """
 Export Deals v2 - Uses neighborhood-aware comparisons
 Exports to deals.json for GitHub Pages frontend
+Includes properties WITHOUT market data (flagged as "no comparison available")
 """
 
 import json
@@ -37,6 +38,7 @@ def export_deals():
     conn = sqlite3.connect(DB_PATH)
     conn.row_factory = sqlite3.Row
     
+    # Include ALL properties, even without market comparison data
     query = """
         SELECT 
             a.id as bcpea_id,
@@ -58,9 +60,10 @@ def export_deals():
         FROM auctions a
         LEFT JOIN comparisons c ON a.id = c.auction_id
         WHERE a.property_type = 'апартамент'
-        AND a.size_sqm BETWEEN 35 AND 150
-        AND c.bargain_score IS NOT NULL
-        ORDER BY c.bargain_score DESC
+        AND a.size_sqm BETWEEN 20 AND 500
+        ORDER BY 
+            CASE WHEN c.bargain_score IS NOT NULL THEN c.bargain_score ELSE -999 END DESC,
+            a.price_eur DESC
     """
     
     deals = []
@@ -72,15 +75,21 @@ def export_deals():
         auction_price = row['auction_price'] or 0
         size = row['size_sqm'] or 1
         market_sqm = row['market_median_sqm']
+        has_market_data = market_sqm is not None
         
-        if market_sqm:
+        if has_market_data:
             market_price = market_sqm * size
             discount = row['bargain_score'] or 0
             savings = market_price - auction_price
+            match_type = row['match_type'] or 'Unknown'
+            bargain_rating = row['bargain_rating'] or 'NO_DATA'
         else:
+            # No market data available
             market_price = None
             discount = 0
             savings = 0
+            match_type = 'Няма данни за пазара'
+            bargain_rating = 'NO_COMPARISON'
         
         city = (row['city'] or '').replace('гр. ', '').replace('с. ', '').strip()
         if not city:
@@ -103,8 +112,9 @@ def export_deals():
             'auction_end': format_auction_end(row['auction_end']),
             'url': f"https://sales.bcpea.org/properties/{row['bcpea_id']}",
             'market_sample_size': row['market_sample_size'] or 0,
-            'match_type': row['match_type'] or 'Unknown',
-            'bargain_rating': row['bargain_rating'] or 'NO_DATA'
+            'match_type': match_type,
+            'bargain_rating': bargain_rating,
+            'has_market_comparison': has_market_data
         }
         
         deals.append(deal)
@@ -118,32 +128,33 @@ def main():
     
     deals = export_deals()
     
-    deals_with_data = [d for d in deals if d['market_price'] is not None]
+    deals_with_data = [d for d in deals if d['has_market_comparison']]
+    deals_without_data = [d for d in deals if not d['has_market_comparison']]
     
     print(f"Total apartments: {len(deals)}")
     print(f"With market data: {len(deals_with_data)}")
-    print(f"Without market data: {len(deals) - len(deals_with_data)}\n")
+    print(f"Without market data: {len(deals_without_data)}")
     
     if deals_with_data:
-        print("By city (top 10):")
+        print("\nBy city (with market data):")
         cities = {}
         for d in deals_with_data:
             cities[d['city']] = cities.get(d['city'], 0) + 1
-        for city, count in sorted(cities.items(), key=lambda x: -x[1])[:10]:
+        for city, count in sorted(cities.items(), key=lambda x: -x[1]):
             print(f"  {city}: {count}")
         
-        print("\nBy match type:")
-        match_types = {}
-        for d in deals_with_data:
-            mt = d['match_type']
-            match_types[mt] = match_types.get(mt, 0) + 1
-        for mt, count in sorted(match_types.items(), key=lambda x: -x[1]):
-            print(f"  {mt}: {count}")
-        
-        print(f"\nTop 10 bargains:")
-        for d in deals_with_data[:10]:
+        print(f"\nTop bargains (with market data):")
+        for d in deals_with_data[:5]:
             hood_str = f", {d['neighborhood']}" if d['neighborhood'] != 'Неизвестен' else ""
             print(f"  {d['city']}{hood_str}: €{d['auction_price']:,} (-{d['discount_pct']}%, {d['match_type']})")
+    
+    if deals_without_data:
+        print(f"\nProperties without market comparison:")
+        cities_no_data = {}
+        for d in deals_without_data:
+            cities_no_data[d['city']] = cities_no_data.get(d['city'], 0) + 1
+        for city, count in sorted(cities_no_data.items(), key=lambda x: -x[1])[:10]:
+            print(f"  {city}: {count}")
     
     with open(OUTPUT_PATH, 'w', encoding='utf-8') as f:
         json.dump(deals, f, ensure_ascii=False, indent=2)
