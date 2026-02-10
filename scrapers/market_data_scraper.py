@@ -19,10 +19,19 @@ OLX_CITIES = {
     'Варна': 'https://www.olx.bg/nedvizhimi-imoti/prodazhbi/apartamenti/q-varna/',
     'Бургас': 'https://www.olx.bg/nedvizhimi-imoti/prodazhbi/apartamenti/q-burgas/',
     'Пловдив': 'https://www.olx.bg/nedvizhimi-imoti/prodazhbi/apartamenti/q-plovdiv/',
+    'Русе': 'https://www.olx.bg/nedvizhimi-imoti/prodazhbi/apartamenti/q-ruse/',
+    'Плевен': 'https://www.olx.bg/nedvizhimi-imoti/prodazhbi/apartamenti/q-pleven/',
+    'Шумен': 'https://www.olx.bg/nedvizhimi-imoti/prodazhbi/apartamenti/q-shumen/',
+    'Ямбол': 'https://www.olx.bg/nedvizhimi-imoti/prodazhbi/apartamenti/q-yambol/',
+    'Стара Загора': 'https://www.olx.bg/nedvizhimi-imoti/prodazhbi/apartamenti/q-stara-zagora/',
+    'Велико Търново': 'https://www.olx.bg/nedvizhimi-imoti/prodazhbi/apartamenti/q-veliko-turnovo/',
+    'Благоевград': 'https://www.olx.bg/nedvizhimi-imoti/prodazhbi/apartamenti/q-blagoevgrad/',
 }
 
 ALO_CITIES = {
     'София': 1, 'Пловдив': 2, 'Варна': 3, 'Бургас': 4,
+    'Русе': 5, 'Плевен': 6, 'Шумен': 7, 'Ямбол': 8,
+    'Стара Загора': 9, 'Велико Търново': 10, 'Благоевград': 11,
 }
 
 HOMES_URLS = {
@@ -30,6 +39,13 @@ HOMES_URLS = {
     'Пловдив': 'https://www.homes.bg/obiavi/apartamenti/prodazhba/plovdiv/',
     'Варна': 'https://www.homes.bg/obiavi/apartamenti/prodazhba/varna/',
     'Бургас': 'https://www.homes.bg/obiavi/apartamenti/prodazhba/burgas/',
+    'Русе': 'https://www.homes.bg/obiavi/apartamenti/prodazhba/ruse/',
+    'Плевен': 'https://www.homes.bg/obiavi/apartamenti/prodazhba/pleven/',
+    'Шумен': 'https://www.homes.bg/obiavi/apartamenti/prodazhba/shumen/',
+    'Ямбол': 'https://www.homes.bg/obiavi/apartamenti/prodazhba/yambol/',
+    'Стара Загора': 'https://www.homes.bg/obiavi/apartamenti/prodazhba/stara-zagora/',
+    'Велико Търново': 'https://www.homes.bg/obiavi/apartamenti/prodazhba/veliko-turnovo/',
+    'Благоевград': 'https://www.homes.bg/obiavi/apartamenti/prodazhba/blagoevgrad/',
 }
 
 

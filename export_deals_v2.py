@@ -60,7 +60,7 @@ def export_deals():
         FROM auctions a
         LEFT JOIN comparisons c ON a.id = c.auction_id
         WHERE a.property_type = 'апартамент'
-        AND a.size_sqm BETWEEN 20 AND 500
+        AND a.size_sqm BETWEEN 20 AND 2000
         ORDER BY 
             CASE WHEN c.bargain_score IS NOT NULL THEN c.bargain_score ELSE -999 END DESC,
             a.price_eur DESC

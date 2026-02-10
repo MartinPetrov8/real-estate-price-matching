@@ -68,9 +68,11 @@
         // Normalize deal data - support both old and new field names
         const bcpeaId = deal.bcpea_id || deal.id;
         const auctionPrice = deal.auction_price || deal.effective_price || deal.price || 0;
-        const marketPrice = deal.market_price || (deal.market_avg ? deal.market_avg * deal.sqm : 0) || auctionPrice * 1.5;
+        const comparables = deal.comparables_count || deal.market_sample_size || 0;
+        const hasReliableMarketData = comparables > 0 && deal.market_price;
+        const marketPrice = hasReliableMarketData ? deal.market_price : null;
         const discountPct = deal.discount_pct !== undefined ? deal.discount_pct : (deal.discount || 0);
-        const savingsEur = deal.savings_eur !== undefined ? deal.savings_eur : Math.max(0, marketPrice - auctionPrice);
+        const savingsEur = deal.savings_eur !== undefined ? deal.savings_eur : (marketPrice ? Math.max(0, marketPrice - auctionPrice) : 0);
         const pricePerSqm = deal.price_per_sqm || (deal.auction_price && deal.sqm ? deal.auction_price / deal.sqm : 0);
         const auctionEnd = deal.auction_end || null;
         const city = deal.city || 'Неизвестен';
@@ -79,7 +81,7 @@
         const rooms = deal.rooms;
         const floor = deal.floor;
         const propertyType = deal.property_type || 'апартамент';
-        const comparables = deal.comparables_count || 0;
+        // comparables already defined above
         const partialOwnership = deal.partial_ownership;
         const url = deal.url || `${BCPEA_URL}/${bcpeaId}`;
         
@@ -127,6 +129,7 @@
             <div class="card-body">
                 ${ownershipWarning}
                 ${dataWarning}
+                ${marketPrice ? `
                 <div class="price-section">
                     <div class="price-block price-auction">
                         <div class="price-block-label">Тръжна цена</div>
@@ -140,6 +143,18 @@
                         <div class="price-block-sub">${fmtSqm(marketPrice, sqm)}</div>
                     </div>
                 </div>
+                ` : `
+                <div class="price-section">
+                    <div class="price-block price-auction" style="flex:1">
+                        <div class="price-block-label">Тръжна цена</div>
+                        <div class="price-block-value">${fmtPrice(auctionPrice)}</div>
+                        <div class="price-block-sub">${fmtSqm(auctionPrice, sqm)}</div>
+                    </div>
+                </div>
+                <div style="background:var(--warning-light, #FFF8E1);padding:8px 12px;border-radius:var(--radius);margin-top:8px;font-size:13px;color:var(--warning, #F57C00);">
+                    ⚠️ Няма данни за пазарна цена
+                </div>
+                `}
                 <div class="deal-score">
                     <span class="score-label">Оценка:</span>
                     <div class="score-bar"><div class="score-fill ${r.level}" style="width:${r.score}%"></div></div>
@@ -258,7 +273,7 @@
             if (pill === 'new' && !isNew(d.auction_end)) return false;
             if (pill === 'ending') { const days = daysUntil(d.auction_end); if (days === null || days > 7) return false; }
             if (pill === 'best' && discountPct < 40) return false;
-            if (pill === 'sofia' && d.city !== 'София') return false;
+            if (pill === 'sofia' && !(d.city && d.city.includes('София'))) return false;
             return true;
         });
         const sort = el.sort.value;
@@ -314,7 +329,9 @@
         // Normalize data
         const bcpeaId = d.bcpea_id || d.id;
         const auctionPrice = d.auction_price || d.effective_price || d.price || 0;
-        const marketPrice = d.market_price || (d.market_avg ? d.market_avg * d.sqm : 0) || auctionPrice * 1.5;
+        const modalComparables = d.comparables_count || d.market_sample_size || 0;
+        const modalHasMarketData = modalComparables > 0 && d.market_price;
+        const marketPrice = modalHasMarketData ? d.market_price : null;
         const discountPct = d.discount_pct !== undefined ? d.discount_pct : (d.discount || 0);
         const savingsEur = Math.max(0, d.savings_eur !== undefined ? d.savings_eur : (marketPrice - auctionPrice));
         const city = d.city || 'Неизвестен';
@@ -362,27 +379,29 @@
             ${negativeWarningHtml}
             <h2 style="font-size:24px;font-weight:700;margin-bottom:8px;">${propertyType.charAt(0).toUpperCase() + propertyType.slice(1)} в ${city}</h2>
             <p style="color:var(--gray-500);margin-bottom:24px;">${neighborhood && neighborhood !== 'Неизвестен' ? neighborhood : ''}</p>
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px;">
+            <div style="display:grid;grid-template-columns:${marketPrice ? '1fr 1fr' : '1fr'};gap:16px;margin-bottom:24px;">
                 <div style="background:${discountPct >= 0 ? 'var(--success-light)' : 'var(--danger-light)'};padding:16px;border-radius:var(--radius);">
                     <div style="font-size:12px;color:var(--gray-500);text-transform:uppercase;font-weight:600;">Тръжна цена</div>
                     <div style="font-size:24px;font-weight:700;color:${discountPct >= 0 ? 'var(--success)' : 'var(--danger)'};">${fmtPrice(auctionPrice)}</div>
                     <div style="font-size:14px;color:var(--gray-600);">${fmtSqm(auctionPrice, sqm)}</div>
                 </div>
+                ${marketPrice ? `
                 <div style="background:var(--gray-100);padding:16px;border-radius:var(--radius);">
                     <div style="font-size:12px;color:var(--gray-500);text-transform:uppercase;font-weight:600;">Пазарна цена</div>
                     <div style="font-size:20px;font-weight:600;color:var(--gray-500);text-decoration:line-through;">${fmtPrice(marketPrice)}</div>
                     <div style="font-size:14px;color:var(--gray-600);">${fmtSqm(marketPrice, sqm)}</div>
                 </div>
+                ` : ''}
             </div>
             <div style="background:var(--info-light);padding:20px;border-radius:var(--radius);margin-bottom:24px;">
                 <h4 style="font-size:14px;font-weight:600;margin-bottom:12px;">💡 Анализ на сделката</h4>
                 <ul style="list-style:none;padding:0;margin:0;font-size:14px;line-height:1.8;">
-                    ${discountPct >= 0 ? 
+                    ${marketPrice ? (discountPct >= 0 ? 
                         `<li>✓ Цената е с <strong>${Math.round(discountPct)}%</strong> под пазарната ниво</li>
                          <li>✓ Спестявате <strong>${fmtPrice(savingsEur)}</strong> спрямо пазарната цена</li>` :
                         `<li>⚠ Цената е с <strong>${Math.abs(Math.round(discountPct))}%</strong> над пазарната ниво</li>
                          <li>⚠ Тръжната цена е с <strong>${fmtPrice(auctionPrice - marketPrice)}</strong> по-висока от пазарната</li>`
-                    }
+                    ) : '<li>⚠ Няма достатъчно данни за пазарна оценка</li>'}
                     ${d.neighborhood_range ? `<li>✓ Ценови диапазон в района: ${d.neighborhood_range}</li>` : ''}
                     ${comparables > 0 ? `<li>✓ Базирано на ${comparables} сравними обяви</li>` : '<li>⚠ Няма достатъчно сравними обяви за надеждна оценка</li>'}
                 </ul>

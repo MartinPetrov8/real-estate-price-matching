@@ -45,7 +45,7 @@ def get_market_median_for_neighborhood(city, neighborhood, size_sqm, rooms=None,
     size_min = size_sqm - size_tolerance
     size_max = size_sqm + size_tolerance
     
-    # Try 1: District + size match
+    # Try 1: District + size match (threshold lowered from 3 to 1)
     cursor.execute("""
         SELECT price_per_sqm FROM market_listings 
         WHERE city = ? AND district = ?
@@ -54,7 +54,7 @@ def get_market_median_for_neighborhood(city, neighborhood, size_sqm, rooms=None,
     """, (city_clean, neighborhood, size_min, size_max))
     results = cursor.fetchall()
     
-    if len(results) >= 3:
+    if len(results) >= 1:
         prices = sorted([r[0] for r in results])
         median = prices[len(prices) // 2]
         market_conn.close()
@@ -69,7 +69,7 @@ def get_market_median_for_neighborhood(city, neighborhood, size_sqm, rooms=None,
     """, (city_clean, size_min, size_max))
     results = cursor.fetchall()
     
-    if len(results) >= 3:
+    if len(results) >= 1:
         prices = sorted([r[0] for r in results])
         median = prices[len(prices) // 2]
         market_conn.close()

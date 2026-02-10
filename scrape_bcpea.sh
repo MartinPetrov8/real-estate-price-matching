@@ -1,17 +1,5 @@
 #!/bin/bash
-# BCPEA Auction Scraper - Sofia properties
-
-mkdir -p data
-echo "[]" > data/bcpea_sofia.json
-
-for page in $(seq 1 92); do
-  echo "Scraping page $page..."
-  curl -s "https://sales.bcpea.org/properties?page=$page" > /tmp/page.html
-  
-  # Extract Sofia properties with prices using grep/sed
-  grep -B5 "гр\. София" /tmp/page.html | grep -oP '[\d\s]+\.\d+\s*EUR' | head -5 >> /tmp/sofia_prices.txt
-  
-  sleep 0.5  # Be nice to server
-done
-
-echo "Done! Found $(wc -l < /tmp/sofia_prices.txt) Sofia prices"
+cd /workspace/real-estate-price-matching
+python3 scrapers/bcpea_v5.py --start-id 85000 --end-id 86000
+python3 scrapers/neighborhood_comparison.py
+python3 export_deals_v2.py
