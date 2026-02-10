@@ -645,3 +645,40 @@ body {
     to { opacity: 1; transform: translateY(0); }
 }
 .deal-card { animation: fadeInUp 0.4s ease-out; }
+
+/* QA Fixes - Partial ownership, expired, no data */
+.deal-card.deal-partial {
+    opacity: 0.7;
+    border: 2px dashed #9CA3AF;
+}
+.deal-card.deal-expired {
+    opacity: 0.5;
+    filter: grayscale(50%);
+}
+.card-header.deal-none {
+    background: linear-gradient(135deg, #6B7280 0%, #4B5563 100%);
+}
+.discount-badge.partial {
+    background: rgba(255,255,255,0.1);
+    border-radius: var(--radius);
+    padding: 8px;
+}
+.discount-badge.no-data {
+    background: rgba(255,255,255,0.1);
+    border-radius: var(--radius);
+    padding: 8px;
+}
+.badge-expired {
+    background: #6B7280;
+    color: white;
+}
+.badge-warning {
+    background: #F59E0B;
+    color: white;
+}
+.price-section.single {
+    justify-content: center;
+}
+.price-section.single .price-block {
+    flex: 0 0 auto;
+}
