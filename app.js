@@ -78,6 +78,9 @@
         const city = deal.city || 'Неизвестен';
         const neighborhood = deal.neighborhood || 'Неизвестен';
         const sqm = deal.sqm;
+        const buildingSqm = deal.building_sqm;
+        const plotSqm = deal.plot_sqm;
+        const isHouse = deal.property_type === 'къща';
         const rooms = deal.rooms;
         const floor = deal.floor;
         const propertyType = deal.property_type || 'апартамент';
@@ -161,7 +164,8 @@
                     <span class="score-value">${r.stars}★</span>
                 </div>
                 <div class="property-info">
-                    <div class="info-item"><span class="info-icon">📐</span><div class="info-content"><span class="info-label">Площ</span><span class="info-value">${sqm ? sqm+' м²' : 'N/A'}</span></div></div>
+                    <div class="info-item"><span class="info-icon">📐</span><div class="info-content"><span class="info-label">Площ</span><span class="info-value">${isHouse && buildingSqm ? buildingSqm+' м² (сграда)' : (sqm ? sqm+' м²' : 'N/A')}</span></div></div>
+                    ${isHouse && plotSqm ? '<div class="info-item"><span class="info-icon">🌳</span><div class="info-content"><span class="info-label">Парцел</span><span class="info-value">'+plotSqm+' м²</span></div></div>' : ''}
                     <div class="info-item"><span class="info-icon">🚪</span><div class="info-content"><span class="info-label">Стаи</span><span class="info-value">${rooms || 'N/A'}</span></div></div>
                     <div class="info-item"><span class="info-icon">🏢</span><div class="info-content"><span class="info-label">Етаж</span><span class="info-value">${floor || 'N/A'}</span></div></div>
                     <div class="info-item"><span class="info-icon">📊</span><div class="info-content"><span class="info-label">Сравнения</span><span class="info-value">${comparables > 0 ? comparables + ' имота' : 'Няма данни'}</span></div></div>

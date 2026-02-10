@@ -186,12 +186,35 @@ def parse_detail(prop_id, html_text, url):
     if addr_match:
         data['address'] = addr_match.group(1).strip()[:300]
     
+    # Extract main size (plot/land size for УПИ, total area for apartments)
     size_match = re.search(r'ПЛОЩ</div>\s*<div class="info">([\d\s\.,]+)\s*кв', decoded, re.IGNORECASE)
     if not size_match:
         size_match = re.search(r'class="info">([\d\s\.,]+)\s*кв\.?\s*м', decoded, re.IGNORECASE)
     if size_match:
         try:
             data['size_sqm'] = float(size_match.group(1).replace(' ', '').replace(',', '.'))
+        except:
+            pass
+    
+    # For houses with plots (УПИ): extract building size (разгъната застроена площ)
+    building_match = re.search(r'разгъната застроена площ.*?([\d\s\.,]+)\s*кв\.?\s*м', decoded, re.IGNORECASE)
+    if not building_match:
+        building_match = re.search(r'застроена площ.*?([\d\s\.,]+)\s*кв\.?\s*м', decoded, re.IGNORECASE)
+    if building_match:
+        try:
+            data['building_sqm'] = float(building_match.group(1).replace(' ', '').replace(',', '.'))
+        except:
+            pass
+    
+    # Extract plot/land size for УПИ (площ по нотариален акт)
+    plot_match = re.search(r'площ по нотариален акт.*?([\d\s\.,]+)\s*кв\.?\s*м', decoded, re.IGNORECASE)
+    if plot_match:
+        try:
+            plot_size = float(plot_match.group(1).replace(' ', '').replace(',', '.'))
+            data['plot_sqm'] = plot_size
+            # For УПИ, use plot as main size if current size is smaller
+            if data.get('size_sqm', 0) < plot_size:
+                data['size_sqm'] = plot_size
         except:
             pass
     
@@ -280,7 +303,7 @@ def init_db():
     conn.execute("""
         CREATE TABLE auctions (
             id TEXT PRIMARY KEY, url TEXT, price_eur REAL, city TEXT, district TEXT,
-            neighborhood TEXT, address TEXT, property_type TEXT, size_sqm REAL, 
+            neighborhood TEXT, address TEXT, property_type TEXT, size_sqm REAL, building_sqm REAL, plot_sqm REAL, 
             rooms INTEGER, court TEXT, auction_start TEXT, auction_end TEXT, scraped_at DATETIME,
             excluded BOOLEAN DEFAULT 0,
             exclusion_reason TEXT
@@ -356,13 +379,13 @@ def scrape_range(start_id=85000, end_id=85100, workers=10, args=None):
                     conn.execute("""
                         INSERT OR REPLACE INTO auctions 
                         (id, url, price_eur, city, district, neighborhood, address, property_type, 
-                         size_sqm, rooms, court, auction_start, auction_end, scraped_at, excluded, exclusion_reason)
-                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                         size_sqm, building_sqm, plot_sqm, rooms, court, auction_start, auction_end, scraped_at, excluded, exclusion_reason)
+                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                     """, (
                         data.get('id'), data.get('url'), data.get('price_eur'),
                         data.get('city'), data.get('district'), data.get('neighborhood'),
                         data.get('address'), data.get('property_type'), data.get('size_sqm'), 
-                        data.get('rooms'), data.get('court'), data.get('auction_start'), 
+                        data.get('building_sqm'), data.get('plot_sqm'), data.get('rooms'), data.get('court'), data.get('auction_start'), 
                         data.get('auction_end'), data.get('scraped_at'),
                         excluded_flag, exclusion_reason
                     ))
