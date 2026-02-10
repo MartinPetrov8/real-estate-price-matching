@@ -243,18 +243,19 @@ def parse_detail(prop_id, html_text, url):
     if rooms:
         data['rooms'] = rooms
     
-    # PRIORITY: Check for houses FIRST (before apartments)
-    # "еднофамилна" = single-family house, "упи" = regulated plot with house
-    if any(x in text_lower for x in ['еднофамилна', 'самостоятелна къща', 'семейна къща', 'къща с двор', 'къща с парцел']):
-        data['property_type'] = 'къща'
-    elif any(x in text_lower for x in ['упи', 'урегулиран поземлен имот']) and any(x in text_lower for x in ['сграда', 'къща', 'жилищна']):
-        data['property_type'] = 'къща'
-    elif any(x in text_lower for x in ['жилищна сграда', 'къща', 'вила']):
-        data['property_type'] = 'къща'
-    elif any(x in text_lower for x in ['самостоятелен обект', 'жилищен етаж', 'жилище,', 'жилище ']):
+    # Property type detection - apartments first (most common), then houses
+    # "самостоятелен обект" = separate unit (apartment)
+    if any(x in text_lower for x in ['самостоятелен обект', 'жилищен етаж', 'жилище,', 'жилище ']):
         data['property_type'] = 'апартамент'
     elif 'апартамент' in text_lower:
         data['property_type'] = 'апартамент'
+    # Houses - specific keywords
+    elif any(x in text_lower for x in ['еднофамилна', 'самостоятелна къща', 'семейна къща', 'къща с двор', 'къща с парцел']):
+        data['property_type'] = 'къща'
+    elif any(x in text_lower for x in ['упи', 'урегулиран поземлен имот']) and any(x in text_lower for x in ['сграда', 'къща', 'жилищна']):
+        data['property_type'] = 'къща'
+    elif any(x in text_lower for x in ['къща', 'вила']):
+        data['property_type'] = 'къща'
     elif any(x in text_lower for x in ['гараж', 'паркомясто', 'паркинг']):
         data['property_type'] = 'гараж'
     elif any(x in text_lower for x in ['магазин', 'търговски']):
