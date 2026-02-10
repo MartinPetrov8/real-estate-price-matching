@@ -230,6 +230,14 @@ def parse_detail(prop_id, html_text, url):
     if 'address' in data:
         data['neighborhood'] = extract_neighborhood_from_address(data['address'])
     
+    # Detect partial ownership (1/6 ид.ч, 1/2, etc.) - can't compare prices accurately
+    text_for_ownership_check = (data.get('address', '') + ' ' + decoded).lower()
+    partial_patterns = [
+        r'1/\d+\s*ид', r'1/\d+[^0-9]', r'идеална част', r'идеални части',
+        r'\d+/\d+\s*ид', r'\d+/\d+\s*идеална'
+    ]
+    data['is_partial_ownership'] = any(re.search(p, text_for_ownership_check) for p in partial_patterns)
+    
     text_lower = decoded.lower()
     rooms = extract_rooms(text_lower)
     if rooms:
@@ -306,7 +314,8 @@ def init_db():
             neighborhood TEXT, address TEXT, property_type TEXT, size_sqm REAL, building_sqm REAL, plot_sqm REAL, 
             rooms INTEGER, court TEXT, auction_start TEXT, auction_end TEXT, scraped_at DATETIME,
             excluded BOOLEAN DEFAULT 0,
-            exclusion_reason TEXT
+            exclusion_reason TEXT,
+            is_partial_ownership BOOLEAN DEFAULT 0
         )
     """)
     conn.execute("CREATE INDEX idx_city ON auctions(city)")
@@ -379,13 +388,13 @@ def scrape_range(start_id=85000, end_id=85100, workers=10, args=None):
                     conn.execute("""
                         INSERT OR REPLACE INTO auctions 
                         (id, url, price_eur, city, district, neighborhood, address, property_type, 
-                         size_sqm, building_sqm, plot_sqm, rooms, court, auction_start, auction_end, scraped_at, excluded, exclusion_reason)
-                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                         size_sqm, building_sqm, plot_sqm, rooms, is_partial_ownership, court, auction_start, auction_end, scraped_at, excluded, exclusion_reason)
+                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                     """, (
                         data.get('id'), data.get('url'), data.get('price_eur'),
                         data.get('city'), data.get('district'), data.get('neighborhood'),
                         data.get('address'), data.get('property_type'), data.get('size_sqm'), 
-                        data.get('building_sqm'), data.get('plot_sqm'), data.get('rooms'), data.get('court'), data.get('auction_start'), 
+                        data.get('building_sqm'), data.get('plot_sqm'), data.get('rooms'), data.get('is_partial_ownership', False), data.get('court'), data.get('auction_start'), 
                         data.get('auction_end'), data.get('scraped_at'),
                         excluded_flag, exclusion_reason
                     ))

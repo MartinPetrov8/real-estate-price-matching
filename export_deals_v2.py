@@ -49,9 +49,10 @@ def export_deals():
             a.rooms,
             a.auction_end,
             a.property_type,
+            a.is_partial_ownership,
             a.building_sqm,
             a.plot_sqm,
-            c.auction_price,
+            a.price_eur as auction_price,
             c.auction_price_sqm,
             c.market_median_sqm,
             c.market_sample_size,
@@ -77,9 +78,30 @@ def export_deals():
         auction_price = row['auction_price'] or 0
         size = row['size_sqm'] or 1
         market_sqm = row['market_median_sqm']
-        has_market_data = market_sqm is not None
         
-        if has_market_data:
+        # Skip price comparisons for non-apartments and partial ownership
+        is_apartment = (row['property_type'] or '').lower() == 'апартамент'
+        is_partial = row['is_partial_ownership'] or False
+        
+        if is_partial:
+            # Partial ownership - cannot compare accurately
+            has_market_data = False
+            market_price = None
+            discount = 0
+            savings = 0
+            match_type = 'Дробна собственост (не се сравнява)'
+            bargain_rating = 'PARTIAL_OWNERSHIP'
+        elif not is_apartment:
+            # Non-apartment - include in export but no price comparison
+            has_market_data = False
+            market_price = None
+            discount = 0
+            savings = 0
+            match_type = 'Няма сравнение (не е апартамент)'
+            bargain_rating = 'NON_APARTMENT'
+        elif market_sqm is not None:
+            # Apartment with market data
+            has_market_data = True
             market_price = market_sqm * size
             discount = row['bargain_score'] or 0
             savings = market_price - auction_price
@@ -87,6 +109,7 @@ def export_deals():
             bargain_rating = row['bargain_rating'] or 'NO_DATA'
         else:
             # No market data available
+            has_market_data = False
             market_price = None
             discount = 0
             savings = 0
@@ -105,6 +128,7 @@ def export_deals():
             'sqm': round(size, 1),
             'rooms': row['rooms'],
             'property_type': row['property_type'] or 'апартамент',
+            'is_partial_ownership': row['is_partial_ownership'] or False,
             'building_sqm': row['building_sqm'],
             'plot_sqm': row['plot_sqm'],
             'auction_price': round(auction_price),
