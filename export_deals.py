@@ -295,8 +295,8 @@ def export_deals(min_price=10000, include_no_comparison=True):
             discount = ((market_price - auction_price) / market_price * 100) if market_price > 0 else 0
             has_market_estimate = True  # We have an estimate
         
-        # Cap discount at realistic level
-        discount = min(discount, MAX_REALISTIC_DISCOUNT)
+        # NO CAP - show actual values to expose data quality bugs
+        # Extreme discounts (>70%) indicate issues like partial ownership, wrong sqm, etc.
         
         # Skip if no meaningful market data and include_no_comparison is False
         comparison_info = get_comparison_status(comparables, has_market_estimate, property_type)
