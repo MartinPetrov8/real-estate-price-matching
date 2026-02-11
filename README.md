@@ -209,9 +209,9 @@ Correctly classifies Bulgarian property types:
 - **Къща** → house
 - **Гараж** → garage
 
-### Discount Validation
-- Max realistic discount capped at 60% (configurable)
-- Properties with unrealistic discounts flagged for review
+### Discount Display
+- **No artificial caps** - actual values shown to expose data quality issues
+- Extreme discounts (>70%) likely indicate bugs in data (partial ownership, wrong sqm, etc.)
 - Only apartments get market comparison; garages/shops shown without discount
 
 ## ⚠️ Known Limitations
