@@ -765,3 +765,57 @@ body {
 .blog-card:hover .blog-card-link {
     text-decoration: underline;
 }
+
+/* FAQ Section on Homepage */
+.faq-section {
+    padding: 4rem 0;
+    background: white;
+}
+
+.faq-list {
+    max-width: 800px;
+    margin: 0 auto 2rem;
+}
+
+.faq-item {
+    border-bottom: 1px solid #e2e8f0;
+    padding: 1.25rem 0;
+}
+
+.faq-item:last-child {
+    border-bottom: none;
+}
+
+.faq-question {
+    font-weight: 600;
+    color: #1a1a2e;
+    font-size: 1.05rem;
+    margin-bottom: 0.5rem;
+    cursor: default;
+}
+
+.faq-answer {
+    color: #64748b;
+    line-height: 1.6;
+}
+
+.faq-more {
+    text-align: center;
+    margin-top: 1.5rem;
+}
+
+.btn-outline {
+    display: inline-block;
+    padding: 0.75rem 1.5rem;
+    border: 2px solid #667eea;
+    color: #667eea;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.2s;
+}
+
+.btn-outline:hover {
+    background: #667eea;
+    color: white;
+}
