@@ -188,12 +188,39 @@ deviation_pct REAL,
 bargain_score INTEGER
 ```
 
+## ✅ Data Quality Features
+
+### Partial Ownership Detection
+Properties with fractional ownership (e.g., "1/4 идеална част") are:
+- Flagged with `is_partial_ownership: true`
+- Shown with warning badge in UI
+- NOT included in market comparisons (prices aren't comparable)
+
+Detection patterns:
+- `притежава 1/6` (owns 1/6)
+- `1/4 идеална част от апартамент`
+- `продава 1/2` (sells 1/2)
+- Common area shares (`идеални части от общите части`) are NOT flagged
+
+### Property Type Classification
+Correctly classifies Bulgarian property types:
+- **Магазин** → commercial (shop)
+- **Апартамент** → apartment
+- **Къща** → house
+- **Гараж** → garage
+
+### Discount Validation
+- Max realistic discount capped at 60% (configurable)
+- Properties with unrealistic discounts flagged for review
+- Only apartments get market comparison; garages/shops shown without discount
+
 ## ⚠️ Known Limitations
 
 1. **imoti.net blocked**: Heavy JavaScript + Cloudflare protection
 2. **Small towns**: May match to city prices (filtered with min €10K threshold)
 3. **Missing sqm**: Some auctions lack size data
 4. **Stale data**: Market prices change; re-scrape regularly
+5. **Neighborhood data sparse**: Many properties lack neighborhood info for granular matching
 
 ## 🛠️ Development
 
@@ -226,6 +253,18 @@ for row in conn.execute('''
 ```bash
 python src/matching/neighborhood_matcher.py
 ```
+
+## 📝 Changelog
+
+### 2026-02-11
+- **Fixed**: Partial ownership detection now catches "X/Y идеална част от ап." patterns
+- **Fixed**: Property type "Магазин" correctly classified as commercial (was showing raw text)
+- **Added**: Data quality documentation in README
+- **Improved**: Export script properly excludes partial ownership from comparisons
+
+### 2026-02-10
+- Initial QA pass: partial ownership, property types, expired auctions
+- Neighborhood-aware price caps for Sofia districts
 
 ## 📄 License
 
