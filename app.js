@@ -24,12 +24,34 @@
     
     function fmtPrice(p) { return !p ? '€?' : '€' + Math.round(p).toLocaleString('bg-BG'); }
     function fmtSqm(p, s) { return !p || !s ? '€?/m²' : '€' + Math.round(p/s).toLocaleString('bg-BG') + '/m²'; }
+    function parseDate(d) {
+        if (!d) return null;
+        // Handle DD.MM.YYYY format (Bulgarian)
+        const match = d.match(/^(\d{2})\.(\d{2})\.(\d{4})$/);
+        if (match) {
+            return new Date(parseInt(match[3]), parseInt(match[2]) - 1, parseInt(match[1]));
+        }
+        // Handle YYYY-MM-DD format (ISO)
+        const isoMatch = d.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+        if (isoMatch) {
+            return new Date(parseInt(isoMatch[1]), parseInt(isoMatch[2]) - 1, parseInt(isoMatch[3]));
+        }
+        // Fallback to native parsing
+        const date = new Date(d);
+        return isNaN(date.getTime()) ? null : date;
+    }
     function fmtDate(d) { 
         if (!d) return 'Неизвестна';
-        const date = new Date(d);
+        const date = parseDate(d);
+        if (!date) return 'Неизвестна';
         return date.toLocaleDateString('bg-BG', {day:'numeric', month:'short', year:'numeric'});
     }
-    function daysUntil(d) { return !d ? null : Math.ceil((new Date(d) - new Date()) / 86400000); }
+    function daysUntil(d) { 
+        if (!d) return null;
+        const date = parseDate(d);
+        if (!date) return null;
+        return Math.ceil((date - new Date()) / 86400000);
+    }
     
     // A deal is "new" if auction ends far in future (likely newly listed)
     function isNew(d) { const days = daysUntil(d); return days !== null && days > 20; }
@@ -52,7 +74,8 @@
     function startCountdown(id, endDate) {
         const el = document.getElementById(id);
         if (!el || !endDate) return;
-        const end = new Date(endDate);
+        const end = parseDate(endDate);
+        if (!end) { el.textContent = 'Неизвестна'; return; }
         function upd() {
             const diff = end - new Date();
             if (diff <= 0) { el.textContent = 'Приключи'; return; }
@@ -291,8 +314,8 @@
             const bSavings = Math.max(0, b.savings_eur !== undefined ? b.savings_eur : ((b.market_price || b.market_avg * b.sqm || 0) - bPrice));
             
             if (sort === 'best') return (bDiscount * Math.log(bSavings+1)) - (aDiscount * Math.log(aSavings+1));
-            if (sort === 'ending') return new Date(a.auction_end) - new Date(b.auction_end);
-            if (sort === 'newest') return new Date(b.auction_end) - new Date(a.auction_end);
+            if (sort === 'ending') return (parseDate(a.auction_end) || new Date(9999,0)) - (parseDate(b.auction_end) || new Date(9999,0));
+            if (sort === 'newest') return (parseDate(b.auction_end) || new Date(0)) - (parseDate(a.auction_end) || new Date(0));
             if (sort === 'price_asc') return aPrice - bPrice;
             if (sort === 'price_desc') return bPrice - aPrice;
             return 0;
