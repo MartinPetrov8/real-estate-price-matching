@@ -1,0 +1,9 @@
+# robots.txt for КЧСИ Сделки
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://martinpetrov8.github.io/real-estate-price-matching/sitemap.xml
+
+# Crawl-delay for politeness
+Crawl-delay: 1
