@@ -41,8 +41,8 @@ CITY_MARKET_RATES = {
     'бургас': 1350,
 }
 
-# Max realistic discount to cap crazy outliers
-MAX_REALISTIC_DISCOUNT = 70
+# NO discount cap - show actual values to expose bugs
+# MAX_REALISTIC_DISCOUNT = 70  # REMOVED per Martin's feedback
 
 
 def is_expired(auction_end):
@@ -150,8 +150,8 @@ def export_deals():
             price_per_sqm = price / size
             raw_discount = ((market_rate - price_per_sqm) / market_rate) * 100
             
-            # Cap discount at realistic max
-            discount_pct = min(round(raw_discount), MAX_REALISTIC_DISCOUNT)
+            # Show actual discount - no cap (exposes data bugs)
+            discount_pct = round(raw_discount)
             if discount_pct < 0:
                 discount_pct = 0
             
