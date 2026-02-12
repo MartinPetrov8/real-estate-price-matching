@@ -47,12 +47,22 @@
     
     function fmtDate(d) { 
         if (!d) return 'Неизвестна';
-        return new Date(d).toLocaleDateString('bg-BG', {day:'numeric', month:'short', year:'numeric'}); 
+        // Parse Bulgarian date format: DD.MM.YYYY
+        const parts = d.match(/(\d{1,2})\.(\d{1,2})\.(\d{4})/);
+        if (!parts) return d;
+        const [, day, month, year] = parts;
+        const date = new Date(`${year}-${month.padStart(2,'0')}-${day.padStart(2,'0')}T00:00:00`);
+        return date.toLocaleDateString('bg-BG', {day:'numeric', month:'short', year:'numeric'}); 
     }
     
     function daysUntil(d) { 
         if (!d) return null;
-        const days = Math.ceil((new Date(d) - new Date()) / 86400000);
+        // Parse Bulgarian date format: DD.MM.YYYY → YYYY-MM-DD
+        const parts = d.match(/(\d{1,2})\.(\d{1,2})\.(\d{4})/);
+        if (!parts) return null;
+        const [, day, month, year] = parts;
+        const targetDate = new Date(`${year}-${month.padStart(2,'0')}-${day.padStart(2,'0')}T00:00:00`);
+        const days = Math.ceil((targetDate - new Date()) / 86400000);
         return days;
     }
     
