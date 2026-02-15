@@ -277,7 +277,7 @@
             if (displayedDeals < deals.length) {
                 el.loadMore.classList.remove('hidden');
                 el.loadMore.querySelector('.load-more-count').textContent = 
-                    (deals.length - displayedDeals) + ' още';
+                    (deals.length - displayedDeals) + ' имота';
             } else {
                 el.loadMore.classList.add('hidden');
             }
