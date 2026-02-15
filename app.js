@@ -302,6 +302,11 @@
             if (pill === 'ending') { const days = daysUntil(d.auction_end); if (days === null || days > 7) return false; }
             if (pill === 'best' && discountPct < 40) return false;
             if (pill === 'sofia' && !(d.city && d.city.includes('София'))) return false;
+            // No comparison filter - deals without market data
+            if (pill === 'nocomparison') {
+                const comparables = d.comparables_count || d.market_sample_size || 0;
+                if (comparables > 0 && d.market_price) return false;
+            }
             return true;
         });
         const sort = el.sort.value;
