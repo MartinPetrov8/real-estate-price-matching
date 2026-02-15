@@ -202,12 +202,16 @@ def export_deals():
         
         if is_apartment and not is_partial:
             market_median, sample_size, matched_hood = get_market_median(city, size, row['address'])
-            if market_median:
+            if market_median and sample_size >= 3:
                 market_avg = round(market_median)
                 price_per_sqm = price / size
                 discount = round(((market_median - price_per_sqm) / market_median) * 100, 1)
                 if discount < 0:
                     discount = 0  # Don't show negative discounts
+            elif market_median:
+                # Not enough comparables for reliable discount
+                market_avg = round(market_median)
+                discount = None  # Don't show unreliable discount
         
         # Build deal object
         deal = {
@@ -220,6 +224,9 @@ def export_deals():
             'sqm': round(size, 1),
             'price_per_sqm': round(price / size) if size > 0 else None,
             'market_avg': market_avg,
+            'market_price': round(market_avg * size) if market_avg and size else None,
+            'savings_eur': round((market_avg * size) - price) if market_avg and size and price else None,
+            'comparables_count': sample_size if market_avg else 0,
             'discount': discount if not is_partial else None,
             'rooms': row['rooms'],
             'property_type': frontend_type,
