@@ -1,0 +1,103 @@
+{
+  "scraped_at": "2026-02-13T14:34:37Z",
+  "count": 12,
+  "properties": [
+    {
+      "price_text": "29 818.54 EUR",
+      "price_eur": 29818.54,
+      "title": "Гараж",
+      "url": "https://sales.bcpea.org/properties/86085",
+      "id": "86085",
+      "area_sqm": 20.0
+    },
+    {
+      "price_text": "211 920.00 EUR",
+      "price_eur": 211920.0,
+      "title": "Мезонет",
+      "url": "https://sales.bcpea.org/properties/86084",
+      "id": "86084",
+      "area_sqm": 140.36,
+      "location": "Младост 2, блок 213, етаж 19"
+    },
+    {
+      "price_text": "35 200.20 EUR",
+      "price_eur": 35200.2,
+      "title": "Гараж",
+      "url": "https://sales.bcpea.org/properties/86080",
+      "id": "86080",
+      "area_sqm": 18.37
+    },
+    {
+      "price_text": "443 200.07 EUR",
+      "price_eur": 443200.07,
+      "title": "Многостаен апартамент",
+      "url": "https://sales.bcpea.org/properties/86079",
+      "id": "86079",
+      "area_sqm": 148.68
+    },
+    {
+      "price_text": "442 124.32 EUR",
+      "price_eur": 442124.32,
+      "title": "Къща с парцел",
+      "url": "https://sales.bcpea.org/properties/86059",
+      "id": "86059",
+      "area_sqm": 198.5
+    },
+    {
+      "price_text": "30 800.00 EUR",
+      "price_eur": 30800.0,
+      "title": "Гараж",
+      "url": "https://sales.bcpea.org/properties/86056",
+      "id": "86056",
+      "area_sqm": 20.4
+    },
+    {
+      "price_text": "25 920.00 EUR",
+      "price_eur": 25920.0,
+      "title": "Парцел",
+      "url": "https://sales.bcpea.org/properties/86052",
+      "id": "86052",
+      "area_sqm": 3915.0
+    },
+    {
+      "price_text": "280 300.00 EUR",
+      "price_eur": 280300.0,
+      "title": "Гараж",
+      "url": "https://sales.bcpea.org/properties/86051",
+      "id": "86051",
+      "area_sqm": 18.24
+    },
+    {
+      "price_text": "280 300.00 EUR",
+      "price_eur": 280300.0,
+      "title": "Тристаен апартамент",
+      "url": "https://sales.bcpea.org/properties/86050",
+      "id": "86050",
+      "area_sqm": 80.17
+    },
+    {
+      "price_text": "494 800.00 EUR",
+      "price_eur": 494800.0,
+      "title": "Търговски имот",
+      "url": "https://sales.bcpea.org/properties/86035",
+      "id": "86035",
+      "area_sqm": 1134.0
+    },
+    {
+      "price_text": "257 067.00 EUR",
+      "price_eur": 257067.0,
+      "title": "Къща",
+      "url": "https://sales.bcpea.org/properties/86034",
+      "id": "86034",
+      "area_sqm": 101.0
+    },
+    {
+      "price_text": "1 014 812.13 EUR",
+      "price_eur": 1014812.13,
+      "title": "Жилищна сграда",
+      "url": "https://sales.bcpea.org/properties/85945",
+      "id": "85945",
+      "area_sqm": 587.98
+    }
+  ]
+}

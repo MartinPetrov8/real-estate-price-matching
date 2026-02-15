@@ -1,7 +1,29 @@
-data/*.db
-data/*.json
-node_modules/
-__pycache__/
-*.pyc
-.env
+# Databases (generated data, not tracked)
 *.db
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+env/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Node.js (if using web/ directory)
+node_modules/
+
+# Temporary
+*.tmp
+*.log
+
+# Archive (old scraper versions, not needed in repo)
+scrapers/archive/

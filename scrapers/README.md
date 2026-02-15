@@ -1,83 +1,55 @@
 # Market Scrapers
 
-## Overview
+## Production Scrapers
 
-Scrapes Bulgarian real estate listing sites to get market prices for comparison with КЧСИ auctions.
-
-## Scrapers
-
-### market_scraper_v4.py (Recommended)
-
-Production scraper using `requests` + `BeautifulSoup`.
-
-**Features:**
-- Session-based requests for cookie persistence
-- Simple retry logic with exponential backoff
-- Proper encoding handling (windows-1251 for imot.bg)
-- 0.5-1.5s delay between requests (polite, not excessive)
-- No timeouts or 404 errors
+### market_scraper.py
+Production market scraper using `requests` + `BeautifulSoup`.
 
 **Sources:**
-- **imot.bg**: Scrapes listing URLs from index, then individual pages for price
-- **olx.bg**: Single-page scrape with pagination (3 pages per city)
+- **imot.bg**: ~120 listings from Sofia, Plovdiv, Varna, Burgas
+- **olx.bg**: ~490 listings from same cities
 
 **Usage:**
 ```bash
-pip install beautifulsoup4 requests
-python scrapers/market_scraper_v4.py
+python market_scraper.py
 ```
 
 **Output:**
-- `scrapers/data/market.db` - SQLite database
-- `scrapers/data/market_listings.json` - JSON export
+- `../data/market.db` - SQLite database
+- `data/market_listings.json` - JSON export
 
-**Performance (2026-02-15):**
-| Source | Listings | Avg €/m² |
-|--------|----------|----------|
-| imot.bg | 118 | €2,114 |
-| olx.bg | 492 | €1,868 |
-| **TOTAL** | **610** | €1,920 |
+**Performance:**
+- Runtime: ~3 minutes
+- No 404s or timeouts
+- 0.5-1.5s delay between requests (polite scraping)
 
-### market_scraper_v3.py (Legacy)
+### bcpea_scraper.py
+КЧСИ (court auction) scraper.
 
-Earlier version with more aggressive anti-blocking measures.
-- Rotating user agents
-- Random delays (2-5s per request)
-- Slower but works
+**Source:** https://sales.bcpea.org
 
-## Data Format
-
-```json
-{
-  "city": "София",
-  "size_sqm": 74.0,
-  "price_eur": 148000.0,
-  "price_per_sqm": 2000.0,
-  "rooms": 2,
-  "source": "imot.bg",
-  "scraped_at": "2026-02-15T08:20:00"
-}
+**Usage:**
+```bash
+python bcpea_scraper.py
 ```
 
-## Cities Covered
+**Output:**
+- `../data/auctions.db` - SQLite database
 
-| City | Bulgarian | imot.bg URL | olx.bg URL |
-|------|-----------|-------------|------------|
-| София | Sofia | grad-sofiya | sofiya |
-| Пловдив | Plovdiv | grad-plovdiv | plovdiv |
-| Варна | Varna | grad-varna | varna |
-| Бургас | Burgas | grad-burgas | burgas |
+## URL Formats
 
-## Troubleshooting
+| Site | City | URL Pattern |
+|------|------|-------------|
+| imot.bg | София | `obiavi/prodazhbi/grad-sofiya/` |
+| olx.bg | София | `nedvizhimi-imoti/prodazhbi/apartamenti/sofiya/` |
 
-### 404 Errors
-- OLX uses transliterated names: `sofiya` not `sofia`
-- imot.bg uses Bulgarian transliteration: `grad-sofiya`
+**Note:** OLX uses Bulgarian transliteration (`sofiya` not `sofia`).
 
-### Encoding Issues
-- imot.bg uses `windows-1251` encoding
-- OLX uses UTF-8
+## Encoding
 
-### Brotli Compression
-- Don't include `br` in Accept-Encoding header
-- We only handle gzip/deflate
+- **imot.bg**: `windows-1251`
+- **olx.bg**: `UTF-8`
+
+## Archive
+
+Old scraper versions are in `archive/` (not tracked in git).

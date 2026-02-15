@@ -124,7 +124,8 @@ class APIHandler(SimpleHTTPRequestHandler):
             'newest': 'scraped_at DESC'
         }
         query += f" ORDER BY {sort_map.get(sort, 'price_eur ASC')}"
-        query += f" LIMIT {limit} OFFSET {offset}"
+        query += " LIMIT ? OFFSET ?"
+        args.extend([int(limit), int(offset)])
         
         listings = [dict(r) for r in conn.execute(query, args)]
         
