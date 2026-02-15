@@ -106,6 +106,9 @@
         const isHouse = deal.property_type === 'къща';
         const floor = deal.floor;
         const propertyType = deal.property_type || 'апартамент';
+        const propertyTypeBg = deal.property_type_bg || '';
+        const roomType = propertyTypeBg.match(/(едностаен|двустаен|тристаен|многостаен|четиристаен)/i)?.[1] || null;
+        const roomTypeDisplay = roomType ? roomType.charAt(0).toUpperCase() + roomType.slice(1) : null;
         const isPartialOwnership = deal.is_partial_ownership || false;
         // comparables already defined above
         const partialOwnership = deal.partial_ownership;
@@ -190,6 +193,7 @@
                     <div class="info-item"><span class="info-icon">📐</span><div class="info-content"><span class="info-label">Площ</span><span class="info-value">${isHouse && buildingSqm ? buildingSqm+' м² (сграда)' : (sqm ? sqm+' м²' : 'N/A')}</span></div></div>
                     ${isHouse && plotSqm ? '<div class="info-item"><span class="info-icon">🌳</span><div class="info-content"><span class="info-label">Парцел</span><span class="info-value">'+plotSqm+' м²</span></div></div>' : ''}
                     <div class="info-item"><span class="info-icon">🏢</span><div class="info-content"><span class="info-label">Етаж</span><span class="info-value">${floor || 'N/A'}</span></div></div>
+                    ${roomTypeDisplay ? '<div class="info-item"><span class="info-icon">🚪</span><div class="info-content"><span class="info-label">Тип</span><span class="info-value">'+roomTypeDisplay+'</span></div></div>' : ''}
                     <div class="info-item"><span class="info-icon">📊</span><div class="info-content"><span class="info-label">Сравнения</span><span class="info-value">${comparables > 0 ? comparables + ' имота' : 'Няма данни'}</span></div></div>
                 </div>
                 <div class="location-section">
