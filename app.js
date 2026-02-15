@@ -58,12 +58,12 @@
     
     function getRating(pct) {
         // Handle negative discounts (bad deals)
-        if (pct < 0) return {level:'bad', label:'Неблагоприятна', score:20, stars:1};
-        if (pct >= 50) return {level:'excellent', label:'Отлична!', score:100, stars:5};
-        if (pct >= 40) return {level:'great', label:'Много добра', score:90, stars:4};
-        if (pct >= 30) return {level:'good', label:'Добра', score:75, stars:3};
-        if (pct >= 20) return {level:'fair', label:'Приемлива', score:60, stars:2};
-        return {level:'low', label:'Стандартна', score:40, stars:1};
+        if (pct < 0) return {level:'bad', label:'Неблагоприятна', score:20, stars:1, tooltip:'Тръжната цена е над пазарната - не е изгодна сделка'};
+        if (pct >= 50) return {level:'excellent', label:'Отлична!', score:100, stars:5, tooltip:'Изключителна сделка! 50%+ под пазарната цена. Рядка възможност за инвестиция.'};
+        if (pct >= 40) return {level:'great', label:'Много добра', score:90, stars:4, tooltip:'Много добра сделка - 40-50% под пазарната цена. Сериозна спестяване.'};
+        if (pct >= 30) return {level:'good', label:'Добра', score:75, stars:3, tooltip:'Добра сделка - 30-40% под пазарната цена. Препоръчва се за разглеждане.'};
+        if (pct >= 20) return {level:'fair', label:'Приемлива', score:60, stars:2, tooltip:'Приемлива сделка - 20-30% под пазарната цена. Умерена отстъпка.'};
+        return {level:'low', label:'Стандартна', score:40, stars:1, tooltip:'Стандартна цена - под 20% отстъпка. Близо до пазарната стойност.'};
     }
     
     function propIcon(t) {
@@ -182,7 +182,7 @@
                     ⚠️ Няма данни за пазарна цена
                 </div>
                 `}
-                <div class="deal-score">
+                <div class="deal-score" title="${r.tooltip || 'Оценка на сделката'}">
                     <span class="score-label">Оценка:</span>
                     <div class="score-bar"><div class="score-fill ${r.level}" style="width:${r.score}%"></div></div>
                     <span class="score-value">${r.stars}★</span>

@@ -819,3 +819,15 @@ body {
     background: #667eea;
     color: white;
 }
+
+/* Score Tooltip Styles */
+.deal-score {
+    position: relative;
+    cursor: help;
+}
+
+.deal-score::after {
+    content: attr(title);
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
