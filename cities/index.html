@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Имоти на търг по градове | КЧСИ Сделки България</title>
+    <meta name="description" content="Намерете имоти на принудителна продажба в София, Варна, Бургас, Пловдив и други градове. Актуална информация за КЧСИ търгове в цяла България.">
+    <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+    <link rel="canonical" href="https://kchsi-sdelki.bg/cities/">
+    <link rel="stylesheet" href="../styles.css">
+    <style>
+        .cities-header { padding: 60px 0 40px; background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); text-align: center; }
+        .cities-title { font-size: 2.5rem; color: #fff; }
+        .cities-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem; padding: 3rem 1rem; max-width: 1200px; margin: 0 auto; }
+        .city-card { background: white; border-radius: 12px; padding: 2rem; box-shadow: 0 4px 20px rgba(0,0,0,0.08); transition: transform 0.2s; text-align: center; }
+        .city-card:hover { transform: translateY(-4px); }
+        .city-card-icon { font-size: 3rem; margin-bottom: 1rem; }
+        .city-card-name { font-size: 1.5rem; color: #1a1a2e; margin-bottom: 0.5rem; }
+        .city-card-count { color: #667eea; font-weight: 600; margin-bottom: 1rem; }
+        .city-card-link { color: #667eea; text-decoration: none; font-weight: 500; }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="../" class="logo" style="text-decoration: none;">
+                    <span class="logo-icon">🏛️</span>
+                    <div class="logo-text">
+                        <span class="logo-name">КЧСИ Сделки</span>
+                        <span class="logo-tagline">Изгодни имоти от търгове</span>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <section class="cities-header">
+        <h1 class="cities-title">📍 Имоти по градове</h1>
+    </section>
+
+    <main class="cities-grid" id="citiesGrid">
+        <div class="city-card">
+            <div class="city-card-icon">🏙️</div>
+            <h2 class="city-card-name">София</h2>
+            <p class="city-card-count" id="count-sofia">- имота</p>
+            <a href="sofia.html" class="city-card-link">Виж търгове →</a>
+        </div>
+        <div class="city-card">
+            <div class="city-card-icon">🌊</div>
+            <h2 class="city-card-name">Варна</h2>
+            <p class="city-card-count" id="count-varna">- имота</p>
+            <a href="varna.html" class="city-card-link">Виж търгове →</a>
+        </div>
+        <div class="city-card">
+            <div class="city-card-icon">🏖️</div>
+            <h2 class="city-card-name">Бургас</h2>
+            <p class="city-card-count" id="count-burgas">- имота</p>
+            <a href="../?city=Бургас" class="city-card-link">Виж търгове →</a>
+        </div>
+        <div class="city-card">
+            <div class="city-card-icon">🏛️</div>
+            <h2 class="city-card-name">Пловдив</h2>
+            <p class="city-card-count" id="count-plovdiv">- имота</p>
+            <a href="../?city=Пловдив" class="city-card-link">Виж търгове →</a>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>© 2026 КЧСИ Сделки. <a href="../privacy.html" style="color: #64748b;">Поверителност</a></p>
+        </div>
+    </footer>
+
+    <script>
+        fetch('../deals.json')
+            .then(r => r.json())
+            .then(deals => {
+                const cities = {sofia: 'София', varna: 'Варна', burgas: 'Бургас', plovdiv: 'Пловдив'};
+                for (const [key, name] of Object.entries(cities)) {
+                    const count = deals.filter(d => d.city === name).length;
+                    const el = document.getElementById('count-' + key);
+                    if (el) el.textContent = count + ' имота';
+                }
+            });
+    </script>
+</body>
+</html>

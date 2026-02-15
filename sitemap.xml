@@ -1,35 +1,64 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
-        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    <!-- Main -->
     <url>
-        <loc>https://martinpetrov8.github.io/real-estate-price-matching/</loc>
-        <xhtml:link rel="alternate" hreflang="bg" href="https://martinpetrov8.github.io/real-estate-price-matching/"/>
-        <lastmod>2026-02-11</lastmod>
+        <loc>https://kchsi-sdelki.bg/</loc>
+        <lastmod>2026-02-15</lastmod>
         <changefreq>daily</changefreq>
         <priority>1.0</priority>
     </url>
+    
+    <!-- Cities -->
     <url>
-        <loc>https://martinpetrov8.github.io/real-estate-price-matching/blog/</loc>
+        <loc>https://kchsi-sdelki.bg/cities/</loc>
+        <lastmod>2026-02-15</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.9</priority>
+    </url>
+    <url>
+        <loc>https://kchsi-sdelki.bg/cities/sofia.html</loc>
+        <lastmod>2026-02-15</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.9</priority>
+    </url>
+    <url>
+        <loc>https://kchsi-sdelki.bg/cities/varna.html</loc>
+        <lastmod>2026-02-15</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.9</priority>
+    </url>
+    
+    <!-- Blog -->
+    <url>
+        <loc>https://kchsi-sdelki.bg/blog/</loc>
         <lastmod>2026-02-11</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
     <url>
-        <loc>https://martinpetrov8.github.io/real-estate-price-matching/blog/kak-da-kupya-imot-na-targ.html</loc>
+        <loc>https://kchsi-sdelki.bg/blog/kak-da-kupya-imot-na-targ.html</loc>
         <lastmod>2026-02-11</lastmod>
         <changefreq>monthly</changefreq>
-        <priority>0.9</priority>
+        <priority>0.7</priority>
     </url>
     <url>
-        <loc>https://martinpetrov8.github.io/real-estate-price-matching/blog/riskove-pri-pokupka-ot-kchsi.html</loc>
+        <loc>https://kchsi-sdelki.bg/blog/riskove-pri-pokupka-ot-kchsi.html</loc>
         <lastmod>2026-02-11</lastmod>
         <changefreq>monthly</changefreq>
-        <priority>0.9</priority>
+        <priority>0.7</priority>
     </url>
     <url>
-        <loc>https://martinpetrov8.github.io/real-estate-price-matching/blog/chesti-vaprosi.html</loc>
+        <loc>https://kchsi-sdelki.bg/blog/chesti-vaprosi.html</loc>
         <lastmod>2026-02-11</lastmod>
         <changefreq>monthly</changefreq>
-        <priority>0.9</priority>
+        <priority>0.7</priority>
+    </url>
+    
+    <!-- Legal -->
+    <url>
+        <loc>https://kchsi-sdelki.bg/privacy.html</loc>
+        <lastmod>2026-02-15</lastmod>
+        <changefreq>yearly</changefreq>
+        <priority>0.3</priority>
     </url>
 </urlset>
