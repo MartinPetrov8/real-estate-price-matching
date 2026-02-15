@@ -1,5 +1,4 @@
 # Databases (generated data, not tracked)
-*.db
 
 # Python
 __pycache__/
@@ -37,3 +36,5 @@ data/*.json
 # Old data files
 auctions.json
 market_listings.json
+# Databases (keep in repo for GitHub Pages)
+scrapers/data/*.db

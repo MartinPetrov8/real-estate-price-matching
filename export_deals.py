@@ -144,7 +144,7 @@ def export_deals():
     
     if not os.path.exists(DB_PATH):
         print(f"Error: Database not found at {DB_PATH}")
-        return []
+        return [], {}
     
     conn = sqlite3.connect(DB_PATH)
     conn.row_factory = sqlite3.Row
@@ -201,7 +201,7 @@ def export_deals():
         discount = None
         
         if is_apartment and not is_partial:
-            market_median, sample_size = get_market_median(city, size)
+            market_median, sample_size, matched_hood = get_market_median(city, size, row['address'])
             if market_median:
                 market_avg = round(market_median)
                 price_per_sqm = price / size
