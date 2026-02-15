@@ -440,6 +440,7 @@ async function load() {
             allDeals = [];
         }
         populateCities();
+        loadFromURL(); // Apply URL filters after cities are populated
         updateHero();
         el.loading.classList.add('hidden');
         filter();
