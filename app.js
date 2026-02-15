@@ -317,9 +317,16 @@
     }
     
     function getActive() {
+        const typeLabels = {
+            'apartment': 'Апартамент',
+            'house': 'Къща',
+            'garage': 'Гараж',
+            'commercial': 'Търговски',
+            'other': 'Други'
+        };
         const f = [];
         if (el.city.value !== 'all') f.push({type:'city', label:el.city.value});
-        if (el.type.value !== 'all') f.push({type:'type', label:el.type.value});
+        if (el.type.value !== 'all') f.push({type:'type', label:typeLabels[el.type.value] || el.type.value});
         if (el.minPrice.value) f.push({type:'minPrice', label:'От '+fmtPrice(parseInt(el.minPrice.value))});
         if (el.maxPrice.value) f.push({type:'maxPrice', label:'До '+fmtPrice(parseInt(el.maxPrice.value))});
         if (parseInt(el.discount.value) > 0) f.push({type:'discount', label:el.discount.value+'%+ отстъпка'});
