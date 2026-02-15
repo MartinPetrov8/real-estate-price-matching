@@ -334,6 +334,7 @@ def init_db() -> sqlite3.Connection:
     conn.execute("CREATE INDEX idx_city ON market_listings(city)")
     conn.execute("CREATE INDEX idx_neighborhood ON market_listings(neighborhood)")
     conn.execute("CREATE INDEX idx_source ON market_listings(source)")
+    conn.execute("CREATE INDEX idx_size ON market_listings(size_sqm)")
     conn.commit()
     return conn
 
