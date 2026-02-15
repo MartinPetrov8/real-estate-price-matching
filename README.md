@@ -20,10 +20,9 @@ Scrapes КЧСИ (BCPEA) court-enforced property auctions and compares prices to
 
 | Source | Type | Listings | Notes |
 |--------|------|----------|-------|
-| КЧСИ (bcpea.org) | Auctions | ~750 | Court-enforced sales |
-| OLX.bg | Market | ~850 | Private listings |
-| imot.bg | Market | ~80 | Agency listings |
-| alo.bg | Market | ~35 | Mixed |
+| КЧСИ (bcpea.org) | Auctions | ~1,100 | Court-enforced sales |
+| OLX.bg | Market | ~490 | Private listings (€1,868/m²) |
+| imot.bg | Market | ~120 | Agency listings (€2,114/m²) |
 
 ## 🚀 Quick Start
 
@@ -36,7 +35,7 @@ cd real-estate-price-matching
 python scrapers/bcpea_v4.py
 
 # Scrape market data + run comparison
-python scrapers/market_scraper.py
+python scrapers/market_scraper_v4.py
 
 # Export deals to frontend
 python export_deals.py
@@ -84,7 +83,7 @@ python scrapers/bcpea_v4.py
 
 ### 2. Scrape Market Data
 ```bash
-python scrapers/market_scraper.py
+python scrapers/market_scraper_v4.py
 ```
 - Fetches listings from OLX.bg, imot.bg, alo.bg
 - Extracts: price, size, €/m², rooms (when available)
@@ -228,7 +227,7 @@ Correctly classifies Bulgarian property types:
 ```bash
 # Full refresh
 python scrapers/bcpea_v4.py      # ~5 min
-python scrapers/market_scraper.py # ~2 min
+python scrapers/market_scraper_v4.py # ~2 min
 python export_deals.py
 ```
 

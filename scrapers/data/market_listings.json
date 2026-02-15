@@ -1,0 +1,5492 @@
+[
+  {
+    "city": "София",
+    "size_sqm": 74.0,
+    "price_eur": 148000.0,
+    "price_per_sqm": 2000.0,
+    "rooms": 2,
+    "source": "imot.bg",
+    "scraped_at": "2026-02-15T08:19:45.919909"
+  },
+  {
+    "city": "София",
+    "size_sqm": 125.0,
+    "price_eur": 369000.0,
+    "price_per_sqm": 2952.0,
+    "rooms": 3,
+    "source": "imot.bg",
+    "scraped_at": "2026-02-15T08:19:46.974292"
+  },
+  {
+    "city": "София",
+    "size_sqm": 130.0,
+    "price_eur": 540000.0,
+    "price_per_sqm": 4153.85,
+    "rooms": 4,
+    "source": "imot.bg",
+    "scraped_at": "2026-02-15T08:19:48.504689"
+  },
+  {
+    "city": "София",
+    "size_sqm": 50.0,
+    "price_eur": 120000.0,
+    "price_per_sqm": 2400.0,
+    "rooms": 1,
+    "source": "imot.bg",
+    "scraped_at": "2026-02-15T08:19:49.453991"
+  },
+  {
+    "city": "София",
+    "size_sqm": 60.0,
+    "price_eur": 142293.0,
+    "price_per_sqm": 2371.55,
+    "rooms": 1,
+    "source": "imot.bg",
+    "scraped_at": "2026-02-15T08:19:51.068365"
+  },
+  {
+    "city": "София",
+    "size_sqm": 47.0,
+    "price_eur": 110450.0,
+    "price_per_sqm": 2350.0,
+    "rooms": 1,
+    "source": "imot.bg",
+    "scraped_at": "2026-02-15T08:19:52.001287"
+  },
+  {
+    "city": "София",
+    "size_sqm": 42.0,
+    "price_eur": 119900.0,
+    "price_per_sqm": 2854.76,
+    "rooms": 1,
+    "source": "imot.bg",
+    "scraped_at": "2026-02-15T08:19:53.499762"
+  },
+  {
+    "city": "София",
+    "size_sqm": 40.0,
+    "price_eur": 155000.0,
+    "price_per_sqm": 3875.0,
+    "rooms": 1,
+    "source": "imot.bg",
+    "scraped_at": "2026-02-15T08:19:54.230726"
+  },
+  {
+    "city": "София",
+    "size_sqm": 40.0,
+    "price_eur": 77381.0,
+    "price_per_sqm": 1934.53,
+    "rooms": 1,
+    "source": "imot.bg",
+    "scraped_at": "2026-02-15T08:19:55.207606"
+  },
+  {
+    "city": "София",
+    "size_sqm": 46.0,
+    "price_eur": 138800.0,
+    "price_per_sqm": 3017.39,
+    "rooms": 1,
+    "source": "imot.bg",
+    "scraped_at": "2026-02-15T08:19:56.042277"
+  },
+  {
+    "city": "София",
+    "size_sqm": 67.0,
+    "price_eur": 145000.0,
+    "price_per_sqm": 2164.18,
+    "rooms": 1,
+    "source": "imot.bg",
+    "scraped_at": "2026-02-15T08:19:56.810655"
+  },
+  {
+    "city": "София",
+    "size_sqm": 56.0,
+    "price_eur": 116319.0,
+    "price_per_sqm": 2077.12,
+    "rooms": 1,
+    "source": "imot.bg",
+    "scraped_at": "2026-02-15T08:19:58.299564"
+  },
+  {
+    "city": "София",
+    "size_sqm": 38.0,
+    "price_eur": 83100.0,
+    "price_per_sqm": 2186.84,
+    "rooms": 1,
+    "source": "imot.bg",
+    "scraped_at": "2026-02-15T08:19:59.582953"
+  },
+  {
+    "city": "София",
+    "size_sqm": 46.0,
+    "price_eur": 87000.0,
+    "price_per_sqm": 1891.3,
+    "rooms": 1,
+    "source": "imot.bg",
+    "scraped_at": "2026-02-15T08:20:01.233362"
+  },
+  {
+    "city": "София",
+    "size_sqm": 48.0,
+    "price_eur": 127000.0,
+    "price_per_sqm": 2645.83,
+    "rooms": 1,
+    "source": "imot.bg",
+    "scraped_at": "2026-02-15T08:20:02.785909"
+  },
+  {
+    "city": "София",
+    "size_sqm": 49.0,
+    "price_eur": 90000.0,
+    "price_per_sqm": 1836.73,
+    "rooms": 1,
+    "source": "imot.bg",
+    "scraped_at": "2026-02-15T08:20:03.918678"
+  },
+  {
+    "city": "София",
+    "size_sqm": 16.0,
+    "price_eur": 60000.0,
+    "price_per_sqm": 3750.0,
+    "rooms": 1,
+    "source": "imot.bg",
+    "scraped_at": "2026-02-15T08:20:05.354428"
+  },
+  {
+    "city": "София",
+    "size_sqm": 25.0,
+    "price_eur": 124000.0,
+    "price_per_sqm": 4960.0,
+    "rooms": 1,
+    "source": "imot.bg",
+    "scraped_at": "2026-02-15T08:20:06.887195"
+  },
+  {
+    "city": "София",
+    "size_sqm": 50.0,
+    "price_eur": 234900.0,
+    "price_per_sqm": 4698.0,
+    "rooms": 1,
+    "source": "imot.bg",
+    "scraped_at": "2026-02-15T08:20:09.624024"
+  },
+  {
+    "city": "София",
+    "size_sqm": 50.0,
+    "price_eur": 83300.0,
+    "price_per_sqm": 1666.0,
+    "rooms": 1,
+    "source": "imot.bg",
+    "scraped_at": "2026-02-15T08:20:10.737931"
+  },
+  {
+    "city": "София",
+    "size_sqm": 58.0,
+    "price_eur": 146158.0,
+    "price_per_sqm": 2519.97,
+    "rooms": 1,
+    "source": "imot.bg",
+    "scraped_at": "2026-02-15T08:20:12.182257"
+  },
+  {
+    "city": "София",
+    "size_sqm": 26.0,
+    "price_eur": 73900.0,
+    "price_per_sqm": 2842.31,
+    "rooms": 1,
+    "source": "imot.bg",
+    "scraped_at": "2026-02-15T08:20:13.182475"
+  },
+  {
+    "city": "София",
+    "size_sqm": 43.0,
+    "price_eur": 91107.0,
+    "price_per_sqm": 2118.77,
+    "rooms": 1,
+    "source": "imot.bg",
+    "scraped_at": "2026-02-15T08:20:13.982822"
+  },
+  {
+    "city": "София",
+    "size_sqm": 43.0,
+    "price_eur": 75999.0,
+    "price_per_sqm": 1767.42,
+    "rooms": 1,
+    "source": "imot.bg",
+    "scraped_at": "2026-02-15T08:20:15.547727"
+  },
+  {
+    "city": "София",
+    "size_sqm": 41.0,
+    "price_eur": 100056.0,
+    "price_per_sqm": 2440.39,
+    "rooms": 1,
+    "source": "imot.bg",
+    "scraped_at": "2026-02-15T08:20:15.153697"
+  },
+  {
+    "city": "София",
+    "size_sqm": 46.0,
+    "price_eur": 121000.0,
+    "price_per_sqm": 2630.43,
+    "rooms": 1,
+    "source": "imot.bg",
+    "scraped_at": "2026-02-15T08:20:16.571838"
+  },
+  {
+    "city": "София",
+    "size_sqm": 44.0,
+    "price_eur": 135000.0,
+    "price_per_sqm": 3068.18,
+    "rooms": 1,
+    "source": "imot.bg",
+    "scraped_at": "2026-02-15T08:20:17.543029"
+  },
+  {
+    "city": "София",
+    "size_sqm": 43.0,
+    "price_eur": 158000.0,
+    "price_per_sqm": 3674.42,
+    "rooms": 1,
+    "source": "imot.bg",
+    "scraped_at": "2026-02-15T08:20:18.772940"
+  },
+  {
+    "city": "София",
+    "size_sqm": 52.0,
+    "price_eur": 194000.0,
+    "price_per_sqm": 3730.77,
+    "rooms": 1,
+    "source": "imot.bg",
+    "scraped_at": "2026-02-15T08:20:20.449326"
+  },
+  {
+    "city": "София",
+    "size_sqm": 61.0,
+    "price_eur": 227000.0,
+    "price_per_sqm": 3721.31,
+    "rooms": 1,
+    "source": "imot.bg",
+    "scraped_at": "2026-02-15T08:20:21.443397"
+  },
+  {
+    "city": "София",
+    "size_sqm": 257.0,
+    "price_eur": 985803.17,
+    "price_per_sqm": 3835.81,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:20:23.246048"
+  },
+  {
+    "city": "София",
+    "size_sqm": 70.0,
+    "price_eur": 148000.3,
+    "price_per_sqm": 2114.29,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:20:23.246066"
+  },
+  {
+    "city": "София",
+    "size_sqm": 82.0,
+    "price_eur": 178887.92,
+    "price_per_sqm": 2181.56,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:20:23.246074"
+  },
+  {
+    "city": "София",
+    "size_sqm": 65.0,
+    "price_eur": 340000.05,
+    "price_per_sqm": 5230.77,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:20:23.246080"
+  },
+  {
+    "city": "София",
+    "size_sqm": 75.0,
+    "price_eur": 165999.75,
+    "price_per_sqm": 2213.33,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:20:23.246087"
+  },
+  {
+    "city": "София",
+    "size_sqm": 84.0,
+    "price_eur": 173500.32,
+    "price_per_sqm": 2065.48,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:20:23.246093"
+  },
+  {
+    "city": "София",
+    "size_sqm": 89.0,
+    "price_eur": 399990.03,
+    "price_per_sqm": 4494.27,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:20:23.246101"
+  },
+  {
+    "city": "София",
+    "size_sqm": 86.0,
+    "price_eur": 249000.1,
+    "price_per_sqm": 2895.35,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:20:23.246111"
+  },
+  {
+    "city": "София",
+    "size_sqm": 119.0,
+    "price_eur": 298624.55,
+    "price_per_sqm": 2509.45,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:20:23.246119"
+  },
+  {
+    "city": "София",
+    "size_sqm": 76.0,
+    "price_eur": 191700.12,
+    "price_per_sqm": 2522.37,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:20:23.246126"
+  },
+  {
+    "city": "София",
+    "size_sqm": 77.0,
+    "price_eur": 209899.69,
+    "price_per_sqm": 2725.97,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:20:23.246133"
+  },
+  {
+    "city": "София",
+    "size_sqm": 83.0,
+    "price_eur": 288000.04,
+    "price_per_sqm": 3469.88,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:20:23.246139"
+  },
+  {
+    "city": "София",
+    "size_sqm": 105.0,
+    "price_eur": 183999.9,
+    "price_per_sqm": 1752.38,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:20:23.246257"
+  },
+  {
+    "city": "София",
+    "size_sqm": 65.0,
+    "price_eur": 247999.7,
+    "price_per_sqm": 3815.38,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:20:23.246266"
+  },
+  {
+    "city": "София",
+    "size_sqm": 135.0,
+    "price_eur": 283359.6,
+    "price_per_sqm": 2098.96,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:20:23.246272"
+  },
+  {
+    "city": "София",
+    "size_sqm": 70.0,
+    "price_eur": 197000.3,
+    "price_per_sqm": 2814.29,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:20:23.246278"
+  },
+  {
+    "city": "София",
+    "size_sqm": 71.0,
+    "price_eur": 135000.11,
+    "price_per_sqm": 1901.41,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:20:23.246285"
+  },
+  {
+    "city": "София",
+    "size_sqm": 65.0,
+    "price_eur": 138999.9,
+    "price_per_sqm": 2138.46,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:20:23.246291"
+  },
+  {
+    "city": "София",
+    "size_sqm": 132.0,
+    "price_eur": 204999.96,
+    "price_per_sqm": 1553.03,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:20:23.246298"
+  },
+  {
+    "city": "София",
+    "size_sqm": 84.0,
+    "price_eur": 210474.6,
+    "price_per_sqm": 2505.65,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:20:23.246304"
+  },
+  {
+    "city": "София",
+    "size_sqm": 70.0,
+    "price_eur": 127999.2,
+    "price_per_sqm": 1828.56,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:20:23.246310"
+  },
+  {
+    "city": "София",
+    "size_sqm": 126.0,
+    "price_eur": 199999.8,
+    "price_per_sqm": 1587.3,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:20:23.246316"
+  },
+  {
+    "city": "София",
+    "size_sqm": 106.0,
+    "price_eur": 183000.52,
+    "price_per_sqm": 1726.42,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:20:23.246322"
+  },
+  {
+    "city": "София",
+    "size_sqm": 103.0,
+    "price_eur": 179999.71,
+    "price_per_sqm": 1747.57,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:20:23.246328"
+  },
+  {
+    "city": "София",
+    "size_sqm": 108.0,
+    "price_eur": 180000.36,
+    "price_per_sqm": 1666.67,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:20:23.246334"
+  },
+  {
+    "city": "София",
+    "size_sqm": 105.0,
+    "price_eur": 180000.45,
+    "price_per_sqm": 1714.29,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:20:23.246340"
+  },
+  {
+    "city": "София",
+    "size_sqm": 73.0,
+    "price_eur": 162822.12,
+    "price_per_sqm": 2230.44,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:20:23.246346"
+  },
+  {
+    "city": "София",
+    "size_sqm": 115.0,
+    "price_eur": 343000.15,
+    "price_per_sqm": 2982.61,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:20:23.246352"
+  },
+  {
+    "city": "София",
+    "size_sqm": 121.0,
+    "price_eur": 400719.33,
+    "price_per_sqm": 3311.73,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:20:23.246358"
+  },
+  {
+    "city": "София",
+    "size_sqm": 87.0,
+    "price_eur": 150000.18,
+    "price_per_sqm": 1724.14,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:20:23.246364"
+  },
+  {
+    "city": "София",
+    "size_sqm": 96.0,
+    "price_eur": 143640.0,
+    "price_per_sqm": 1496.25,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:20:23.246377"
+  },
+  {
+    "city": "София",
+    "size_sqm": 135.0,
+    "price_eur": 210000.6,
+    "price_per_sqm": 1555.56,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:20:23.246383"
+  },
+  {
+    "city": "София",
+    "size_sqm": 107.0,
+    "price_eur": 184999.79,
+    "price_per_sqm": 1728.97,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:20:23.246389"
+  },
+  {
+    "city": "София",
+    "size_sqm": 67.0,
+    "price_eur": 117999.73,
+    "price_per_sqm": 1761.19,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:20:23.246396"
+  },
+  {
+    "city": "София",
+    "size_sqm": 65.0,
+    "price_eur": 130000.0,
+    "price_per_sqm": 2000.0,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:20:23.246402"
+  },
+  {
+    "city": "София",
+    "size_sqm": 70.0,
+    "price_eur": 134999.9,
+    "price_per_sqm": 1928.57,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:20:23.246408"
+  },
+  {
+    "city": "София",
+    "size_sqm": 70.0,
+    "price_eur": 128499.7,
+    "price_per_sqm": 1835.71,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:20:23.246414"
+  },
+  {
+    "city": "София",
+    "size_sqm": 220.0,
+    "price_eur": 639999.8,
+    "price_per_sqm": 2909.09,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:20:23.246426"
+  },
+  {
+    "city": "София",
+    "size_sqm": 97.0,
+    "price_eur": 184319.4,
+    "price_per_sqm": 1900.2,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:20:23.246432"
+  },
+  {
+    "city": "София",
+    "size_sqm": 65.0,
+    "price_eur": 129998.7,
+    "price_per_sqm": 1999.98,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:20:23.246444"
+  },
+  {
+    "city": "София",
+    "size_sqm": 104.0,
+    "price_eur": 180000.08,
+    "price_per_sqm": 1730.77,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:20:23.246450"
+  },
+  {
+    "city": "София",
+    "size_sqm": 80.0,
+    "price_eur": 132500.0,
+    "price_per_sqm": 1656.25,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:20:23.246456"
+  },
+  {
+    "city": "София",
+    "size_sqm": 37.0,
+    "price_eur": 105000.08,
+    "price_per_sqm": 2837.84,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:20:23.246463"
+  },
+  {
+    "city": "София",
+    "size_sqm": 74.0,
+    "price_eur": 159000.1,
+    "price_per_sqm": 2148.65,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:20:23.246469"
+  },
+  {
+    "city": "София",
+    "size_sqm": 82.0,
+    "price_eur": 238999.66,
+    "price_per_sqm": 2914.63,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:20:23.246476"
+  },
+  {
+    "city": "София",
+    "size_sqm": 70.0,
+    "price_eur": 117000.1,
+    "price_per_sqm": 1671.43,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:20:23.246483"
+  },
+  {
+    "city": "София",
+    "size_sqm": 102.0,
+    "price_eur": 181999.62,
+    "price_per_sqm": 1784.31,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:20:23.246489"
+  },
+  {
+    "city": "София",
+    "size_sqm": 58.0,
+    "price_eur": 168999.82,
+    "price_per_sqm": 2913.79,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:20:23.246495"
+  },
+  {
+    "city": "София",
+    "size_sqm": 130.0,
+    "price_eur": 195015.6,
+    "price_per_sqm": 1500.12,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:20:23.246504"
+  },
+  {
+    "city": "София",
+    "size_sqm": 150.0,
+    "price_eur": 247071.0,
+    "price_per_sqm": 1647.14,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:20:24.498104"
+  },
+  {
+    "city": "София",
+    "size_sqm": 132.0,
+    "price_eur": 206000.52,
+    "price_per_sqm": 1560.61,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:20:24.498185"
+  },
+  {
+    "city": "София",
+    "size_sqm": 41.0,
+    "price_eur": 134999.88,
+    "price_per_sqm": 3292.68,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:20:24.498192"
+  },
+  {
+    "city": "София",
+    "size_sqm": 107.0,
+    "price_eur": 179999.68,
+    "price_per_sqm": 1682.24,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:20:24.498200"
+  },
+  {
+    "city": "София",
+    "size_sqm": 64.0,
+    "price_eur": 99000.32,
+    "price_per_sqm": 1546.88,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:20:24.498206"
+  },
+  {
+    "city": "София",
+    "size_sqm": 102.0,
+    "price_eur": 229999.8,
+    "price_per_sqm": 2254.9,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:20:24.498212"
+  },
+  {
+    "city": "София",
+    "size_sqm": 70.0,
+    "price_eur": 134500.1,
+    "price_per_sqm": 1921.43,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:20:24.498219"
+  },
+  {
+    "city": "София",
+    "size_sqm": 103.0,
+    "price_eur": 270000.08,
+    "price_per_sqm": 2621.36,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:20:24.498226"
+  },
+  {
+    "city": "София",
+    "size_sqm": 45.0,
+    "price_eur": 75000.15,
+    "price_per_sqm": 1666.67,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:20:24.498232"
+  },
+  {
+    "city": "София",
+    "size_sqm": 60.0,
+    "price_eur": 132999.0,
+    "price_per_sqm": 2216.65,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:20:24.498239"
+  },
+  {
+    "city": "София",
+    "size_sqm": 65.0,
+    "price_eur": 181000.3,
+    "price_per_sqm": 2784.62,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:20:24.498246"
+  },
+  {
+    "city": "София",
+    "size_sqm": 305.0,
+    "price_eur": 637999.0,
+    "price_per_sqm": 2091.8,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:20:24.498253"
+  },
+  {
+    "city": "София",
+    "size_sqm": 61.0,
+    "price_eur": 165000.12,
+    "price_per_sqm": 2704.92,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:20:24.498260"
+  },
+  {
+    "city": "София",
+    "size_sqm": 90.0,
+    "price_eur": 266000.4,
+    "price_per_sqm": 2955.56,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:20:24.498266"
+  },
+  {
+    "city": "София",
+    "size_sqm": 85.0,
+    "price_eur": 333000.25,
+    "price_per_sqm": 3917.65,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:20:24.498272"
+  },
+  {
+    "city": "София",
+    "size_sqm": 128.0,
+    "price_eur": 204000.0,
+    "price_per_sqm": 1593.75,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:20:24.498279"
+  },
+  {
+    "city": "София",
+    "size_sqm": 84.0,
+    "price_eur": 151000.08,
+    "price_per_sqm": 1797.62,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:20:24.498286"
+  },
+  {
+    "city": "София",
+    "size_sqm": 65.0,
+    "price_eur": 151843.9,
+    "price_per_sqm": 2336.06,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:20:24.498293"
+  },
+  {
+    "city": "София",
+    "size_sqm": 78.0,
+    "price_eur": 219999.78,
+    "price_per_sqm": 2820.51,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:20:24.498300"
+  },
+  {
+    "city": "София",
+    "size_sqm": 49.0,
+    "price_eur": 92500.24,
+    "price_per_sqm": 1887.76,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:20:24.498306"
+  },
+  {
+    "city": "София",
+    "size_sqm": 104.0,
+    "price_eur": 139000.16,
+    "price_per_sqm": 1336.54,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:20:24.498312"
+  },
+  {
+    "city": "София",
+    "size_sqm": 53.0,
+    "price_eur": 135000.01,
+    "price_per_sqm": 2547.17,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:20:24.498320"
+  },
+  {
+    "city": "София",
+    "size_sqm": 110.0,
+    "price_eur": 649999.9,
+    "price_per_sqm": 5909.09,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:20:24.498327"
+  },
+  {
+    "city": "София",
+    "size_sqm": 94.0,
+    "price_eur": 304999.92,
+    "price_per_sqm": 3244.68,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:20:24.498335"
+  },
+  {
+    "city": "София",
+    "size_sqm": 79.0,
+    "price_eur": 120000.21,
+    "price_per_sqm": 1518.99,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:20:24.498342"
+  },
+  {
+    "city": "София",
+    "size_sqm": 65.0,
+    "price_eur": 186999.8,
+    "price_per_sqm": 2876.92,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:20:24.498351"
+  },
+  {
+    "city": "София",
+    "size_sqm": 127.0,
+    "price_eur": 239999.52,
+    "price_per_sqm": 1889.76,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:20:24.498358"
+  },
+  {
+    "city": "София",
+    "size_sqm": 128.0,
+    "price_eur": 239000.32,
+    "price_per_sqm": 1867.19,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:20:24.498365"
+  },
+  {
+    "city": "София",
+    "size_sqm": 70.0,
+    "price_eur": 112000.0,
+    "price_per_sqm": 1600.0,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:20:24.498371"
+  },
+  {
+    "city": "София",
+    "size_sqm": 75.0,
+    "price_eur": 273999.75,
+    "price_per_sqm": 3653.33,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:20:24.498379"
+  },
+  {
+    "city": "София",
+    "size_sqm": 65.0,
+    "price_eur": 156000.0,
+    "price_per_sqm": 2400.0,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:20:24.498386"
+  },
+  {
+    "city": "София",
+    "size_sqm": 112.0,
+    "price_eur": 330000.16,
+    "price_per_sqm": 2946.43,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:20:24.498392"
+  },
+  {
+    "city": "София",
+    "size_sqm": 144.0,
+    "price_eur": 360000.0,
+    "price_per_sqm": 2500.0,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:20:24.498400"
+  },
+  {
+    "city": "София",
+    "size_sqm": 66.0,
+    "price_eur": 188035.32,
+    "price_per_sqm": 2849.02,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:20:24.498407"
+  },
+  {
+    "city": "София",
+    "size_sqm": 71.0,
+    "price_eur": 144999.75,
+    "price_per_sqm": 2042.25,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:20:24.498413"
+  },
+  {
+    "city": "София",
+    "size_sqm": 68.0,
+    "price_eur": 127999.8,
+    "price_per_sqm": 1882.35,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:20:24.498421"
+  },
+  {
+    "city": "София",
+    "size_sqm": 104.0,
+    "price_eur": 218777.52,
+    "price_per_sqm": 2103.63,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:20:24.498434"
+  },
+  {
+    "city": "София",
+    "size_sqm": 140.0,
+    "price_eur": 376175.8,
+    "price_per_sqm": 2686.97,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:20:24.498448"
+  },
+  {
+    "city": "София",
+    "size_sqm": 208.0,
+    "price_eur": 715276.64,
+    "price_per_sqm": 3438.83,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:20:24.498456"
+  },
+  {
+    "city": "София",
+    "size_sqm": 105.0,
+    "price_eur": 251279.7,
+    "price_per_sqm": 2393.14,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:20:24.498463"
+  },
+  {
+    "city": "София",
+    "size_sqm": 124.0,
+    "price_eur": 273723.8,
+    "price_per_sqm": 2207.45,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:20:24.498471"
+  },
+  {
+    "city": "София",
+    "size_sqm": 45.0,
+    "price_eur": 125000.1,
+    "price_per_sqm": 2777.78,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:20:24.498477"
+  },
+  {
+    "city": "София",
+    "size_sqm": 62.0,
+    "price_eur": 99359.96,
+    "price_per_sqm": 1602.58,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:20:24.498484"
+  },
+  {
+    "city": "София",
+    "size_sqm": 73.0,
+    "price_eur": 154000.07,
+    "price_per_sqm": 2109.59,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:20:24.498498"
+  },
+  {
+    "city": "София",
+    "size_sqm": 198.0,
+    "price_eur": 479999.52,
+    "price_per_sqm": 2424.24,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:20:24.498505"
+  },
+  {
+    "city": "София",
+    "size_sqm": 55.0,
+    "price_eur": 84999.75,
+    "price_per_sqm": 1545.45,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:20:24.498512"
+  },
+  {
+    "city": "София",
+    "size_sqm": 61.0,
+    "price_eur": 171000.08,
+    "price_per_sqm": 2803.28,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:20:26.435205"
+  },
+  {
+    "city": "София",
+    "size_sqm": 108.0,
+    "price_eur": 249999.48,
+    "price_per_sqm": 2314.81,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:20:26.435233"
+  },
+  {
+    "city": "София",
+    "size_sqm": 73.0,
+    "price_eur": 209145.73,
+    "price_per_sqm": 2865.01,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:20:26.435244"
+  },
+  {
+    "city": "София",
+    "size_sqm": 111.0,
+    "price_eur": 319200.48,
+    "price_per_sqm": 2875.68,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:20:26.435254"
+  },
+  {
+    "city": "София",
+    "size_sqm": 61.0,
+    "price_eur": 189999.75,
+    "price_per_sqm": 3114.75,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:20:26.435265"
+  },
+  {
+    "city": "София",
+    "size_sqm": 85.0,
+    "price_eur": 153999.6,
+    "price_per_sqm": 1811.76,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:20:26.435289"
+  },
+  {
+    "city": "София",
+    "size_sqm": 60.0,
+    "price_eur": 109999.8,
+    "price_per_sqm": 1833.33,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:20:26.435310"
+  },
+  {
+    "city": "София",
+    "size_sqm": 20.0,
+    "price_eur": 54990.0,
+    "price_per_sqm": 2749.5,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:20:26.435319"
+  },
+  {
+    "city": "София",
+    "size_sqm": 59.0,
+    "price_eur": 153400.0,
+    "price_per_sqm": 2600.0,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:20:26.435328"
+  },
+  {
+    "city": "София",
+    "size_sqm": 282.0,
+    "price_eur": 243098.1,
+    "price_per_sqm": 862.05,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:20:26.435338"
+  },
+  {
+    "city": "София",
+    "size_sqm": 21.0,
+    "price_eur": 55000.05,
+    "price_per_sqm": 2619.05,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:20:26.435351"
+  },
+  {
+    "city": "София",
+    "size_sqm": 70.0,
+    "price_eur": 131000.1,
+    "price_per_sqm": 1871.43,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:20:26.435365"
+  },
+  {
+    "city": "София",
+    "size_sqm": 135.0,
+    "price_eur": 334999.8,
+    "price_per_sqm": 2481.48,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:20:26.435374"
+  },
+  {
+    "city": "София",
+    "size_sqm": 102.0,
+    "price_eur": 244344.06,
+    "price_per_sqm": 2395.53,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:20:26.435386"
+  },
+  {
+    "city": "София",
+    "size_sqm": 65.0,
+    "price_eur": 179999.95,
+    "price_per_sqm": 2769.23,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:20:26.435397"
+  },
+  {
+    "city": "София",
+    "size_sqm": 77.0,
+    "price_eur": 221449.69,
+    "price_per_sqm": 2875.97,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:20:26.435407"
+  },
+  {
+    "city": "София",
+    "size_sqm": 54.0,
+    "price_eur": 79300.08,
+    "price_per_sqm": 1468.52,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:20:26.435417"
+  },
+  {
+    "city": "София",
+    "size_sqm": 67.0,
+    "price_eur": 114393.12,
+    "price_per_sqm": 1707.36,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:20:26.435427"
+  },
+  {
+    "city": "София",
+    "size_sqm": 85.0,
+    "price_eur": 159999.75,
+    "price_per_sqm": 1882.35,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:20:26.435436"
+  },
+  {
+    "city": "София",
+    "size_sqm": 116.0,
+    "price_eur": 273000.2,
+    "price_per_sqm": 2353.45,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:20:26.435448"
+  },
+  {
+    "city": "София",
+    "size_sqm": 117.0,
+    "price_eur": 319999.68,
+    "price_per_sqm": 2735.04,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:20:26.435458"
+  },
+  {
+    "city": "София",
+    "size_sqm": 133.0,
+    "price_eur": 339900.12,
+    "price_per_sqm": 2555.64,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:20:26.435467"
+  },
+  {
+    "city": "София",
+    "size_sqm": 77.0,
+    "price_eur": 188000.12,
+    "price_per_sqm": 2441.56,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:20:26.435476"
+  },
+  {
+    "city": "София",
+    "size_sqm": 115.0,
+    "price_eur": 279999.7,
+    "price_per_sqm": 2434.78,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:20:26.435486"
+  },
+  {
+    "city": "София",
+    "size_sqm": 65.0,
+    "price_eur": 264999.8,
+    "price_per_sqm": 4076.92,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:20:26.435497"
+  },
+  {
+    "city": "София",
+    "size_sqm": 70.0,
+    "price_eur": 175000.0,
+    "price_per_sqm": 2500.0,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:20:26.435506"
+  },
+  {
+    "city": "София",
+    "size_sqm": 70.0,
+    "price_eur": 161735.7,
+    "price_per_sqm": 2310.51,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:20:26.435516"
+  },
+  {
+    "city": "София",
+    "size_sqm": 82.0,
+    "price_eur": 144999.78,
+    "price_per_sqm": 1768.29,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:20:26.435525"
+  },
+  {
+    "city": "София",
+    "size_sqm": 100.0,
+    "price_eur": 226462.0,
+    "price_per_sqm": 2264.62,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:20:26.435535"
+  },
+  {
+    "city": "София",
+    "size_sqm": 109.0,
+    "price_eur": 462892.48,
+    "price_per_sqm": 4246.72,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:20:26.435550"
+  },
+  {
+    "city": "София",
+    "size_sqm": 129.0,
+    "price_eur": 350000.22,
+    "price_per_sqm": 2713.18,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:20:26.435564"
+  },
+  {
+    "city": "София",
+    "size_sqm": 123.0,
+    "price_eur": 202000.44,
+    "price_per_sqm": 1642.28,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:20:26.435574"
+  },
+  {
+    "city": "София",
+    "size_sqm": 135.0,
+    "price_eur": 287999.55,
+    "price_per_sqm": 2133.33,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:20:26.435585"
+  },
+  {
+    "city": "София",
+    "size_sqm": 92.0,
+    "price_eur": 187000.12,
+    "price_per_sqm": 2032.61,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:20:26.435594"
+  },
+  {
+    "city": "София",
+    "size_sqm": 103.0,
+    "price_eur": 209999.49,
+    "price_per_sqm": 2038.83,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:20:26.435605"
+  },
+  {
+    "city": "София",
+    "size_sqm": 70.0,
+    "price_eur": 133000.0,
+    "price_per_sqm": 1900.0,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:20:26.435615"
+  },
+  {
+    "city": "София",
+    "size_sqm": 67.0,
+    "price_eur": 134499.82,
+    "price_per_sqm": 2007.46,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:20:26.435625"
+  },
+  {
+    "city": "София",
+    "size_sqm": 102.0,
+    "price_eur": 180000.42,
+    "price_per_sqm": 1764.71,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:20:26.435644"
+  },
+  {
+    "city": "София",
+    "size_sqm": 42.0,
+    "price_eur": 107000.04,
+    "price_per_sqm": 2547.62,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:20:26.435653"
+  },
+  {
+    "city": "Пловдив",
+    "size_sqm": 71.0,
+    "price_eur": 95000.0,
+    "price_per_sqm": 1338.03,
+    "rooms": 2,
+    "source": "imot.bg",
+    "scraped_at": "2026-02-15T08:20:27.730669"
+  },
+  {
+    "city": "Пловдив",
+    "size_sqm": 38.0,
+    "price_eur": 45630.0,
+    "price_per_sqm": 1200.79,
+    "rooms": 1,
+    "source": "imot.bg",
+    "scraped_at": "2026-02-15T08:20:28.709911"
+  },
+  {
+    "city": "Пловдив",
+    "size_sqm": 43.0,
+    "price_eur": 55000.0,
+    "price_per_sqm": 1279.07,
+    "rooms": 1,
+    "source": "imot.bg",
+    "scraped_at": "2026-02-15T08:20:30.138964"
+  },
+  {
+    "city": "Пловдив",
+    "size_sqm": 32.0,
+    "price_eur": 68969.0,
+    "price_per_sqm": 2155.28,
+    "rooms": 1,
+    "source": "imot.bg",
+    "scraped_at": "2026-02-15T08:20:31.793941"
+  },
+  {
+    "city": "Пловдив",
+    "size_sqm": 39.0,
+    "price_eur": 37161.0,
+    "price_per_sqm": 952.85,
+    "rooms": 1,
+    "source": "imot.bg",
+    "scraped_at": "2026-02-15T08:20:33.181804"
+  },
+  {
+    "city": "Пловдив",
+    "size_sqm": 42.0,
+    "price_eur": 40032.0,
+    "price_per_sqm": 953.14,
+    "rooms": 1,
+    "source": "imot.bg",
+    "scraped_at": "2026-02-15T08:20:34.749881"
+  },
+  {
+    "city": "Пловдив",
+    "size_sqm": 32.0,
+    "price_eur": 90000.0,
+    "price_per_sqm": 2812.5,
+    "rooms": 1,
+    "source": "imot.bg",
+    "scraped_at": "2026-02-15T08:20:36.520554"
+  },
+  {
+    "city": "Пловдив",
+    "size_sqm": 44.0,
+    "price_eur": 54686.0,
+    "price_per_sqm": 1242.86,
+    "rooms": 1,
+    "source": "imot.bg",
+    "scraped_at": "2026-02-15T08:20:38.163311"
+  },
+  {
+    "city": "Пловдив",
+    "size_sqm": 39.0,
+    "price_eur": 58999.0,
+    "price_per_sqm": 1512.79,
+    "rooms": 1,
+    "source": "imot.bg",
+    "scraped_at": "2026-02-15T08:20:39.869936"
+  },
+  {
+    "city": "Пловдив",
+    "size_sqm": 41.0,
+    "price_eur": 61999.0,
+    "price_per_sqm": 1512.17,
+    "rooms": 1,
+    "source": "imot.bg",
+    "scraped_at": "2026-02-15T08:20:40.591209"
+  },
+  {
+    "city": "Пловдив",
+    "size_sqm": 36.0,
+    "price_eur": 75600.0,
+    "price_per_sqm": 2100.0,
+    "rooms": 1,
+    "source": "imot.bg",
+    "scraped_at": "2026-02-15T08:20:42.070326"
+  },
+  {
+    "city": "Пловдив",
+    "size_sqm": 43.0,
+    "price_eur": 52900.0,
+    "price_per_sqm": 1230.23,
+    "rooms": 1,
+    "source": "imot.bg",
+    "scraped_at": "2026-02-15T08:20:43.330757"
+  },
+  {
+    "city": "Пловдив",
+    "size_sqm": 43.0,
+    "price_eur": 56499.0,
+    "price_per_sqm": 1313.93,
+    "rooms": 1,
+    "source": "imot.bg",
+    "scraped_at": "2026-02-15T08:20:44.379952"
+  },
+  {
+    "city": "Пловдив",
+    "size_sqm": 40.0,
+    "price_eur": 82000.0,
+    "price_per_sqm": 2050.0,
+    "rooms": 1,
+    "source": "imot.bg",
+    "scraped_at": "2026-02-15T08:20:45.193736"
+  },
+  {
+    "city": "Пловдив",
+    "size_sqm": 36.0,
+    "price_eur": 83900.0,
+    "price_per_sqm": 2330.56,
+    "rooms": 1,
+    "source": "imot.bg",
+    "scraped_at": "2026-02-15T08:20:45.972559"
+  },
+  {
+    "city": "Пловдив",
+    "size_sqm": 28.0,
+    "price_eur": 65999.0,
+    "price_per_sqm": 2357.11,
+    "rooms": 1,
+    "source": "imot.bg",
+    "scraped_at": "2026-02-15T08:20:46.983846"
+  },
+  {
+    "city": "Пловдив",
+    "size_sqm": 39.0,
+    "price_eur": 89000.0,
+    "price_per_sqm": 2282.05,
+    "rooms": 1,
+    "source": "imot.bg",
+    "scraped_at": "2026-02-15T08:20:46.940910"
+  },
+  {
+    "city": "Пловдив",
+    "size_sqm": 35.0,
+    "price_eur": 108980.0,
+    "price_per_sqm": 3113.71,
+    "rooms": 1,
+    "source": "imot.bg",
+    "scraped_at": "2026-02-15T08:20:48.510509"
+  },
+  {
+    "city": "Пловдив",
+    "size_sqm": 36.0,
+    "price_eur": 42000.0,
+    "price_per_sqm": 1166.67,
+    "rooms": 1,
+    "source": "imot.bg",
+    "scraped_at": "2026-02-15T08:20:49.612016"
+  },
+  {
+    "city": "Пловдив",
+    "size_sqm": 42.0,
+    "price_eur": 61000.0,
+    "price_per_sqm": 1452.38,
+    "rooms": 1,
+    "source": "imot.bg",
+    "scraped_at": "2026-02-15T08:20:51.008324"
+  },
+  {
+    "city": "Пловдив",
+    "size_sqm": 38.0,
+    "price_eur": 61900.0,
+    "price_per_sqm": 1628.95,
+    "rooms": 1,
+    "source": "imot.bg",
+    "scraped_at": "2026-02-15T08:20:52.399260"
+  },
+  {
+    "city": "Пловдив",
+    "size_sqm": 39.0,
+    "price_eur": 63999.0,
+    "price_per_sqm": 1641.0,
+    "rooms": 1,
+    "source": "imot.bg",
+    "scraped_at": "2026-02-15T08:20:53.664473"
+  },
+  {
+    "city": "Пловдив",
+    "size_sqm": 41.0,
+    "price_eur": 64500.0,
+    "price_per_sqm": 1573.17,
+    "rooms": 1,
+    "source": "imot.bg",
+    "scraped_at": "2026-02-15T08:20:54.511409"
+  },
+  {
+    "city": "Пловдив",
+    "size_sqm": 61.0,
+    "price_eur": 65199.0,
+    "price_per_sqm": 1068.84,
+    "rooms": 2,
+    "source": "imot.bg",
+    "scraped_at": "2026-02-15T08:20:55.664137"
+  },
+  {
+    "city": "Пловдив",
+    "size_sqm": 60.0,
+    "price_eur": 66098.0,
+    "price_per_sqm": 1101.63,
+    "rooms": 2,
+    "source": "imot.bg",
+    "scraped_at": "2026-02-15T08:20:56.988323"
+  },
+  {
+    "city": "Пловдив",
+    "size_sqm": 60.0,
+    "price_eur": 68899.0,
+    "price_per_sqm": 1148.32,
+    "rooms": 2,
+    "source": "imot.bg",
+    "scraped_at": "2026-02-15T08:20:58.231457"
+  },
+  {
+    "city": "Пловдив",
+    "size_sqm": 59.0,
+    "price_eur": 68900.0,
+    "price_per_sqm": 1167.8,
+    "rooms": 2,
+    "source": "imot.bg",
+    "scraped_at": "2026-02-15T08:20:59.774355"
+  },
+  {
+    "city": "Пловдив",
+    "size_sqm": 67.0,
+    "price_eur": 73100.0,
+    "price_per_sqm": 1091.04,
+    "rooms": 2,
+    "source": "imot.bg",
+    "scraped_at": "2026-02-15T08:21:01.130508"
+  },
+  {
+    "city": "Пловдив",
+    "size_sqm": 60.0,
+    "price_eur": 75000.0,
+    "price_per_sqm": 1250.0,
+    "rooms": 2,
+    "source": "imot.bg",
+    "scraped_at": "2026-02-15T08:21:01.838325"
+  },
+  {
+    "city": "Пловдив",
+    "size_sqm": 60.0,
+    "price_eur": 77000.0,
+    "price_per_sqm": 1283.33,
+    "rooms": 2,
+    "source": "imot.bg",
+    "scraped_at": "2026-02-15T08:21:02.991301"
+  },
+  {
+    "city": "Пловдив",
+    "size_sqm": 106.0,
+    "price_eur": 164998.54,
+    "price_per_sqm": 1556.59,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:04.961179"
+  },
+  {
+    "city": "Пловдив",
+    "size_sqm": 48.0,
+    "price_eur": 77000.16,
+    "price_per_sqm": 1604.17,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:04.961195"
+  },
+  {
+    "city": "Пловдив",
+    "size_sqm": 400.0,
+    "price_eur": 650000.0,
+    "price_per_sqm": 1625.0,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:04.961203"
+  },
+  {
+    "city": "Пловдив",
+    "size_sqm": 69.0,
+    "price_eur": 76000.05,
+    "price_per_sqm": 1101.45,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:04.961210"
+  },
+  {
+    "city": "Пловдив",
+    "size_sqm": 28.0,
+    "price_eur": 65999.08,
+    "price_per_sqm": 2357.11,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:04.961216"
+  },
+  {
+    "city": "Пловдив",
+    "size_sqm": 43.0,
+    "price_eur": 129000.0,
+    "price_per_sqm": 3000.0,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:04.961223"
+  },
+  {
+    "city": "Пловдив",
+    "size_sqm": 108.0,
+    "price_eur": 226800.0,
+    "price_per_sqm": 2100.0,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:04.961230"
+  },
+  {
+    "city": "Пловдив",
+    "size_sqm": 59.0,
+    "price_eur": 58192.29,
+    "price_per_sqm": 986.31,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:04.961236"
+  },
+  {
+    "city": "Пловдив",
+    "size_sqm": 98.0,
+    "price_eur": 149999.78,
+    "price_per_sqm": 1530.61,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:04.961243"
+  },
+  {
+    "city": "Пловдив",
+    "size_sqm": 120.0,
+    "price_eur": 180000.0,
+    "price_per_sqm": 1500.0,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:04.961250"
+  },
+  {
+    "city": "Пловдив",
+    "size_sqm": 68.0,
+    "price_eur": 65173.92,
+    "price_per_sqm": 958.44,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:04.961257"
+  },
+  {
+    "city": "Пловдив",
+    "size_sqm": 157.0,
+    "price_eur": 128000.53,
+    "price_per_sqm": 815.29,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:04.961264"
+  },
+  {
+    "city": "Пловдив",
+    "size_sqm": 60.0,
+    "price_eur": 109999.8,
+    "price_per_sqm": 1833.33,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:04.961270"
+  },
+  {
+    "city": "Пловдив",
+    "size_sqm": 60.0,
+    "price_eur": 134899.8,
+    "price_per_sqm": 2248.33,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:04.961276"
+  },
+  {
+    "city": "Пловдив",
+    "size_sqm": 65.0,
+    "price_eur": 93000.05,
+    "price_per_sqm": 1430.77,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:04.961288"
+  },
+  {
+    "city": "Пловдив",
+    "size_sqm": 38.0,
+    "price_eur": 64999.0,
+    "price_per_sqm": 1710.5,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:04.961295"
+  },
+  {
+    "city": "Пловдив",
+    "size_sqm": 48.0,
+    "price_eur": 72998.88,
+    "price_per_sqm": 1520.81,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:04.961302"
+  },
+  {
+    "city": "Пловдив",
+    "size_sqm": 35.0,
+    "price_eur": 48000.05,
+    "price_per_sqm": 1371.43,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:04.961308"
+  },
+  {
+    "city": "Пловдив",
+    "size_sqm": 127.0,
+    "price_eur": 230192.58,
+    "price_per_sqm": 1812.54,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:04.961314"
+  },
+  {
+    "city": "Пловдив",
+    "size_sqm": 41.0,
+    "price_eur": 78000.04,
+    "price_per_sqm": 1902.44,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:04.961321"
+  },
+  {
+    "city": "Пловдив",
+    "size_sqm": 104.0,
+    "price_eur": 131000.48,
+    "price_per_sqm": 1259.62,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:04.961328"
+  },
+  {
+    "city": "Пловдив",
+    "size_sqm": 58.0,
+    "price_eur": 94849.14,
+    "price_per_sqm": 1635.33,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:04.961335"
+  },
+  {
+    "city": "Пловдив",
+    "size_sqm": 72.0,
+    "price_eur": 99990.0,
+    "price_per_sqm": 1388.75,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:04.961341"
+  },
+  {
+    "city": "Пловдив",
+    "size_sqm": 65.0,
+    "price_eur": 126998.95,
+    "price_per_sqm": 1953.83,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:04.961347"
+  },
+  {
+    "city": "Пловдив",
+    "size_sqm": 67.0,
+    "price_eur": 79979.91,
+    "price_per_sqm": 1193.73,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:04.961354"
+  },
+  {
+    "city": "Пловдив",
+    "size_sqm": 88.0,
+    "price_eur": 129000.08,
+    "price_per_sqm": 1465.91,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:04.961372"
+  },
+  {
+    "city": "Пловдив",
+    "size_sqm": 100.0,
+    "price_eur": 165000.0,
+    "price_per_sqm": 1650.0,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:04.961380"
+  },
+  {
+    "city": "Пловдив",
+    "size_sqm": 99.0,
+    "price_eur": 109928.61,
+    "price_per_sqm": 1110.39,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:04.961387"
+  },
+  {
+    "city": "Пловдив",
+    "size_sqm": 108.0,
+    "price_eur": 130116.24,
+    "price_per_sqm": 1204.78,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:04.961394"
+  },
+  {
+    "city": "Пловдив",
+    "size_sqm": 72.0,
+    "price_eur": 99959.04,
+    "price_per_sqm": 1388.32,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:04.961400"
+  },
+  {
+    "city": "Пловдив",
+    "size_sqm": 53.0,
+    "price_eur": 65249.89,
+    "price_per_sqm": 1231.13,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:04.961407"
+  },
+  {
+    "city": "Пловдив",
+    "size_sqm": 75.0,
+    "price_eur": 159999.75,
+    "price_per_sqm": 2133.33,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:04.961413"
+  },
+  {
+    "city": "Пловдив",
+    "size_sqm": 55.0,
+    "price_eur": 65000.1,
+    "price_per_sqm": 1181.82,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:04.961419"
+  },
+  {
+    "city": "Пловдив",
+    "size_sqm": 116.0,
+    "price_eur": 147636.68,
+    "price_per_sqm": 1272.73,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:04.961425"
+  },
+  {
+    "city": "Пловдив",
+    "size_sqm": 41.0,
+    "price_eur": 42999.98,
+    "price_per_sqm": 1048.78,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:04.961431"
+  },
+  {
+    "city": "Пловдив",
+    "size_sqm": 76.0,
+    "price_eur": 77700.12,
+    "price_per_sqm": 1022.37,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:04.961451"
+  },
+  {
+    "city": "Пловдив",
+    "size_sqm": 315.0,
+    "price_eur": 729999.9,
+    "price_per_sqm": 2317.46,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:04.961458"
+  },
+  {
+    "city": "Пловдив",
+    "size_sqm": 90.0,
+    "price_eur": 88540.2,
+    "price_per_sqm": 983.78,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:04.961464"
+  },
+  {
+    "city": "Пловдив",
+    "size_sqm": 60.0,
+    "price_eur": 56200.2,
+    "price_per_sqm": 936.67,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:04.961471"
+  },
+  {
+    "city": "Пловдив",
+    "size_sqm": 63.0,
+    "price_eur": 128899.89,
+    "price_per_sqm": 2046.03,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:04.961478"
+  },
+  {
+    "city": "Пловдив",
+    "size_sqm": 55.0,
+    "price_eur": 142799.25,
+    "price_per_sqm": 2596.35,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:04.961484"
+  },
+  {
+    "city": "Пловдив",
+    "size_sqm": 69.0,
+    "price_eur": 115000.23,
+    "price_per_sqm": 1666.67,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:04.961490"
+  },
+  {
+    "city": "Пловдив",
+    "size_sqm": 103.0,
+    "price_eur": 145499.86,
+    "price_per_sqm": 1412.62,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:04.961497"
+  },
+  {
+    "city": "Пловдив",
+    "size_sqm": 66.0,
+    "price_eur": 65340.0,
+    "price_per_sqm": 990.0,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:04.961503"
+  },
+  {
+    "city": "Пловдив",
+    "size_sqm": 71.0,
+    "price_eur": 62957.83,
+    "price_per_sqm": 886.73,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:04.961510"
+  },
+  {
+    "city": "Пловдив",
+    "size_sqm": 90.0,
+    "price_eur": 214999.2,
+    "price_per_sqm": 2388.88,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:06.055118"
+  },
+  {
+    "city": "Пловдив",
+    "size_sqm": 35.0,
+    "price_eur": 44500.05,
+    "price_per_sqm": 1271.43,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:06.055136"
+  },
+  {
+    "city": "Пловдив",
+    "size_sqm": 92.0,
+    "price_eur": 162000.04,
+    "price_per_sqm": 1760.87,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:06.055149"
+  },
+  {
+    "city": "Пловдив",
+    "size_sqm": 107.0,
+    "price_eur": 102000.96,
+    "price_per_sqm": 953.28,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:06.055156"
+  },
+  {
+    "city": "Пловдив",
+    "size_sqm": 86.0,
+    "price_eur": 79120.0,
+    "price_per_sqm": 920.0,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:06.055202"
+  },
+  {
+    "city": "Пловдив",
+    "size_sqm": 108.0,
+    "price_eur": 150500.16,
+    "price_per_sqm": 1393.52,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:06.055211"
+  },
+  {
+    "city": "Пловдив",
+    "size_sqm": 73.0,
+    "price_eur": 127498.88,
+    "price_per_sqm": 1746.56,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:06.055218"
+  },
+  {
+    "city": "Пловдив",
+    "size_sqm": 33.0,
+    "price_eur": 46000.02,
+    "price_per_sqm": 1393.94,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:06.055224"
+  },
+  {
+    "city": "Пловдив",
+    "size_sqm": 126.0,
+    "price_eur": 280799.82,
+    "price_per_sqm": 2228.57,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:06.055232"
+  },
+  {
+    "city": "Пловдив",
+    "size_sqm": 103.0,
+    "price_eur": 126787.85,
+    "price_per_sqm": 1230.95,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:06.055240"
+  },
+  {
+    "city": "Пловдив",
+    "size_sqm": 98.0,
+    "price_eur": 137000.08,
+    "price_per_sqm": 1397.96,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:06.055246"
+  },
+  {
+    "city": "Пловдив",
+    "size_sqm": 33.0,
+    "price_eur": 79998.93,
+    "price_per_sqm": 2424.21,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:06.055252"
+  },
+  {
+    "city": "Пловдив",
+    "size_sqm": 73.0,
+    "price_eur": 56102.69,
+    "price_per_sqm": 768.53,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:06.055258"
+  },
+  {
+    "city": "Пловдив",
+    "size_sqm": 68.0,
+    "price_eur": 129000.08,
+    "price_per_sqm": 1897.06,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:06.055265"
+  },
+  {
+    "city": "Пловдив",
+    "size_sqm": 107.0,
+    "price_eur": 165102.07,
+    "price_per_sqm": 1543.01,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:06.055272"
+  },
+  {
+    "city": "Пловдив",
+    "size_sqm": 117.0,
+    "price_eur": 180493.56,
+    "price_per_sqm": 1542.68,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:06.055279"
+  },
+  {
+    "city": "Пловдив",
+    "size_sqm": 74.0,
+    "price_eur": 89124.12,
+    "price_per_sqm": 1204.38,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:06.055286"
+  },
+  {
+    "city": "Пловдив",
+    "size_sqm": 83.0,
+    "price_eur": 150083.92,
+    "price_per_sqm": 1808.24,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:06.055293"
+  },
+  {
+    "city": "Пловдив",
+    "size_sqm": 144.0,
+    "price_eur": 166000.32,
+    "price_per_sqm": 1152.78,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:06.055300"
+  },
+  {
+    "city": "Пловдив",
+    "size_sqm": 180.0,
+    "price_eur": 189500.4,
+    "price_per_sqm": 1052.78,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:06.055307"
+  },
+  {
+    "city": "Пловдив",
+    "size_sqm": 81.0,
+    "price_eur": 149000.31,
+    "price_per_sqm": 1839.51,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:06.055314"
+  },
+  {
+    "city": "Пловдив",
+    "size_sqm": 99.0,
+    "price_eur": 128700.0,
+    "price_per_sqm": 1300.0,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:06.055320"
+  },
+  {
+    "city": "Пловдив",
+    "size_sqm": 80.0,
+    "price_eur": 79996.8,
+    "price_per_sqm": 999.96,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:06.055327"
+  },
+  {
+    "city": "Пловдив",
+    "size_sqm": 62.0,
+    "price_eur": 76498.7,
+    "price_per_sqm": 1233.85,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:06.055334"
+  },
+  {
+    "city": "Пловдив",
+    "size_sqm": 80.0,
+    "price_eur": 76284.8,
+    "price_per_sqm": 953.56,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:06.055341"
+  },
+  {
+    "city": "Пловдив",
+    "size_sqm": 97.0,
+    "price_eur": 73893.63,
+    "price_per_sqm": 761.79,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:06.055348"
+  },
+  {
+    "city": "Пловдив",
+    "size_sqm": 113.0,
+    "price_eur": 163200.25,
+    "price_per_sqm": 1444.25,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:06.055354"
+  },
+  {
+    "city": "Пловдив",
+    "size_sqm": 135.0,
+    "price_eur": 199999.8,
+    "price_per_sqm": 1481.48,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:06.055362"
+  },
+  {
+    "city": "Пловдив",
+    "size_sqm": 80.0,
+    "price_eur": 73600.0,
+    "price_per_sqm": 920.0,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:06.055371"
+  },
+  {
+    "city": "Пловдив",
+    "size_sqm": 150.0,
+    "price_eur": 277498.5,
+    "price_per_sqm": 1849.99,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:06.055382"
+  },
+  {
+    "city": "Пловдив",
+    "size_sqm": 62.0,
+    "price_eur": 127499.9,
+    "price_per_sqm": 2056.45,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:06.055390"
+  },
+  {
+    "city": "Пловдив",
+    "size_sqm": 126.0,
+    "price_eur": 169113.42,
+    "price_per_sqm": 1342.17,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:06.055399"
+  },
+  {
+    "city": "Пловдив",
+    "size_sqm": 217.0,
+    "price_eur": 267291.92,
+    "price_per_sqm": 1231.76,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:06.055408"
+  },
+  {
+    "city": "Пловдив",
+    "size_sqm": 53.0,
+    "price_eur": 84442.78,
+    "price_per_sqm": 1593.26,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:06.055417"
+  },
+  {
+    "city": "Пловдив",
+    "size_sqm": 121.0,
+    "price_eur": 185756.78,
+    "price_per_sqm": 1535.18,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:06.055426"
+  },
+  {
+    "city": "Пловдив",
+    "size_sqm": 104.0,
+    "price_eur": 144499.68,
+    "price_per_sqm": 1389.42,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:06.055436"
+  },
+  {
+    "city": "Пловдив",
+    "size_sqm": 101.0,
+    "price_eur": 89623.36,
+    "price_per_sqm": 887.36,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:06.055445"
+  },
+  {
+    "city": "Пловдив",
+    "size_sqm": 68.0,
+    "price_eur": 84500.88,
+    "price_per_sqm": 1242.66,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:06.055456"
+  },
+  {
+    "city": "Пловдив",
+    "size_sqm": 101.0,
+    "price_eur": 90245.52,
+    "price_per_sqm": 893.52,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:06.055463"
+  },
+  {
+    "city": "Пловдив",
+    "size_sqm": 70.0,
+    "price_eur": 84588.0,
+    "price_per_sqm": 1208.4,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:07.748518"
+  },
+  {
+    "city": "Пловдив",
+    "size_sqm": 59.0,
+    "price_eur": 113999.21,
+    "price_per_sqm": 1932.19,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:07.748545"
+  },
+  {
+    "city": "Пловдив",
+    "size_sqm": 66.0,
+    "price_eur": 115500.0,
+    "price_per_sqm": 1750.0,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:07.748553"
+  },
+  {
+    "city": "Пловдив",
+    "size_sqm": 63.0,
+    "price_eur": 120999.69,
+    "price_per_sqm": 1920.63,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:07.748561"
+  },
+  {
+    "city": "Пловдив",
+    "size_sqm": 178.0,
+    "price_eur": 222416.34,
+    "price_per_sqm": 1249.53,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:07.748569"
+  },
+  {
+    "city": "Пловдив",
+    "size_sqm": 103.0,
+    "price_eur": 78552.95,
+    "price_per_sqm": 762.65,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:07.748577"
+  },
+  {
+    "city": "Пловдив",
+    "size_sqm": 124.0,
+    "price_eur": 197493.56,
+    "price_per_sqm": 1592.69,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:07.748591"
+  },
+  {
+    "city": "Пловдив",
+    "size_sqm": 141.0,
+    "price_eur": 210490.44,
+    "price_per_sqm": 1492.84,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:07.748599"
+  },
+  {
+    "city": "Пловдив",
+    "size_sqm": 69.0,
+    "price_eur": 83532.09,
+    "price_per_sqm": 1210.61,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:07.748606"
+  },
+  {
+    "city": "Пловдив",
+    "size_sqm": 69.0,
+    "price_eur": 82955.94,
+    "price_per_sqm": 1202.26,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:07.748620"
+  },
+  {
+    "city": "Пловдив",
+    "size_sqm": 136.0,
+    "price_eur": 176000.32,
+    "price_per_sqm": 1294.12,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:07.748627"
+  },
+  {
+    "city": "Пловдив",
+    "size_sqm": 71.0,
+    "price_eur": 85596.18,
+    "price_per_sqm": 1205.58,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:07.748634"
+  },
+  {
+    "city": "Пловдив",
+    "size_sqm": 125.0,
+    "price_eur": 125900.0,
+    "price_per_sqm": 1007.2,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:07.748642"
+  },
+  {
+    "city": "Пловдив",
+    "size_sqm": 79.0,
+    "price_eur": 121711.35,
+    "price_per_sqm": 1540.65,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:07.748649"
+  },
+  {
+    "city": "Пловдив",
+    "size_sqm": 112.0,
+    "price_eur": 198095.52,
+    "price_per_sqm": 1768.71,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:07.748656"
+  },
+  {
+    "city": "Пловдив",
+    "size_sqm": 125.0,
+    "price_eur": 168617.5,
+    "price_per_sqm": 1348.94,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:07.748664"
+  },
+  {
+    "city": "Пловдив",
+    "size_sqm": 166.0,
+    "price_eur": 160452.28,
+    "price_per_sqm": 966.58,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:07.748671"
+  },
+  {
+    "city": "Пловдив",
+    "size_sqm": 80.0,
+    "price_eur": 145000.0,
+    "price_per_sqm": 1812.5,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:07.748678"
+  },
+  {
+    "city": "Пловдив",
+    "size_sqm": 125.0,
+    "price_eur": 134421.25,
+    "price_per_sqm": 1075.37,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:07.748685"
+  },
+  {
+    "city": "Пловдив",
+    "size_sqm": 203.0,
+    "price_eur": 292650.89,
+    "price_per_sqm": 1441.63,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:07.748693"
+  },
+  {
+    "city": "Пловдив",
+    "size_sqm": 80.0,
+    "price_eur": 81132.0,
+    "price_per_sqm": 1014.15,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:07.748700"
+  },
+  {
+    "city": "Пловдив",
+    "size_sqm": 85.0,
+    "price_eur": 135796.0,
+    "price_per_sqm": 1597.6,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:07.748707"
+  },
+  {
+    "city": "Пловдив",
+    "size_sqm": 68.0,
+    "price_eur": 85875.16,
+    "price_per_sqm": 1262.87,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:07.748714"
+  },
+  {
+    "city": "Пловдив",
+    "size_sqm": 103.0,
+    "price_eur": 128849.91,
+    "price_per_sqm": 1250.97,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:07.748729"
+  },
+  {
+    "city": "Пловдив",
+    "size_sqm": 71.0,
+    "price_eur": 85319.99,
+    "price_per_sqm": 1201.69,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:07.748736"
+  },
+  {
+    "city": "Пловдив",
+    "size_sqm": 212.0,
+    "price_eur": 188251.76,
+    "price_per_sqm": 887.98,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:07.748743"
+  },
+  {
+    "city": "Пловдив",
+    "size_sqm": 55.0,
+    "price_eur": 139499.8,
+    "price_per_sqm": 2536.36,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:07.748749"
+  },
+  {
+    "city": "Пловдив",
+    "size_sqm": 65.0,
+    "price_eur": 78499.85,
+    "price_per_sqm": 1207.69,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:07.748756"
+  },
+  {
+    "city": "Пловдив",
+    "size_sqm": 73.0,
+    "price_eur": 93999.91,
+    "price_per_sqm": 1287.67,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:07.748762"
+  },
+  {
+    "city": "Пловдив",
+    "size_sqm": 166.0,
+    "price_eur": 314855.52,
+    "price_per_sqm": 1896.72,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:07.748769"
+  },
+  {
+    "city": "Пловдив",
+    "size_sqm": 67.0,
+    "price_eur": 94589.26,
+    "price_per_sqm": 1411.78,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:07.748776"
+  },
+  {
+    "city": "Пловдив",
+    "size_sqm": 189.0,
+    "price_eur": 119599.2,
+    "price_per_sqm": 632.8,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:07.748783"
+  },
+  {
+    "city": "Пловдив",
+    "size_sqm": 85.0,
+    "price_eur": 153498.95,
+    "price_per_sqm": 1805.87,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:07.748790"
+  },
+  {
+    "city": "Пловдив",
+    "size_sqm": 105.0,
+    "price_eur": 79943.85,
+    "price_per_sqm": 761.37,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:07.748804"
+  },
+  {
+    "city": "Пловдив",
+    "size_sqm": 104.0,
+    "price_eur": 135000.32,
+    "price_per_sqm": 1298.08,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:07.748811"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 60.0,
+    "price_eur": 109990.0,
+    "price_per_sqm": 1833.17,
+    "rooms": 1,
+    "source": "imot.bg",
+    "scraped_at": "2026-02-15T08:21:08.987780"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 30.0,
+    "price_eur": 80000.0,
+    "price_per_sqm": 2666.67,
+    "rooms": 1,
+    "source": "imot.bg",
+    "scraped_at": "2026-02-15T08:21:10.489062"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 46.0,
+    "price_eur": 59800.0,
+    "price_per_sqm": 1300.0,
+    "rooms": 1,
+    "source": "imot.bg",
+    "scraped_at": "2026-02-15T08:21:12.119116"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 37.0,
+    "price_eur": 111000.0,
+    "price_per_sqm": 3000.0,
+    "rooms": 1,
+    "source": "imot.bg",
+    "scraped_at": "2026-02-15T08:21:13.680429"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 26.0,
+    "price_eur": 43990.0,
+    "price_per_sqm": 1691.92,
+    "rooms": 1,
+    "source": "imot.bg",
+    "scraped_at": "2026-02-15T08:21:14.903698"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 34.0,
+    "price_eur": 50000.0,
+    "price_per_sqm": 1470.59,
+    "rooms": 1,
+    "source": "imot.bg",
+    "scraped_at": "2026-02-15T08:21:16.533363"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 36.0,
+    "price_eur": 52989.0,
+    "price_per_sqm": 1471.92,
+    "rooms": 1,
+    "source": "imot.bg",
+    "scraped_at": "2026-02-15T08:21:17.307275"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 41.0,
+    "price_eur": 59990.0,
+    "price_per_sqm": 1463.17,
+    "rooms": 1,
+    "source": "imot.bg",
+    "scraped_at": "2026-02-15T08:21:17.247682"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 54.0,
+    "price_eur": 74500.0,
+    "price_per_sqm": 1379.63,
+    "rooms": 1,
+    "source": "imot.bg",
+    "scraped_at": "2026-02-15T08:21:18.958146"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 30.0,
+    "price_eur": 64000.0,
+    "price_per_sqm": 2133.33,
+    "rooms": 1,
+    "source": "imot.bg",
+    "scraped_at": "2026-02-15T08:21:19.943461"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 32.0,
+    "price_eur": 65000.0,
+    "price_per_sqm": 2031.25,
+    "rooms": 1,
+    "source": "imot.bg",
+    "scraped_at": "2026-02-15T08:21:21.289748"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 51.0,
+    "price_eur": 90000.0,
+    "price_per_sqm": 1764.71,
+    "rooms": 1,
+    "source": "imot.bg",
+    "scraped_at": "2026-02-15T08:21:22.377037"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 41.0,
+    "price_eur": 99900.0,
+    "price_per_sqm": 2436.59,
+    "rooms": 1,
+    "source": "imot.bg",
+    "scraped_at": "2026-02-15T08:21:23.804230"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 36.0,
+    "price_eur": 104900.0,
+    "price_per_sqm": 2913.89,
+    "rooms": 1,
+    "source": "imot.bg",
+    "scraped_at": "2026-02-15T08:21:24.677372"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 53.0,
+    "price_eur": 159000.0,
+    "price_per_sqm": 3000.0,
+    "rooms": 1,
+    "source": "imot.bg",
+    "scraped_at": "2026-02-15T08:21:25.846559"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 50.0,
+    "price_eur": 209000.0,
+    "price_per_sqm": 4180.0,
+    "rooms": 1,
+    "source": "imot.bg",
+    "scraped_at": "2026-02-15T08:21:27.256607"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 45.0,
+    "price_eur": 64400.0,
+    "price_per_sqm": 1431.11,
+    "rooms": 1,
+    "source": "imot.bg",
+    "scraped_at": "2026-02-15T08:21:28.880284"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 45.0,
+    "price_eur": 67000.0,
+    "price_per_sqm": 1488.89,
+    "rooms": 1,
+    "source": "imot.bg",
+    "scraped_at": "2026-02-15T08:21:30.131251"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 29.0,
+    "price_eur": 77999.0,
+    "price_per_sqm": 2689.62,
+    "rooms": 1,
+    "source": "imot.bg",
+    "scraped_at": "2026-02-15T08:21:31.502093"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 22.0,
+    "price_eur": 62990.0,
+    "price_per_sqm": 2863.18,
+    "rooms": 1,
+    "source": "imot.bg",
+    "scraped_at": "2026-02-15T08:21:32.775092"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 38.0,
+    "price_eur": 62500.0,
+    "price_per_sqm": 1644.74,
+    "rooms": 1,
+    "source": "imot.bg",
+    "scraped_at": "2026-02-15T08:21:34.213606"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 37.0,
+    "price_eur": 62990.0,
+    "price_per_sqm": 1702.43,
+    "rooms": 1,
+    "source": "imot.bg",
+    "scraped_at": "2026-02-15T08:21:34.883553"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 33.0,
+    "price_eur": 59990.0,
+    "price_per_sqm": 1817.88,
+    "rooms": 1,
+    "source": "imot.bg",
+    "scraped_at": "2026-02-15T08:21:36.063858"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 25.0,
+    "price_eur": 39500.0,
+    "price_per_sqm": 1580.0,
+    "rooms": 1,
+    "source": "imot.bg",
+    "scraped_at": "2026-02-15T08:21:37.530611"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 38.0,
+    "price_eur": 76500.0,
+    "price_per_sqm": 2013.16,
+    "rooms": 1,
+    "source": "imot.bg",
+    "scraped_at": "2026-02-15T08:21:38.268164"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 20.0,
+    "price_eur": 77700.0,
+    "price_per_sqm": 3885.0,
+    "rooms": 1,
+    "source": "imot.bg",
+    "scraped_at": "2026-02-15T08:21:39.738025"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 45.0,
+    "price_eur": 89900.0,
+    "price_per_sqm": 1997.78,
+    "rooms": 1,
+    "source": "imot.bg",
+    "scraped_at": "2026-02-15T08:21:40.678525"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 32.0,
+    "price_eur": 118000.0,
+    "price_per_sqm": 3687.5,
+    "rooms": 1,
+    "source": "imot.bg",
+    "scraped_at": "2026-02-15T08:21:42.195167"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 48.0,
+    "price_eur": 69500.0,
+    "price_per_sqm": 1447.92,
+    "rooms": 2,
+    "source": "imot.bg",
+    "scraped_at": "2026-02-15T08:21:42.956605"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 58.0,
+    "price_eur": 69990.0,
+    "price_per_sqm": 1206.72,
+    "rooms": 2,
+    "source": "imot.bg",
+    "scraped_at": "2026-02-15T08:21:43.864781"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 58.0,
+    "price_eur": 144900.24,
+    "price_per_sqm": 2498.28,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:46.302025"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 160.0,
+    "price_eur": 518000.0,
+    "price_per_sqm": 3237.5,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:46.302044"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 109.0,
+    "price_eur": 194999.91,
+    "price_per_sqm": 1788.99,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:46.302051"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 67.0,
+    "price_eur": 143000.11,
+    "price_per_sqm": 2134.33,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:46.302057"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 80.0,
+    "price_eur": 139900.0,
+    "price_per_sqm": 1748.75,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:46.302064"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 210.0,
+    "price_eur": 399999.6,
+    "price_per_sqm": 1904.76,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:46.302070"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 66.0,
+    "price_eur": 96499.92,
+    "price_per_sqm": 1462.12,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:46.302077"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 70.0,
+    "price_eur": 140000.0,
+    "price_per_sqm": 2000.0,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:46.302084"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 61.0,
+    "price_eur": 159999.95,
+    "price_per_sqm": 2622.95,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:46.302090"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 62.0,
+    "price_eur": 247840.04,
+    "price_per_sqm": 3997.42,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:46.302095"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 89.0,
+    "price_eur": 125499.79,
+    "price_per_sqm": 1410.11,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:46.302101"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 102.0,
+    "price_eur": 254900.04,
+    "price_per_sqm": 2499.02,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:46.302108"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 63.0,
+    "price_eur": 113999.76,
+    "price_per_sqm": 1809.52,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:46.302114"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 55.0,
+    "price_eur": 83999.85,
+    "price_per_sqm": 1527.27,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:46.302126"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 100.0,
+    "price_eur": 260000.0,
+    "price_per_sqm": 2600.0,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:46.302133"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 60.0,
+    "price_eur": 123000.0,
+    "price_per_sqm": 2050.0,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:46.302140"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 41.0,
+    "price_eur": 98420.09,
+    "price_per_sqm": 2400.49,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:46.302147"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 85.0,
+    "price_eur": 169000.4,
+    "price_per_sqm": 1988.24,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:46.302153"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 94.0,
+    "price_eur": 127231.82,
+    "price_per_sqm": 1353.53,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:46.302159"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 72.0,
+    "price_eur": 170200.08,
+    "price_per_sqm": 2363.89,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:46.302165"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 96.0,
+    "price_eur": 105753.6,
+    "price_per_sqm": 1101.6,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:46.302171"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 38.0,
+    "price_eur": 50449.94,
+    "price_per_sqm": 1327.63,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:46.302178"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 57.0,
+    "price_eur": 72500.01,
+    "price_per_sqm": 1271.93,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:46.302185"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 25.0,
+    "price_eur": 50000.0,
+    "price_per_sqm": 2000.0,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:46.302192"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 52.0,
+    "price_eur": 150000.24,
+    "price_per_sqm": 2884.62,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:46.302199"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 60.0,
+    "price_eur": 145000.2,
+    "price_per_sqm": 2416.67,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:46.302206"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 61.0,
+    "price_eur": 129900.11,
+    "price_per_sqm": 2129.51,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:46.302213"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 84.0,
+    "price_eur": 140000.28,
+    "price_per_sqm": 1666.67,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:46.302220"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 60.0,
+    "price_eur": 124999.8,
+    "price_per_sqm": 2083.33,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:46.302227"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 87.0,
+    "price_eur": 110000.19,
+    "price_per_sqm": 1264.37,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:46.302233"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 147.0,
+    "price_eur": 319000.29,
+    "price_per_sqm": 2170.07,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:46.302239"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 42.0,
+    "price_eur": 54899.88,
+    "price_per_sqm": 1307.14,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:46.302244"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 41.0,
+    "price_eur": 68800.05,
+    "price_per_sqm": 1678.05,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:46.302251"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 91.0,
+    "price_eur": 199899.7,
+    "price_per_sqm": 2196.7,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:46.302257"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 82.0,
+    "price_eur": 130000.34,
+    "price_per_sqm": 1585.37,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:46.302263"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 79.0,
+    "price_eur": 209999.38,
+    "price_per_sqm": 2658.22,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:46.302269"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 79.0,
+    "price_eur": 85000.05,
+    "price_per_sqm": 1075.95,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:46.302276"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 93.0,
+    "price_eur": 69899.73,
+    "price_per_sqm": 751.61,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:46.302281"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 87.0,
+    "price_eur": 214999.62,
+    "price_per_sqm": 2471.26,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:46.302288"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 63.0,
+    "price_eur": 165000.15,
+    "price_per_sqm": 2619.05,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:46.302294"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 140.0,
+    "price_eur": 370000.4,
+    "price_per_sqm": 2642.86,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:46.302306"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 54.0,
+    "price_eur": 139990.14,
+    "price_per_sqm": 2592.41,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:46.302313"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 95.0,
+    "price_eur": 185000.15,
+    "price_per_sqm": 1947.37,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:46.302319"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 144.0,
+    "price_eur": 229999.68,
+    "price_per_sqm": 1597.22,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:46.302326"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 55.0,
+    "price_eur": 125000.15,
+    "price_per_sqm": 2272.73,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:46.302332"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 80.0,
+    "price_eur": 120480.0,
+    "price_per_sqm": 1506.0,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:46.302340"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 87.0,
+    "price_eur": 281599.86,
+    "price_per_sqm": 3236.78,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:46.302346"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 120.0,
+    "price_eur": 630000.0,
+    "price_per_sqm": 5250.0,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:46.302352"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 51.0,
+    "price_eur": 113300.07,
+    "price_per_sqm": 2221.57,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:46.302358"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 65.0,
+    "price_eur": 94099.85,
+    "price_per_sqm": 1447.69,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:46.302364"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 63.0,
+    "price_eur": 89599.86,
+    "price_per_sqm": 1422.22,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:47.631870"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 72.0,
+    "price_eur": 145000.08,
+    "price_per_sqm": 2013.89,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:47.631888"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 115.0,
+    "price_eur": 249999.65,
+    "price_per_sqm": 2173.91,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:47.631896"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 53.0,
+    "price_eur": 85500.13,
+    "price_per_sqm": 1613.21,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:47.631903"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 57.0,
+    "price_eur": 129900.15,
+    "price_per_sqm": 2278.95,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:47.631910"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 58.0,
+    "price_eur": 82800.22,
+    "price_per_sqm": 1427.59,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:47.631916"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 33.0,
+    "price_eur": 76998.9,
+    "price_per_sqm": 2333.3,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:47.631923"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 80.0,
+    "price_eur": 135000.0,
+    "price_per_sqm": 1687.5,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:47.631930"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 148.0,
+    "price_eur": 266200.2,
+    "price_per_sqm": 1798.65,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:47.631937"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 123.0,
+    "price_eur": 208899.51,
+    "price_per_sqm": 1698.37,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:47.631952"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 123.0,
+    "price_eur": 200300.58,
+    "price_per_sqm": 1628.46,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:47.631959"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 159.0,
+    "price_eur": 259999.98,
+    "price_per_sqm": 1635.22,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:47.631966"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 66.0,
+    "price_eur": 217600.02,
+    "price_per_sqm": 3296.97,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:47.631974"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 75.0,
+    "price_eur": 135000.0,
+    "price_per_sqm": 1800.0,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:47.631981"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 86.0,
+    "price_eur": 158774.06,
+    "price_per_sqm": 1846.21,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:47.632000"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 102.0,
+    "price_eur": 189899.52,
+    "price_per_sqm": 1861.76,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:47.632014"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 131.0,
+    "price_eur": 239000.33,
+    "price_per_sqm": 1824.43,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:47.632022"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 38.0,
+    "price_eur": 62850.1,
+    "price_per_sqm": 1653.95,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:47.632029"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 136.0,
+    "price_eur": 321199.36,
+    "price_per_sqm": 2361.76,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:47.632036"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 152.0,
+    "price_eur": 266200.64,
+    "price_per_sqm": 1751.32,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:47.632043"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 100.0,
+    "price_eur": 330000.0,
+    "price_per_sqm": 3300.0,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:47.632051"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 60.0,
+    "price_eur": 135000.0,
+    "price_per_sqm": 2250.0,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:47.632058"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 350.0,
+    "price_eur": 779999.5,
+    "price_per_sqm": 2228.57,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:47.632074"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 32.0,
+    "price_eur": 40000.0,
+    "price_per_sqm": 1250.0,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:47.632089"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 68.0,
+    "price_eur": 108999.24,
+    "price_per_sqm": 1602.93,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:47.632097"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 22.0,
+    "price_eur": 28900.08,
+    "price_per_sqm": 1313.64,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:47.632104"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 104.0,
+    "price_eur": 269999.6,
+    "price_per_sqm": 2596.15,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:47.632112"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 79.0,
+    "price_eur": 156900.32,
+    "price_per_sqm": 1986.08,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:47.632118"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 123.0,
+    "price_eur": 203000.43,
+    "price_per_sqm": 1650.41,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:47.632124"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 50.0,
+    "price_eur": 69000.0,
+    "price_per_sqm": 1380.0,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:47.632131"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 100.0,
+    "price_eur": 230000.0,
+    "price_per_sqm": 2300.0,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:47.632138"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 95.0,
+    "price_eur": 327999.85,
+    "price_per_sqm": 3452.63,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:47.632146"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 79.0,
+    "price_eur": 140999.99,
+    "price_per_sqm": 1784.81,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:47.632152"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 178.0,
+    "price_eur": 398999.46,
+    "price_per_sqm": 2241.57,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:47.632160"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 89.0,
+    "price_eur": 166340.11,
+    "price_per_sqm": 1868.99,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:47.632180"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 94.0,
+    "price_eur": 141105.28,
+    "price_per_sqm": 1501.12,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:47.632188"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 72.0,
+    "price_eur": 175000.32,
+    "price_per_sqm": 2430.56,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:47.632194"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 100.0,
+    "price_eur": 240000.0,
+    "price_per_sqm": 2400.0,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:47.632202"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 82.0,
+    "price_eur": 185000.2,
+    "price_per_sqm": 2256.1,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:47.632208"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 100.0,
+    "price_eur": 130000.0,
+    "price_per_sqm": 1300.0,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:47.632240"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 67.0,
+    "price_eur": 119000.04,
+    "price_per_sqm": 1776.12,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:47.632252"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 100.0,
+    "price_eur": 99990.0,
+    "price_per_sqm": 999.9,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:47.632260"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 98.0,
+    "price_eur": 151999.96,
+    "price_per_sqm": 1551.02,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:47.632266"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 60.0,
+    "price_eur": 300000.0,
+    "price_per_sqm": 5000.0,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:47.632274"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 116.0,
+    "price_eur": 265999.6,
+    "price_per_sqm": 2293.1,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:48.180393"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 78.0,
+    "price_eur": 119999.88,
+    "price_per_sqm": 1538.46,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:48.180410"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 131.0,
+    "price_eur": 359000.26,
+    "price_per_sqm": 2740.46,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:48.180418"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 69.0,
+    "price_eur": 89297.04,
+    "price_per_sqm": 1294.16,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:48.180425"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 76.0,
+    "price_eur": 110899.96,
+    "price_per_sqm": 1459.21,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:48.180432"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 143.0,
+    "price_eur": 185000.53,
+    "price_per_sqm": 1293.71,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:48.180439"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 68.0,
+    "price_eur": 125000.32,
+    "price_per_sqm": 1838.24,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:48.180447"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 58.0,
+    "price_eur": 104999.72,
+    "price_per_sqm": 1810.34,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:48.180456"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 70.0,
+    "price_eur": 89999.7,
+    "price_per_sqm": 1285.71,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:48.180462"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 99.0,
+    "price_eur": 259999.74,
+    "price_per_sqm": 2626.26,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:48.180469"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 60.0,
+    "price_eur": 196500.0,
+    "price_per_sqm": 3275.0,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:48.180476"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 64.0,
+    "price_eur": 129500.16,
+    "price_per_sqm": 2023.44,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:48.180483"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 75.0,
+    "price_eur": 180000.0,
+    "price_per_sqm": 2400.0,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:48.180491"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 44.0,
+    "price_eur": 99000.0,
+    "price_per_sqm": 2250.0,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:48.180506"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 46.0,
+    "price_eur": 67499.94,
+    "price_per_sqm": 1467.39,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:48.180561"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 90.0,
+    "price_eur": 122499.9,
+    "price_per_sqm": 1361.11,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:48.180575"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 67.0,
+    "price_eur": 101500.31,
+    "price_per_sqm": 1514.93,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:48.180583"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 130.0,
+    "price_eur": 220000.3,
+    "price_per_sqm": 1692.31,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:48.180590"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 97.0,
+    "price_eur": 133999.68,
+    "price_per_sqm": 1381.44,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:48.180599"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 100.0,
+    "price_eur": 250000.0,
+    "price_per_sqm": 2500.0,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:48.180608"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 58.0,
+    "price_eur": 75430.16,
+    "price_per_sqm": 1300.52,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:48.180614"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 78.0,
+    "price_eur": 164799.96,
+    "price_per_sqm": 2112.82,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:48.180620"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 88.0,
+    "price_eur": 184900.32,
+    "price_per_sqm": 2101.14,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:48.180628"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 52.0,
+    "price_eur": 115000.08,
+    "price_per_sqm": 2211.54,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:48.180634"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 42.0,
+    "price_eur": 86499.84,
+    "price_per_sqm": 2059.52,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:48.180641"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 64.0,
+    "price_eur": 80339.84,
+    "price_per_sqm": 1255.31,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:48.180648"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 78.0,
+    "price_eur": 114000.12,
+    "price_per_sqm": 1461.54,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:48.180655"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 74.0,
+    "price_eur": 89500.04,
+    "price_per_sqm": 1209.46,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:48.180662"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 120.0,
+    "price_eur": 185000.4,
+    "price_per_sqm": 1541.67,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:48.180669"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 113.0,
+    "price_eur": 127999.62,
+    "price_per_sqm": 1132.74,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:48.180676"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 52.0,
+    "price_eur": 79300.0,
+    "price_per_sqm": 1525.0,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:48.180683"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 33.0,
+    "price_eur": 137900.07,
+    "price_per_sqm": 4178.79,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:48.180690"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 73.0,
+    "price_eur": 159999.94,
+    "price_per_sqm": 2191.78,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:48.180696"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 65.0,
+    "price_eur": 99000.2,
+    "price_per_sqm": 1523.08,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:48.180704"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 50.0,
+    "price_eur": 92990.0,
+    "price_per_sqm": 1859.8,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:48.180710"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 80.0,
+    "price_eur": 83900.0,
+    "price_per_sqm": 1048.75,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:48.180717"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 62.0,
+    "price_eur": 119500.04,
+    "price_per_sqm": 1927.42,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:48.180723"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 42.0,
+    "price_eur": 89000.1,
+    "price_per_sqm": 2119.05,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:48.180730"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 58.0,
+    "price_eur": 103499.84,
+    "price_per_sqm": 1784.48,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:48.180745"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 46.0,
+    "price_eur": 115000.0,
+    "price_per_sqm": 2500.0,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:48.180753"
+  },
+  {
+    "city": "Варна",
+    "size_sqm": 100.0,
+    "price_eur": 110000.0,
+    "price_per_sqm": 1100.0,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:21:48.180761"
+  },
+  {
+    "city": "Бургас",
+    "size_sqm": 43.0,
+    "price_eur": 65000.0,
+    "price_per_sqm": 1511.63,
+    "rooms": 1,
+    "source": "imot.bg",
+    "scraped_at": "2026-02-15T08:21:49.266510"
+  },
+  {
+    "city": "Бургас",
+    "size_sqm": 30.0,
+    "price_eur": 57000.0,
+    "price_per_sqm": 1900.0,
+    "rooms": 1,
+    "source": "imot.bg",
+    "scraped_at": "2026-02-15T08:21:50.638169"
+  },
+  {
+    "city": "Бургас",
+    "size_sqm": 49.0,
+    "price_eur": 55000.0,
+    "price_per_sqm": 1122.45,
+    "rooms": 1,
+    "source": "imot.bg",
+    "scraped_at": "2026-02-15T08:21:51.925903"
+  },
+  {
+    "city": "Бургас",
+    "size_sqm": 25.0,
+    "price_eur": 52750.0,
+    "price_per_sqm": 2110.0,
+    "rooms": 1,
+    "source": "imot.bg",
+    "scraped_at": "2026-02-15T08:21:53.684052"
+  },
+  {
+    "city": "Бургас",
+    "size_sqm": 60.0,
+    "price_eur": 118900.0,
+    "price_per_sqm": 1981.67,
+    "rooms": 2,
+    "source": "imot.bg",
+    "scraped_at": "2026-02-15T08:21:55.214237"
+  },
+  {
+    "city": "Бургас",
+    "size_sqm": 63.0,
+    "price_eur": 141000.0,
+    "price_per_sqm": 2238.1,
+    "rooms": 2,
+    "source": "imot.bg",
+    "scraped_at": "2026-02-15T08:21:55.976124"
+  },
+  {
+    "city": "Бургас",
+    "size_sqm": 69.0,
+    "price_eur": 89102.0,
+    "price_per_sqm": 1291.33,
+    "rooms": 2,
+    "source": "imot.bg",
+    "scraped_at": "2026-02-15T08:21:56.913136"
+  },
+  {
+    "city": "Бургас",
+    "size_sqm": 68.0,
+    "price_eur": 150000.0,
+    "price_per_sqm": 2205.88,
+    "rooms": 2,
+    "source": "imot.bg",
+    "scraped_at": "2026-02-15T08:21:58.411412"
+  },
+  {
+    "city": "Бургас",
+    "size_sqm": 71.0,
+    "price_eur": 156500.0,
+    "price_per_sqm": 2204.23,
+    "rooms": 2,
+    "source": "imot.bg",
+    "scraped_at": "2026-02-15T08:21:59.557023"
+  },
+  {
+    "city": "Бургас",
+    "size_sqm": 53.0,
+    "price_eur": 107360.0,
+    "price_per_sqm": 2025.66,
+    "rooms": 2,
+    "source": "imot.bg",
+    "scraped_at": "2026-02-15T08:22:02.009238"
+  },
+  {
+    "city": "Бургас",
+    "size_sqm": 88.0,
+    "price_eur": 177000.0,
+    "price_per_sqm": 2011.36,
+    "rooms": 2,
+    "source": "imot.bg",
+    "scraped_at": "2026-02-15T08:22:03.071061"
+  },
+  {
+    "city": "Бургас",
+    "size_sqm": 73.0,
+    "price_eur": 179600.0,
+    "price_per_sqm": 2460.27,
+    "rooms": 2,
+    "source": "imot.bg",
+    "scraped_at": "2026-02-15T08:22:03.875758"
+  },
+  {
+    "city": "Бургас",
+    "size_sqm": 76.0,
+    "price_eur": 255000.0,
+    "price_per_sqm": 3355.26,
+    "rooms": 2,
+    "source": "imot.bg",
+    "scraped_at": "2026-02-15T08:22:05.532843"
+  },
+  {
+    "city": "Бургас",
+    "size_sqm": 68.0,
+    "price_eur": 110000.0,
+    "price_per_sqm": 1617.65,
+    "rooms": 2,
+    "source": "imot.bg",
+    "scraped_at": "2026-02-15T08:22:06.326363"
+  },
+  {
+    "city": "Бургас",
+    "size_sqm": 49.0,
+    "price_eur": 51363.0,
+    "price_per_sqm": 1048.22,
+    "rooms": 2,
+    "source": "imot.bg",
+    "scraped_at": "2026-02-15T08:22:08.255558"
+  },
+  {
+    "city": "Бургас",
+    "size_sqm": 65.0,
+    "price_eur": 77500.0,
+    "price_per_sqm": 1192.31,
+    "rooms": 2,
+    "source": "imot.bg",
+    "scraped_at": "2026-02-15T08:22:09.250026"
+  },
+  {
+    "city": "Бургас",
+    "size_sqm": 67.0,
+    "price_eur": 105354.0,
+    "price_per_sqm": 1572.45,
+    "rooms": 2,
+    "source": "imot.bg",
+    "scraped_at": "2026-02-15T08:22:10.540012"
+  },
+  {
+    "city": "Бургас",
+    "size_sqm": 40.0,
+    "price_eur": 107900.0,
+    "price_per_sqm": 2697.5,
+    "rooms": 2,
+    "source": "imot.bg",
+    "scraped_at": "2026-02-15T08:22:11.910930"
+  },
+  {
+    "city": "Бургас",
+    "size_sqm": 68.0,
+    "price_eur": 112992.0,
+    "price_per_sqm": 1661.65,
+    "rooms": 2,
+    "source": "imot.bg",
+    "scraped_at": "2026-02-15T08:22:12.922934"
+  },
+  {
+    "city": "Бургас",
+    "size_sqm": 62.0,
+    "price_eur": 139900.0,
+    "price_per_sqm": 2256.45,
+    "rooms": 2,
+    "source": "imot.bg",
+    "scraped_at": "2026-02-15T08:22:14.184483"
+  },
+  {
+    "city": "Бургас",
+    "size_sqm": 69.0,
+    "price_eur": 86000.0,
+    "price_per_sqm": 1246.38,
+    "rooms": 2,
+    "source": "imot.bg",
+    "scraped_at": "2026-02-15T08:22:15.749136"
+  },
+  {
+    "city": "Бургас",
+    "size_sqm": 64.0,
+    "price_eur": 90000.0,
+    "price_per_sqm": 1406.25,
+    "rooms": 2,
+    "source": "imot.bg",
+    "scraped_at": "2026-02-15T08:22:16.878439"
+  },
+  {
+    "city": "Бургас",
+    "size_sqm": 90.0,
+    "price_eur": 150000.0,
+    "price_per_sqm": 1666.67,
+    "rooms": 3,
+    "source": "imot.bg",
+    "scraped_at": "2026-02-15T08:22:18.037012"
+  },
+  {
+    "city": "Бургас",
+    "size_sqm": 95.0,
+    "price_eur": 175000.0,
+    "price_per_sqm": 1842.11,
+    "rooms": 3,
+    "source": "imot.bg",
+    "scraped_at": "2026-02-15T08:22:19.250494"
+  },
+  {
+    "city": "Бургас",
+    "size_sqm": 85.0,
+    "price_eur": 180000.0,
+    "price_per_sqm": 2117.65,
+    "rooms": 3,
+    "source": "imot.bg",
+    "scraped_at": "2026-02-15T08:22:18.979192"
+  },
+  {
+    "city": "Бургас",
+    "size_sqm": 91.0,
+    "price_eur": 230000.0,
+    "price_per_sqm": 2527.47,
+    "rooms": 3,
+    "source": "imot.bg",
+    "scraped_at": "2026-02-15T08:22:20.557386"
+  },
+  {
+    "city": "Бургас",
+    "size_sqm": 67.0,
+    "price_eur": 119900.0,
+    "price_per_sqm": 1789.55,
+    "rooms": 3,
+    "source": "imot.bg",
+    "scraped_at": "2026-02-15T08:22:21.718329"
+  },
+  {
+    "city": "Бургас",
+    "size_sqm": 68.0,
+    "price_eur": 179900.0,
+    "price_per_sqm": 2645.59,
+    "rooms": 3,
+    "source": "imot.bg",
+    "scraped_at": "2026-02-15T08:22:22.472516"
+  },
+  {
+    "city": "Бургас",
+    "size_sqm": 25.0,
+    "price_eur": 52750.0,
+    "price_per_sqm": 2110.0,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:22:25.400435"
+  },
+  {
+    "city": "Бургас",
+    "size_sqm": 64.0,
+    "price_eur": 139000.32,
+    "price_per_sqm": 2171.88,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:22:25.400452"
+  },
+  {
+    "city": "Бургас",
+    "size_sqm": 152.0,
+    "price_eur": 355000.56,
+    "price_per_sqm": 2335.53,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:22:25.400462"
+  },
+  {
+    "city": "Бургас",
+    "size_sqm": 103.0,
+    "price_eur": 169899.53,
+    "price_per_sqm": 1649.51,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:22:25.400469"
+  },
+  {
+    "city": "Бургас",
+    "size_sqm": 37.0,
+    "price_eur": 43920.11,
+    "price_per_sqm": 1187.03,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:22:25.400477"
+  },
+  {
+    "city": "Бургас",
+    "size_sqm": 52.0,
+    "price_eur": 90000.04,
+    "price_per_sqm": 1730.77,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:22:25.400485"
+  },
+  {
+    "city": "Бургас",
+    "size_sqm": 102.0,
+    "price_eur": 247999.74,
+    "price_per_sqm": 2431.37,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:22:25.400494"
+  },
+  {
+    "city": "Бургас",
+    "size_sqm": 50.0,
+    "price_eur": 72500.0,
+    "price_per_sqm": 1450.0,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:22:25.400501"
+  },
+  {
+    "city": "Бургас",
+    "size_sqm": 63.0,
+    "price_eur": 79999.92,
+    "price_per_sqm": 1269.84,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:22:25.400508"
+  },
+  {
+    "city": "Бургас",
+    "size_sqm": 93.0,
+    "price_eur": 59000.13,
+    "price_per_sqm": 634.41,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:22:25.400516"
+  },
+  {
+    "city": "Бургас",
+    "size_sqm": 57.0,
+    "price_eur": 124999.86,
+    "price_per_sqm": 2192.98,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:22:25.400522"
+  },
+  {
+    "city": "Бургас",
+    "size_sqm": 115.0,
+    "price_eur": 83000.1,
+    "price_per_sqm": 721.74,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:22:25.400535"
+  },
+  {
+    "city": "Бургас",
+    "size_sqm": 37.0,
+    "price_eur": 56999.98,
+    "price_per_sqm": 1540.54,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:22:25.400542"
+  },
+  {
+    "city": "Бургас",
+    "size_sqm": 70.0,
+    "price_eur": 115999.8,
+    "price_per_sqm": 1657.14,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:22:25.400550"
+  },
+  {
+    "city": "Бургас",
+    "size_sqm": 134.0,
+    "price_eur": 164999.56,
+    "price_per_sqm": 1231.34,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:22:25.400557"
+  },
+  {
+    "city": "Бургас",
+    "size_sqm": 64.0,
+    "price_eur": 74417.28,
+    "price_per_sqm": 1162.77,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:22:25.400564"
+  },
+  {
+    "city": "Бургас",
+    "size_sqm": 91.0,
+    "price_eur": 187000.45,
+    "price_per_sqm": 2054.95,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:22:25.400572"
+  },
+  {
+    "city": "Бургас",
+    "size_sqm": 37.0,
+    "price_eur": 44879.89,
+    "price_per_sqm": 1212.97,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:22:25.400579"
+  },
+  {
+    "city": "Бургас",
+    "size_sqm": 34.0,
+    "price_eur": 67000.06,
+    "price_per_sqm": 1970.59,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:22:25.400585"
+  },
+  {
+    "city": "Бургас",
+    "size_sqm": 59.0,
+    "price_eur": 115999.9,
+    "price_per_sqm": 1966.1,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:22:25.400592"
+  },
+  {
+    "city": "Бургас",
+    "size_sqm": 60.0,
+    "price_eur": 74389.8,
+    "price_per_sqm": 1239.83,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:22:25.400599"
+  },
+  {
+    "city": "Бургас",
+    "size_sqm": 86.0,
+    "price_eur": 146942.18,
+    "price_per_sqm": 1708.63,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:22:25.400607"
+  },
+  {
+    "city": "Бургас",
+    "size_sqm": 30.0,
+    "price_eur": 81999.9,
+    "price_per_sqm": 2733.33,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:22:25.400614"
+  },
+  {
+    "city": "Бургас",
+    "size_sqm": 66.0,
+    "price_eur": 134999.7,
+    "price_per_sqm": 2045.45,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:22:25.400644"
+  },
+  {
+    "city": "Бургас",
+    "size_sqm": 67.0,
+    "price_eur": 130000.1,
+    "price_per_sqm": 1940.3,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:22:25.400654"
+  },
+  {
+    "city": "Бургас",
+    "size_sqm": 95.0,
+    "price_eur": 118397.55,
+    "price_per_sqm": 1246.29,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:22:25.400662"
+  },
+  {
+    "city": "Бургас",
+    "size_sqm": 95.0,
+    "price_eur": 124970.6,
+    "price_per_sqm": 1315.48,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:22:25.400669"
+  },
+  {
+    "city": "Бургас",
+    "size_sqm": 76.0,
+    "price_eur": 207043.0,
+    "price_per_sqm": 2724.25,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:22:25.400677"
+  },
+  {
+    "city": "Бургас",
+    "size_sqm": 60.0,
+    "price_eur": 73870.2,
+    "price_per_sqm": 1231.17,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:22:25.400684"
+  },
+  {
+    "city": "Бургас",
+    "size_sqm": 40.0,
+    "price_eur": 67000.0,
+    "price_per_sqm": 1675.0,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:22:25.400692"
+  },
+  {
+    "city": "Бургас",
+    "size_sqm": 58.0,
+    "price_eur": 80999.9,
+    "price_per_sqm": 1396.55,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:22:25.400714"
+  },
+  {
+    "city": "Бургас",
+    "size_sqm": 60.0,
+    "price_eur": 68508.0,
+    "price_per_sqm": 1141.8,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:22:25.400721"
+  },
+  {
+    "city": "Бургас",
+    "size_sqm": 63.0,
+    "price_eur": 82000.17,
+    "price_per_sqm": 1301.59,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:22:25.400734"
+  },
+  {
+    "city": "Бургас",
+    "size_sqm": 64.0,
+    "price_eur": 57000.32,
+    "price_per_sqm": 890.63,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:22:25.400741"
+  },
+  {
+    "city": "Бургас",
+    "size_sqm": 95.0,
+    "price_eur": 118062.2,
+    "price_per_sqm": 1242.76,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:22:25.400755"
+  },
+  {
+    "city": "Бургас",
+    "size_sqm": 116.0,
+    "price_eur": 142000.24,
+    "price_per_sqm": 1224.14,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:22:25.400762"
+  },
+  {
+    "city": "Бургас",
+    "size_sqm": 61.0,
+    "price_eur": 110000.08,
+    "price_per_sqm": 1803.28,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:22:26.581241"
+  },
+  {
+    "city": "Бургас",
+    "size_sqm": 42.0,
+    "price_eur": 39900.0,
+    "price_per_sqm": 950.0,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:22:26.581248"
+  },
+  {
+    "city": "Бургас",
+    "size_sqm": 85.0,
+    "price_eur": 170024.65,
+    "price_per_sqm": 2000.29,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:22:26.581254"
+  },
+  {
+    "city": "Бургас",
+    "size_sqm": 60.0,
+    "price_eur": 80272.8,
+    "price_per_sqm": 1337.88,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:22:26.581269"
+  },
+  {
+    "city": "Бургас",
+    "size_sqm": 63.0,
+    "price_eur": 78000.3,
+    "price_per_sqm": 1238.1,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:22:26.581275"
+  },
+  {
+    "city": "Бургас",
+    "size_sqm": 86.0,
+    "price_eur": 120000.1,
+    "price_per_sqm": 1395.35,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:22:26.581283"
+  },
+  {
+    "city": "Бургас",
+    "size_sqm": 95.0,
+    "price_eur": 118985.6,
+    "price_per_sqm": 1252.48,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:22:26.581291"
+  },
+  {
+    "city": "Бургас",
+    "size_sqm": 95.0,
+    "price_eur": 123254.9,
+    "price_per_sqm": 1297.42,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:22:26.581312"
+  },
+  {
+    "city": "Бургас",
+    "size_sqm": 62.0,
+    "price_eur": 105000.1,
+    "price_per_sqm": 1693.55,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:22:26.581319"
+  },
+  {
+    "city": "Бургас",
+    "size_sqm": 250.0,
+    "price_eur": 227000.0,
+    "price_per_sqm": 908.0,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:22:26.581355"
+  },
+  {
+    "city": "Бургас",
+    "size_sqm": 95.0,
+    "price_eur": 63000.2,
+    "price_per_sqm": 663.16,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:22:26.581362"
+  },
+  {
+    "city": "Бургас",
+    "size_sqm": 53.0,
+    "price_eur": 35000.14,
+    "price_per_sqm": 660.38,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:22:26.581369"
+  },
+  {
+    "city": "Бургас",
+    "size_sqm": 61.0,
+    "price_eur": 72899.88,
+    "price_per_sqm": 1195.08,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:22:26.581375"
+  },
+  {
+    "city": "Бургас",
+    "size_sqm": 71.0,
+    "price_eur": 157117.32,
+    "price_per_sqm": 2212.92,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:22:26.581383"
+  },
+  {
+    "city": "Бургас",
+    "size_sqm": 64.0,
+    "price_eur": 88000.0,
+    "price_per_sqm": 1375.0,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:22:26.581391"
+  },
+  {
+    "city": "Бургас",
+    "size_sqm": 55.0,
+    "price_eur": 49167.25,
+    "price_per_sqm": 893.95,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:22:26.581397"
+  },
+  {
+    "city": "Бургас",
+    "size_sqm": 94.0,
+    "price_eur": 188000.0,
+    "price_per_sqm": 2000.0,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:22:26.581404"
+  },
+  {
+    "city": "Бургас",
+    "size_sqm": 69.0,
+    "price_eur": 87532.71,
+    "price_per_sqm": 1268.59,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:22:26.581418"
+  },
+  {
+    "city": "Бургас",
+    "size_sqm": 60.0,
+    "price_eur": 76000.2,
+    "price_per_sqm": 1266.67,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:22:26.581424"
+  },
+  {
+    "city": "Бургас",
+    "size_sqm": 63.0,
+    "price_eur": 76415.85,
+    "price_per_sqm": 1212.95,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:22:26.581432"
+  },
+  {
+    "city": "Бургас",
+    "size_sqm": 66.0,
+    "price_eur": 79999.92,
+    "price_per_sqm": 1212.12,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:22:26.581438"
+  },
+  {
+    "city": "Бургас",
+    "size_sqm": 87.0,
+    "price_eur": 87999.63,
+    "price_per_sqm": 1011.49,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:22:26.581445"
+  },
+  {
+    "city": "Бургас",
+    "size_sqm": 104.0,
+    "price_eur": 144999.92,
+    "price_per_sqm": 1394.23,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:22:26.581453"
+  },
+  {
+    "city": "Бургас",
+    "size_sqm": 60.0,
+    "price_eur": 78913.2,
+    "price_per_sqm": 1315.22,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:22:26.581460"
+  },
+  {
+    "city": "Бургас",
+    "size_sqm": 80.0,
+    "price_eur": 150000.0,
+    "price_per_sqm": 1875.0,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:22:26.581467"
+  },
+  {
+    "city": "Бургас",
+    "size_sqm": 61.0,
+    "price_eur": 69999.94,
+    "price_per_sqm": 1147.54,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:22:26.581475"
+  },
+  {
+    "city": "Бургас",
+    "size_sqm": 50.0,
+    "price_eur": 65000.0,
+    "price_per_sqm": 1300.0,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:22:26.581481"
+  },
+  {
+    "city": "Бургас",
+    "size_sqm": 59.0,
+    "price_eur": 110000.19,
+    "price_per_sqm": 1864.41,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:22:26.581487"
+  },
+  {
+    "city": "Бургас",
+    "size_sqm": 59.0,
+    "price_eur": 83000.02,
+    "price_per_sqm": 1406.78,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:22:26.581494"
+  },
+  {
+    "city": "Бургас",
+    "size_sqm": 108.0,
+    "price_eur": 119999.88,
+    "price_per_sqm": 1111.11,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:22:26.581502"
+  },
+  {
+    "city": "Бургас",
+    "size_sqm": 41.0,
+    "price_eur": 41000.0,
+    "price_per_sqm": 1000.0,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:22:28.861592"
+  },
+  {
+    "city": "Бургас",
+    "size_sqm": 58.0,
+    "price_eur": 65000.02,
+    "price_per_sqm": 1120.69,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:22:28.861635"
+  },
+  {
+    "city": "Бургас",
+    "size_sqm": 58.0,
+    "price_eur": 36999.94,
+    "price_per_sqm": 637.93,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:22:28.861647"
+  },
+  {
+    "city": "Бургас",
+    "size_sqm": 57.0,
+    "price_eur": 93999.84,
+    "price_per_sqm": 1649.12,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:22:28.861658"
+  },
+  {
+    "city": "Бургас",
+    "size_sqm": 62.0,
+    "price_eur": 137000.16,
+    "price_per_sqm": 2209.68,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:22:28.861669"
+  },
+  {
+    "city": "Бургас",
+    "size_sqm": 68.0,
+    "price_eur": 90000.04,
+    "price_per_sqm": 1323.53,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:22:28.861684"
+  },
+  {
+    "city": "Бургас",
+    "size_sqm": 104.0,
+    "price_eur": 92499.68,
+    "price_per_sqm": 889.42,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:22:28.861698"
+  },
+  {
+    "city": "Бургас",
+    "size_sqm": 68.0,
+    "price_eur": 85675.24,
+    "price_per_sqm": 1259.93,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:22:28.861710"
+  },
+  {
+    "city": "Бургас",
+    "size_sqm": 86.0,
+    "price_eur": 145999.62,
+    "price_per_sqm": 1697.67,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:22:28.861723"
+  },
+  {
+    "city": "Бургас",
+    "size_sqm": 44.0,
+    "price_eur": 48000.04,
+    "price_per_sqm": 1090.91,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:22:28.861734"
+  },
+  {
+    "city": "Бургас",
+    "size_sqm": 70.0,
+    "price_eur": 99899.8,
+    "price_per_sqm": 1427.14,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:22:28.861747"
+  },
+  {
+    "city": "Бургас",
+    "size_sqm": 58.0,
+    "price_eur": 67999.78,
+    "price_per_sqm": 1172.41,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:22:28.861761"
+  },
+  {
+    "city": "Бургас",
+    "size_sqm": 92.0,
+    "price_eur": 179999.84,
+    "price_per_sqm": 1956.52,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:22:28.861771"
+  },
+  {
+    "city": "Бургас",
+    "size_sqm": 42.0,
+    "price_eur": 63000.0,
+    "price_per_sqm": 1500.0,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:22:28.861784"
+  },
+  {
+    "city": "Бургас",
+    "size_sqm": 56.0,
+    "price_eur": 64999.76,
+    "price_per_sqm": 1160.71,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:22:28.861797"
+  },
+  {
+    "city": "Бургас",
+    "size_sqm": 59.0,
+    "price_eur": 49000.09,
+    "price_per_sqm": 830.51,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:22:28.861808"
+  },
+  {
+    "city": "Бургас",
+    "size_sqm": 57.0,
+    "price_eur": 62200.11,
+    "price_per_sqm": 1091.23,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:22:28.861821"
+  },
+  {
+    "city": "Бургас",
+    "size_sqm": 58.0,
+    "price_eur": 72247.12,
+    "price_per_sqm": 1245.64,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:22:28.861833"
+  },
+  {
+    "city": "Бургас",
+    "size_sqm": 42.0,
+    "price_eur": 141999.9,
+    "price_per_sqm": 3380.95,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:22:28.861846"
+  },
+  {
+    "city": "Бургас",
+    "size_sqm": 77.0,
+    "price_eur": 255000.13,
+    "price_per_sqm": 3311.69,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:22:28.861857"
+  },
+  {
+    "city": "Бургас",
+    "size_sqm": 64.0,
+    "price_eur": 135000.32,
+    "price_per_sqm": 2109.38,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:22:28.861868"
+  },
+  {
+    "city": "Бургас",
+    "size_sqm": 60.0,
+    "price_eur": 69000.0,
+    "price_per_sqm": 1150.0,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:22:28.861879"
+  },
+  {
+    "city": "Бургас",
+    "size_sqm": 115.0,
+    "price_eur": 258000.2,
+    "price_per_sqm": 2243.48,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:22:28.861903"
+  },
+  {
+    "city": "Бургас",
+    "size_sqm": 48.0,
+    "price_eur": 51000.0,
+    "price_per_sqm": 1062.5,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:22:28.861913"
+  },
+  {
+    "city": "Бургас",
+    "size_sqm": 66.0,
+    "price_eur": 129899.88,
+    "price_per_sqm": 1968.18,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:22:28.861926"
+  },
+  {
+    "city": "Бургас",
+    "size_sqm": 118.0,
+    "price_eur": 369999.62,
+    "price_per_sqm": 3135.59,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:22:28.861939"
+  },
+  {
+    "city": "Бургас",
+    "size_sqm": 60.0,
+    "price_eur": 94999.8,
+    "price_per_sqm": 1583.33,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:22:28.861951"
+  },
+  {
+    "city": "Бургас",
+    "size_sqm": 44.0,
+    "price_eur": 71999.84,
+    "price_per_sqm": 1636.36,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:22:28.861963"
+  },
+  {
+    "city": "Бургас",
+    "size_sqm": 90.0,
+    "price_eur": 196000.2,
+    "price_per_sqm": 2177.78,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:22:28.861974"
+  },
+  {
+    "city": "Бургас",
+    "size_sqm": 67.0,
+    "price_eur": 100000.18,
+    "price_per_sqm": 1492.54,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:22:28.861984"
+  },
+  {
+    "city": "Бургас",
+    "size_sqm": 80.0,
+    "price_eur": 250000.0,
+    "price_per_sqm": 3125.0,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:22:28.861994"
+  },
+  {
+    "city": "Бургас",
+    "size_sqm": 42.0,
+    "price_eur": 98999.88,
+    "price_per_sqm": 2357.14,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:22:28.862005"
+  },
+  {
+    "city": "Бургас",
+    "size_sqm": 65.0,
+    "price_eur": 73737.95,
+    "price_per_sqm": 1134.43,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:22:28.862018"
+  },
+  {
+    "city": "Бургас",
+    "size_sqm": 100.0,
+    "price_eur": 170000.0,
+    "price_per_sqm": 1700.0,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:22:28.862028"
+  },
+  {
+    "city": "Бургас",
+    "size_sqm": 72.0,
+    "price_eur": 139999.68,
+    "price_per_sqm": 1944.44,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:22:28.862042"
+  },
+  {
+    "city": "Бургас",
+    "size_sqm": 140.0,
+    "price_eur": 265000.4,
+    "price_per_sqm": 1892.86,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:22:28.862053"
+  },
+  {
+    "city": "Бургас",
+    "size_sqm": 66.0,
+    "price_eur": 85072.02,
+    "price_per_sqm": 1288.97,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:22:28.862064"
+  },
+  {
+    "city": "Бургас",
+    "size_sqm": 65.0,
+    "price_eur": 129500.15,
+    "price_per_sqm": 1992.31,
+    "rooms": null,
+    "source": "olx.bg",
+    "scraped_at": "2026-02-15T08:22:28.862077"
+  }
+]
