@@ -27,3 +27,13 @@ node_modules/
 
 # Archive (old scraper versions, not needed in repo)
 scrapers/archive/
+
+# Debug/temp files
+scrapers/data/*.html
+scrapers/data/*.png
+scrapers/data/*.json
+data/*.json
+
+# Old data files
+auctions.json
+market_listings.json

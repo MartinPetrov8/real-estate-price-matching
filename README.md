@@ -2,27 +2,25 @@
 
 Scrapes КЧСИ (BCPEA) court-enforced property auctions and compares prices to market listings to find bargains.
 
-[![Live Site](https://img.shields.io/badge/Live-GitHub%20Pages-brightgreen)](https://martinpetrov8.github.io/real-estate-price-matching/)
-![Status](https://img.shields.io/badge/status-Production-green)
+**Live:** https://martinpetrov8.github.io/real-estate-price-matching/
+
+![Status](https://img.shields.io/badge/status-MVP-green)
 ![Python](https://img.shields.io/badge/python-3.8+-blue)
 
-## 🎯 Features
+## 🎯 What This Does
 
-- **КЧСИ Scraper**: Extracts auction listings from [sales.bcpea.org](https://sales.bcpea.org)
-- **Market Scrapers**: Aggregates listings from imot.bg and OLX.bg
-- **Price Comparison**: Calculates discount vs market median €/m²
-- **Bargain Detection**: Finds properties selling below market value
-- **Web Frontend**: Bulgarian UI showing top deals
+1. **Scrapes КЧСИ auctions** from [sales.bcpea.org](https://sales.bcpea.org) - court-enforced property sales
+2. **Scrapes market data** from imot.bg and olx.bg for price comparison
+3. **Calculates bargain scores** by comparing auction €/m² to market median
+4. **Displays results** on a static GitHub Pages site
 
-## 📊 Current Data (Updated Daily)
+## 📊 Data Sources
 
-| Source | Type | Listings | Avg €/m² |
-|--------|------|----------|----------|
-| КЧСИ (bcpea.org) | Auctions | ~1,100 | varies |
-| OLX.bg | Market | ~490 | €1,868 |
-| imot.bg | Market | ~120 | €2,114 |
-
-**Cities covered:** София, Пловдив, Варна, Бургас
+| Source | Type | Purpose |
+|--------|------|---------|
+| КЧСИ (bcpea.org) | **Main** | Court-enforced auction listings |
+| imot.bg | Comparison | Agency market prices |
+| olx.bg | Comparison | Private market prices |
 
 ## 🚀 Quick Start
 
@@ -32,14 +30,14 @@ git clone https://github.com/MartinPetrov8/real-estate-price-matching.git
 cd real-estate-price-matching
 
 # Install dependencies
-pip install -r requirements.txt
+pip install requests beautifulsoup4
 
-# Run full pipeline (scrape + export + push)
-python run_pipeline.py
+# Run full pipeline (scrape + export)
+python run_pipeline.py --no-push
 
-# Or run individual components:
-python scrapers/market_scraper.py  # Scrape market data (~3 min)
-python export_deals.py             # Export deals to frontend
+# View results
+open frontend/deals.json
+# Or serve locally: python -m http.server 8080
 ```
 
 ## 📁 Project Structure
@@ -47,64 +45,46 @@ python export_deals.py             # Export deals to frontend
 ```
 real-estate-price-matching/
 ├── scrapers/
-│   ├── market_scraper.py    # Production market scraper (imot.bg, olx.bg)
-│   ├── bcpea_scraper.py     # КЧСИ auction scraper
-│   └── archive/             # Legacy scraper versions
+│   ├── bcpea_scraper.py      # КЧСИ auction scraper (v6)
+│   └── market_scraper.py     # Market scraper (imot.bg, olx.bg)
 ├── data/
-│   ├── auctions.db          # Auction data (SQLite)
-│   └── market.db            # Market listings (SQLite)
-├── docs/
-│   ├── ARCHITECTURE.md      # System design
-│   └── PIPELINE.md          # Daily pipeline docs
+│   ├── auctions.db           # КЧСИ auctions (SQLite)
+│   └── market.db             # Market listings (SQLite)
 ├── frontend/
-│   └── deals.json           # Frontend data
-├── export_deals.py          # Compare & export deals
-├── run_pipeline.py          # Daily pipeline runner
-├── requirements.txt         # Python dependencies
-├── deals.json              # Root copy for GitHub Pages
-└── index.html              # Frontend
+│   └── deals.json            # Exported deals with comparisons
+├── docs/
+│   ├── ARCHITECTURE.md       # System design
+│   └── PIPELINE.md           # Daily automation
+├── export_deals.py           # Generate deals JSON
+├── run_pipeline.py           # Pipeline orchestrator
+├── index.html                # GitHub Pages site
+└── README.md
 ```
 
-## 🔄 Daily Pipeline
+## ⚙️ How It Works
 
-The pipeline runs automatically at 6:00 AM Sofia time:
+### Daily Pipeline
+```bash
+python run_pipeline.py
+```
 
-1. **Scrape** market data from imot.bg and olx.bg
-2. **Compare** auction prices to market medians
-3. **Export** top deals to `deals.json`
-4. **Push** to GitHub (triggers Pages rebuild)
+1. **Market Scraper** → Fetches ~600 listings from imot.bg + olx.bg
+2. **Export Deals** → Joins auctions with market data, calculates discounts
+3. **Git Push** → Updates GitHub Pages site
 
-See [docs/PIPELINE.md](docs/PIPELINE.md) for details.
+### Bargain Score Calculation
+
+```
+discount = (market_median_eur_m2 - auction_eur_m2) / market_median_eur_m2
+bargain_score = discount * 100  # e.g., 30 = 30% below market
+```
 
 ## 📖 Documentation
 
-- [Architecture Overview](docs/ARCHITECTURE.md) - System design, database schema
-- [Pipeline Guide](docs/PIPELINE.md) - Daily automation, troubleshooting
-- [Scrapers README](scrapers/README.md) - Scraper implementation details
+- [Architecture](docs/ARCHITECTURE.md) - System design, database schema
+- [Pipeline](docs/PIPELINE.md) - Daily automation setup
+- [Market Scraper](scrapers/README_MARKET_SCRAPER.md) - Scraper details
 
-## 🛠️ Tech Stack
+## ⚠️ Disclaimer
 
-- **Language:** Python 3.8+
-- **Database:** SQLite3
-- **Scraping:** requests, BeautifulSoup4
-- **Frontend:** Static HTML/JS
-- **Hosting:** GitHub Pages
-- **Automation:** OpenClaw cron
-
-## 📈 Sample Output
-
-Top deals found (example):
-| City | Price | Size | €/m² | Market | Discount |
-|------|-------|------|------|--------|----------|
-| Варна | €66,632 | 80m² | €838 | €1,749 | **-52%** |
-| София | €111,871 | 86m² | €1,303 | €2,213 | **-41%** |
-| Бургас | €53,600 | 61m² | €875 | €1,397 | **-37%** |
-
-## 📝 License
-
-MIT License - see [LICENSE](LICENSE)
-
-## 👨‍💻 Authors
-
-- Martin Petrov
-- Cookie 🍪 (AI Assistant)
+This tool is for research purposes only. Always verify auction details directly on [sales.bcpea.org](https://sales.bcpea.org) before making any decisions. Property auctions involve legal complexity and risk.

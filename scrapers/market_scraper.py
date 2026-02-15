@@ -29,8 +29,8 @@ from bs4 import BeautifulSoup
 # CONFIG
 # ============================================================================
 
-DB_PATH = "scrapers/data/market.db"
-OUTPUT_JSON = "scrapers/data/market_listings.json"
+DB_PATH = "data/market.db"
+OUTPUT_JSON = "data/market_listings.json"
 
 # Cities with correct URL formats
 CITIES = {
