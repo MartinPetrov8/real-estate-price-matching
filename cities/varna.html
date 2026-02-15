@@ -97,9 +97,9 @@
             .then(deals => {
                 const city = deals.filter(d => d.city === 'Варна');
                 document.getElementById('totalDeals').textContent = city.length;
-                const withDiscount = city.filter(d => d.discount_pct > 0);
+                const withDiscount = city.filter(d => d.discount > 0);
                 if (withDiscount.length > 0) {
-                    const avg = withDiscount.reduce((a,b) => a + b.discount_pct, 0) / withDiscount.length;
+                    const avg = withDiscount.reduce((a,b) => a + b.discount, 0) / withDiscount.length;
                     document.getElementById('avgDiscount').textContent = Math.round(avg) + '%';
                 }
             });
