@@ -12,6 +12,9 @@ import sqlite3
 from datetime import datetime
 import os
 import re
+import sys
+sys.path.insert(0, 'src/matching')
+from neighborhood_matcher import extract_neighborhood, normalize_neighborhood
 
 DB_PATH = "data/auctions.db"
 MARKET_DB = "data/market.db"
@@ -52,10 +55,10 @@ TYPE_MAP = {
 }
 
 
-def get_market_median(city, size_sqm, size_tolerance=15):
-    """Get market median from scraped data."""
+def get_market_median(city, size_sqm, address=None, size_tolerance=15):
+    """Get market median from scraped data with neighborhood matching."""
     if not os.path.exists(MARKET_DB):
-        return None, 0
+        return None, 0, None
     
     market_conn = sqlite3.connect(MARKET_DB)
     cursor = market_conn.cursor()
@@ -64,7 +67,26 @@ def get_market_median(city, size_sqm, size_tolerance=15):
     size_min = size_sqm - size_tolerance
     size_max = size_sqm + size_tolerance
     
-    # Try city + size match
+    # Extract neighborhood from auction address
+    auction_hood = extract_neighborhood(address) if address else None
+    matched_neighborhood = None
+    
+    # Try city + neighborhood + size match first (most precise)
+    if auction_hood:
+        cursor.execute("""
+            SELECT price_per_sqm, neighborhood FROM market_listings 
+            WHERE city = ? AND neighborhood = ? AND size_sqm BETWEEN ? AND ?
+            AND price_per_sqm IS NOT NULL AND price_per_sqm > 0
+        """, (city_clean, auction_hood, size_min, size_max))
+        results = cursor.fetchall()
+        
+        if len(results) >= 3:
+            prices = sorted([r[0] for r in results])
+            median = prices[len(prices) // 2]
+            market_conn.close()
+            return median, len(results), auction_hood
+    
+    # Fallback: city + size match (no neighborhood)
     cursor.execute("""
         SELECT price_per_sqm FROM market_listings 
         WHERE city = ? AND size_sqm BETWEEN ? AND ?
@@ -76,9 +98,9 @@ def get_market_median(city, size_sqm, size_tolerance=15):
         prices = sorted([r[0] for r in results])
         median = prices[len(prices) // 2]
         market_conn.close()
-        return median, len(results)
+        return median, len(results), None
     
-    # Fallback: city only
+    # Final fallback: city only
     cursor.execute("""
         SELECT price_per_sqm FROM market_listings 
         WHERE city = ? AND price_per_sqm IS NOT NULL AND price_per_sqm > 0
@@ -89,10 +111,10 @@ def get_market_median(city, size_sqm, size_tolerance=15):
         prices = sorted([r[0] for r in results])
         median = prices[len(prices) // 2]
         market_conn.close()
-        return median, len(results)
+        return median, len(results), None
     
     market_conn.close()
-    return None, 0
+    return None, 0, None
 
 
 def is_expired(auction_end):

@@ -65,6 +65,7 @@ HEADERS = {
 @dataclass
 class Listing:
     city: str
+    neighborhood: Optional[str]
     size_sqm: float
     price_eur: float
     price_per_sqm: float
@@ -190,7 +191,7 @@ def parse_imot_listing(session: requests.Session, url: str, city: str) -> Option
         elif 'chetiristaen' in url_lower or 'mnogostaen' in url_lower:
             rooms = 4
         
-        return Listing(
+        return Listing(neighborhood=None, 
             city=city,
             size_sqm=size_sqm,
             price_eur=price_eur,
@@ -256,7 +257,7 @@ def scrape_olx(session: requests.Session, url: str, city: str) -> List[Listing]:
             
             price_eur = round(size_sqm * price_per_sqm, 2)
             
-            listings.append(Listing(
+            listings.append(Listing(neighborhood=None, 
                 city=city,
                 size_sqm=size_sqm,
                 price_eur=price_eur,
@@ -290,7 +291,7 @@ def scrape_olx(session: requests.Session, url: str, city: str) -> List[Listing]:
                 
                 price_eur = round(size_sqm * price_per_sqm, 2)
                 
-                listings.append(Listing(
+                listings.append(Listing(neighborhood=None, 
                     city=city,
                     size_sqm=size_sqm,
                     price_eur=price_eur,
@@ -320,6 +321,7 @@ def init_db() -> sqlite3.Connection:
         CREATE TABLE market_listings (
             id INTEGER PRIMARY KEY,
             city TEXT NOT NULL,
+            neighborhood TEXT,
             size_sqm REAL NOT NULL,
             price_eur REAL,
             price_per_sqm REAL,
@@ -330,6 +332,7 @@ def init_db() -> sqlite3.Connection:
         )
     """)
     conn.execute("CREATE INDEX idx_city ON market_listings(city)")
+    conn.execute("CREATE INDEX idx_neighborhood ON market_listings(neighborhood)")
     conn.execute("CREATE INDEX idx_source ON market_listings(source)")
     conn.commit()
     return conn
