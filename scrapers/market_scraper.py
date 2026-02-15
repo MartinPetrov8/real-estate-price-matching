@@ -50,6 +50,14 @@ CITIES = {
         'imot': 'https://www.imot.bg/obiavi/prodazhbi/grad-burgas/',
         'olx': 'https://www.olx.bg/nedvizhimi-imoti/prodazhbi/apartamenti/burgas/',
     },
+    'Русе': {
+        'imot': 'https://www.imot.bg/obiavi/prodazhbi/grad-ruse/',
+        'olx': 'https://www.olx.bg/nedvizhimi-imoti/prodazhbi/apartamenti/ruse/',
+    },
+    'Стара Загора': {
+        'imot': 'https://www.imot.bg/obiavi/prodazhbi/grad-stara-zagora/',
+        'olx': 'https://www.olx.bg/nedvizhimi-imoti/prodazhbi/apartamenti/stara-zagora/',
+    },
 }
 
 HEADERS = {
