@@ -26,6 +26,22 @@
         modalBody: document.getElementById('modalBody')
     };
     const BCPEA_URL = 'https://sales.bcpea.org/properties';
+
+    // Property type translations
+    const propTypeBg = {
+        'apartment': 'Апартамент',
+        'house': 'Къща',
+        'garage': 'Гараж',
+        'commercial': 'Търговски',
+        'land': 'Земя',
+        'other': 'Друг',
+        'апартамент': 'Апартамент',
+        'къща': 'Къща',
+        'гараж': 'Гараж',
+        'магазин': 'Магазин',
+        'земя': 'Земя'
+    };
+    function translatePropType(t) { return propTypeBg[t?.toLowerCase()] || t || 'Имот'; }
     
     function fmtPrice(p) { return !p ? '€?' : '€' + Math.round(p).toLocaleString('bg-BG'); }
     function fmtSqm(p, s) { return !p || !s ? '€?/m²' : '€' + Math.round(p/s).toLocaleString('bg-BG') + '/m²'; }
@@ -148,7 +164,7 @@
                 <div class="card-badges">
                     ${isNewFlag ? '<span class="badge badge-new">✨ НОВО</span>' : ''}
                     ${isUrgent ? '<span class="badge badge-urgent">⏰ СКОРО</span>' : ''}
-                    <span class="badge badge-type">${icon} ${propertyType.charAt(0).toUpperCase() + propertyType.slice(1)}</span>${isPartialOwnership ? '<span class="badge badge-warning" title="Дробна собственост - цените не са съпоставими">⚠️ Дробна собственост</span>' : ''}
+                    <span class="badge badge-type">${icon} ${translatePropType(propertyType)}</span>${isPartialOwnership ? '<span class="badge badge-warning" title="Дробна собственост - цените не са съпоставими">⚠️ Дробна собственост</span>' : ''}
                 </div>
                 <div class="discount-badge">
                     <div class="discount-value">${discountPct >= 0 ? '-' : '+'}${Math.abs(Math.round(discountPct))}%</div>
