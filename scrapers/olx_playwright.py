@@ -25,6 +25,8 @@ CITIES = {
     'Пловдив': 'https://www.olx.bg/nedvizhimi-imoti/prodazhbi/apartamenti/plovdiv/',
     'Варна': 'https://www.olx.bg/nedvizhimi-imoti/prodazhbi/apartamenti/varna/',
     'Бургас': 'https://www.olx.bg/nedvizhimi-imoti/prodazhbi/apartamenti/burgas/',
+    'Русе': 'https://www.olx.bg/nedvizhimi-imoti/prodazhbi/apartamenti/ruse/',
+    'Стара Загора': 'https://www.olx.bg/nedvizhimi-imoti/prodazhbi/apartamenti/stara-zagora/',
 }
 
 @dataclass
