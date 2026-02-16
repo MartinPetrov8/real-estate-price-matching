@@ -22,6 +22,8 @@ CITIES = {
     'Пловдив': 'https://www.alo.bg/obiavi/imoti-prodajbi/apartamenti-stai/?city_id=2',
     'Варна': 'https://www.alo.bg/obiavi/imoti-prodajbi/apartamenti-stai/?city_id=3',
     'Бургас': 'https://www.alo.bg/obiavi/imoti-prodajbi/apartamenti-stai/?city_id=4',
+    'Русе': 'https://www.alo.bg/obiavi/imoti-prodajbi/apartamenti-stai/?city_id=5',  # TODO: verify city_id
+    'Стара Загора': 'https://www.alo.bg/obiavi/imoti-prodajbi/apartamenti-stai/?city_id=6',  # TODO: verify city_id
 }
 
 HEADERS = {
