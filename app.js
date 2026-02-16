@@ -79,8 +79,8 @@
     
     function getRating(pct) {
         // Handle negative discounts (bad deals)
-        if (pct < 0) return {level:'bad', label:'Неблагоприятна', score:20, stars:1};
-        if (pct >= 50) return {level:'excellent', label:'Отлична!', score:100, stars:5};
+        if (pct < 0) return {level:'bad', label:'Слаба', score:20, stars:1};
+        if (pct >= 50) return {level:'excellent', label:'Отлична', score:100, stars:5};
         if (pct >= 40) return {level:'great', label:'Много добра', score:90, stars:4};
         if (pct >= 30) return {level:'good', label:'Добра', score:75, stars:3};
         if (pct >= 20) return {level:'fair', label:'Приемлива', score:60, stars:2};
@@ -154,7 +154,7 @@
         // Partial ownership warning
         const ownershipWarning = partialOwnership ? `
             <div class="ownership-warning">
-                <span class="warning-icon">📋</span>
+                <span class="warning-icon">⚠</span>
                 <span class="warning-text">Частна собственост - проверете дела</span>
             </div>
         ` : '';
@@ -162,8 +162,8 @@
         return `<article class="deal-card">
             <div class="card-header deal-${r.level}">
                 <div class="card-badges">
-                    ${isNewFlag ? '<span class="badge badge-new">✨ НОВО</span>' : ''}
-                    ${isUrgent ? '<span class="badge badge-urgent">⏰ СКОРО</span>' : ''}
+                    ${isNewFlag ? '<span class="badge badge-new">НОВО</span>' : ''}
+                    ${isUrgent ? '<span class="badge badge-urgent">СКОРО</span>' : ''}
                     <span class="badge badge-type">${icon} ${translatePropType(propertyType)}</span>${isPartialOwnership ? '<span class="badge badge-warning" title="Дробна собственост - цените не са съпоставими">⚠️ Дробна собственост</span>' : ''}
                 </div>
                 <div class="discount-badge">

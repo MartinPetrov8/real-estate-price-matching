@@ -962,27 +962,6 @@ body {
 .subscribe-link:hover {
     color: var(--primary-dark) !important;
 }
-.bell-icon {
-    display: inline-block;
-    transform-origin: top center;
-    transition: transform 0.1s;
-}
-.subscribe-link:hover .bell-icon {
-    animation: bellRing 0.6s ease-in-out;
-}
-@keyframes bellRing {
-    0% { transform: rotate(0deg); }
-    10% { transform: rotate(25deg); }
-    20% { transform: rotate(-25deg); }
-    30% { transform: rotate(20deg); }
-    40% { transform: rotate(-20deg); }
-    50% { transform: rotate(15deg); }
-    60% { transform: rotate(-15deg); }
-    70% { transform: rotate(10deg); }
-    80% { transform: rotate(-10deg); }
-    90% { transform: rotate(5deg); }
-    100% { transform: rotate(0deg); }
-}
 
 /* Mobile: show bell in nav */
 @media (max-width: 768px) {
