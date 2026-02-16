@@ -1,14 +1,4 @@
-# КЧСИ Сделки - robots.txt
 User-agent: *
 Allow: /
 
-# Sitemap
-Sitemap: https://kchsi-sdelki.bg/sitemap.xml
-
-# Block admin/data paths
-Disallow: /data/
-Disallow: /scrapers/
-Disallow: /docs/
-
-# Crawl delay for politeness
-Crawl-delay: 1
+Sitemap: https://martinpetrov8.github.io/real-estate-price-matching/sitemap.xml

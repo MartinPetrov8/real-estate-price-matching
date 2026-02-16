@@ -580,9 +580,10 @@ async function load() {
     window.loadDeals = load;
     
     function reset() {
+        console.log("Reset called");
         el.city.value = 'all'; el.type.value = 'all';
         el.minPrice.value = ''; el.maxPrice.value = '';
-        el.discount.value = '40'; el.sort.value = 'best';
+        el.discount.value = '0'; el.sort.value = 'best';
         document.querySelectorAll('.pill').forEach(p => p.classList.remove('pill-active'));
         document.querySelector('[data-filter="all"]').classList.add('pill-active');
         filter();
