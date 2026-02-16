@@ -971,3 +971,24 @@ body {
         gap: 4px;
     }
 }
+
+/* About КЧСИ Section - SEO Content */
+.about-kchsi {
+    padding: 4rem 0;
+    background: var(--bg-secondary, #f8f9fa);
+}
+
+.about-content {
+    max-width: 800px;
+    margin: 0 auto;
+    line-height: 1.8;
+}
+
+.about-content p {
+    margin-bottom: 1.5rem;
+    color: var(--text-secondary, #555);
+}
+
+.about-content strong {
+    color: var(--text-primary, #333);
+}
