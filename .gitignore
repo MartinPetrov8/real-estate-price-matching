@@ -38,3 +38,4 @@ auctions.json
 market_listings.json
 # Databases (keep in repo for GitHub Pages)
 scrapers/data/*.db
+.env
