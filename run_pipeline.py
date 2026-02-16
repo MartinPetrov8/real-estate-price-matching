@@ -3,15 +3,11 @@
 Real Estate Price Matching - Daily Pipeline Runner
 
 Runs the full data pipeline:
-1. Scrape market data (imot.bg via requests)
-2. Scrape OLX data (Playwright - bypasses CAPTCHA)
-3. Export deals with market comparison
-4. Optionally push to GitHub
-
-Usage:
-    python run_pipeline.py              # Full pipeline
-    python run_pipeline.py --no-push    # Without git push
-    python run_pipeline.py --market-only # Only market scrape
+1. Scrape imot.bg (requests)
+2. Scrape OLX (Playwright)
+3. Scrape alo.bg (requests)
+4. Export deals with market comparison
+5. Optionally push to GitHub
 """
 
 import argparse
@@ -41,7 +37,7 @@ def run_cmd(cmd, cwd=None, env=None):
 def main():
     parser = argparse.ArgumentParser(description='Run the real estate data pipeline')
     parser.add_argument('--no-push', action='store_true', help='Skip git push')
-    parser.add_argument('--market-only', action='store_true', help='Only run market scraper')
+    parser.add_argument('--market-only', action='store_true', help='Only run market scrapers')
     parser.add_argument('--export-only', action='store_true', help='Only run export')
     args = parser.parse_args()
     
@@ -52,38 +48,42 @@ def main():
     log("=" * 60)
     
     success = True
+    pw_env = {"PLAYWRIGHT_BROWSERS_PATH": os.environ.get("PLAYWRIGHT_BROWSERS_PATH", "/host-workspace/.playwright-browsers")}
     
-    # Playwright browsers path
-    pw_env = {"PLAYWRIGHT_BROWSERS_PATH": "/host-workspace/.playwright-browsers"}
-    
-    # Step 1: imot.bg scraper (requests-based)
     if not args.export_only:
-        log("\n📊 Step 1: Scraping imot.bg...")
+        # Step 1: imot.bg scraper (requests)
+        log("\n📊 Step 1/3: Scraping imot.bg...")
         if not run_cmd("python3 scrapers/market_scraper.py"):
             log("⚠️ imot.bg scraper had issues")
         else:
             log("✅ imot.bg complete")
-    
-    # Step 2: OLX scraper (Playwright)
-    if not args.export_only:
-        log("\n📊 Step 2: Scraping OLX (Playwright)...")
+        
+        # Step 2: OLX scraper (Playwright)
+        log("\n📊 Step 2/3: Scraping OLX (Playwright)...")
         if not run_cmd("python3 scrapers/olx_playwright.py", env=pw_env):
             log("⚠️ OLX scraper had issues")
         else:
             log("✅ OLX complete")
+        
+        # Step 3: alo.bg scraper (requests)
+        log("\n📊 Step 3/3: Scraping alo.bg...")
+        if not run_cmd("python3 scrapers/alo_scraper.py"):
+            log("⚠️ alo.bg scraper had issues")
+        else:
+            log("✅ alo.bg complete")
     
-    # Step 3: Export deals
+    # Step 4: Export deals
     if not args.market_only:
-        log("\n📤 Step 3: Exporting deals...")
+        log("\n📤 Step 4: Exporting deals...")
         if not run_cmd("python3 export_deals.py"):
             log("❌ Export failed")
             success = False
         else:
             log("✅ Export complete")
     
-    # Step 4: Git push
+    # Step 5: Git push
     if not args.no_push and not args.market_only and success:
-        log("\n🚀 Step 4: Pushing to GitHub...")
+        log("\n🚀 Step 5: Pushing to GitHub...")
         date_str = datetime.now().strftime('%Y-%m-%d')
         run_cmd("git add -A")
         run_cmd(f'git commit -m "data: Daily pipeline run {date_str}" --allow-empty')
