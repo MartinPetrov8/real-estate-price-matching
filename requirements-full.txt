@@ -1,0 +1,22 @@
+# Real Estate Price Matching - Python Dependencies
+# Install: pip install -r requirements.txt
+
+# Web scraping
+requests>=2.31.0
+beautifulsoup4>=4.12.0
+lxml>=4.9.0
+
+# Data processing
+# (sqlite3 is built-in)
+
+# Optional: Browser automation (for JS-heavy sites)
+# playwright>=1.40.0
+
+# Development
+# pytest>=7.4.0
+playwright>=1.40.0
+resend>=0.7.0
+flask>=3.0.0
+flask-cors>=4.0.0
+python-dotenv>=1.0.0
+gunicorn>=21.0.0
