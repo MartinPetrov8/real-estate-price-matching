@@ -117,6 +117,11 @@ def parse_property_detail(html_content, prop_id):
     if size_match:
         data['size_sqm'] = float(size_match.group(1).replace(',', '.'))
     
+    # Floor - extract from structured field
+    floor_match = re.search(r'<div class="label">Етаж</div>\s*<div class="info">(-?\d+)</div>', html_content)
+    if floor_match:
+        data['floor'] = int(floor_match.group(1))
+    
     # Rooms
     rooms_match = re.search(r'(\d+)\s*(?:-?стаен|стаи|стая)', html_content, re.I)
     if rooms_match:
@@ -177,6 +182,7 @@ def init_db():
             property_type TEXT,
             size_sqm REAL,
             rooms INTEGER,
+            floor INTEGER,
             is_partial_ownership INTEGER DEFAULT 0,
             is_expired INTEGER DEFAULT 0,
             court TEXT,

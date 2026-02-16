@@ -69,7 +69,6 @@ def main():
             success = False
         else:
             # Copy to root for GitHub Pages
-            run_cmd("cp frontend/deals.json deals.json")
             log("✅ Export complete")
     
     # Step 3: Git push

@@ -18,7 +18,7 @@ from neighborhood_matcher import extract_neighborhood, normalize_neighborhood
 
 DB_PATH = "data/auctions.db"
 MARKET_DB = "data/market.db"
-OUTPUT_PATH = "frontend/deals.json"
+OUTPUT_PATH = "deals.json"
 
 # Property types that are apartments (for market comparison)
 APARTMENT_TYPES = [
@@ -153,7 +153,7 @@ def export_deals():
     query = """
         SELECT 
             id, city, neighborhood, address, 
-            price_eur, size_sqm, rooms,
+            price_eur, size_sqm, floor,
             property_type, is_partial_ownership,
             auction_start, auction_end, is_expired
         FROM auctions 
@@ -228,8 +228,8 @@ def export_deals():
             'savings_eur': round((market_avg * size) - price) if market_avg and size and price else None,
             'comparables_count': sample_size if market_avg else 0,
             'discount': discount if not is_partial else None,
-            'rooms': row['rooms'],
             'property_type': frontend_type,
+            'floor': row['floor'],
             'property_type_bg': row['property_type'],
             'auction_start': row['auction_start'],
             'auction_end': row['auction_end'],

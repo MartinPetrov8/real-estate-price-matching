@@ -1,6 +1,9 @@
 (function() {
     'use strict';
     let allDeals = [], filteredDeals = [], countdownIntervals = [];
+    const DEALS_PER_PAGE = 12;
+    let currentPage = 1;
+    let displayedDeals = 0;
     const el = {
         loading: document.getElementById('loadingState'),
         error: document.getElementById('errorState'),
@@ -18,6 +21,8 @@
         sort: document.getElementById('sortBy'),
         activeFilters: document.getElementById('activeFilters'),
         modal: document.getElementById('dealModal'),
+        loadMore: document.getElementById('loadMoreBtn'),
+        backToTop: document.getElementById('backToTop'),
         modalBody: document.getElementById('modalBody')
     };
     const BCPEA_URL = 'https://sales.bcpea.org/properties';
@@ -104,9 +109,11 @@
         const buildingSqm = deal.building_sqm;
         const plotSqm = deal.plot_sqm;
         const isHouse = deal.property_type === 'къща';
-        const rooms = deal.rooms;
         const floor = deal.floor;
         const propertyType = deal.property_type || 'апартамент';
+        const propertyTypeBg = deal.property_type_bg || '';
+        const roomType = propertyTypeBg.match(/(едностаен|двустаен|тристаен|многостаен|четиристаен)/i)?.[1] || null;
+        const roomTypeDisplay = roomType ? roomType.charAt(0).toUpperCase() + roomType.slice(1) : null;
         const isPartialOwnership = deal.is_partial_ownership || false;
         // comparables already defined above
         const partialOwnership = deal.partial_ownership;
@@ -190,8 +197,8 @@
                 <div class="property-info">
                     <div class="info-item"><span class="info-icon">📐</span><div class="info-content"><span class="info-label">Площ</span><span class="info-value">${isHouse && buildingSqm ? buildingSqm+' м² (сграда)' : (sqm ? sqm+' м²' : 'N/A')}</span></div></div>
                     ${isHouse && plotSqm ? '<div class="info-item"><span class="info-icon">🌳</span><div class="info-content"><span class="info-label">Парцел</span><span class="info-value">'+plotSqm+' м²</span></div></div>' : ''}
-                    <div class="info-item"><span class="info-icon">🚪</span><div class="info-content"><span class="info-label">Стаи</span><span class="info-value">${rooms || 'N/A'}</span></div></div>
                     <div class="info-item"><span class="info-icon">🏢</span><div class="info-content"><span class="info-label">Етаж</span><span class="info-value">${floor || 'N/A'}</span></div></div>
+                    ${roomTypeDisplay ? '<div class="info-item"><span class="info-icon">🚪</span><div class="info-content"><span class="info-label">Тип</span><span class="info-value">'+roomTypeDisplay+'</span></div></div>' : ''}
                     <div class="info-item"><span class="info-icon">📊</span><div class="info-content"><span class="info-label">Сравнения</span><span class="info-value">${comparables > 0 ? comparables + ' имота' : 'Няма данни'}</span></div></div>
                 </div>
                 <div class="location-section">
@@ -224,20 +231,67 @@
         </article>`;
     }
     
-    function render(deals) {
+    function render(deals, append = false) {
         countdownIntervals.forEach(clearInterval);
         countdownIntervals = [];
+        
         if (deals.length === 0) {
             el.grid.classList.add('hidden');
             el.empty.classList.remove('hidden');
             el.count.textContent = '(0)';
+            if (el.loadMore) el.loadMore.classList.add('hidden');
             return;
         }
+        
         el.empty.classList.add('hidden');
         el.grid.classList.remove('hidden');
         el.count.textContent = '(' + deals.length + ')';
-        el.grid.innerHTML = deals.map(createCard).join('');
-        deals.forEach(d => startCountdown('cd-'+(d.bcpea_id || d.id), d.auction_end));
+        
+        // Paginate: show only up to currentPage * DEALS_PER_PAGE
+        const toShow = deals.slice(0, currentPage * DEALS_PER_PAGE);
+        displayedDeals = toShow.length;
+        
+        if (append) {
+            // Append new cards with fade-in animation
+            const newCards = deals.slice((currentPage - 1) * DEALS_PER_PAGE, currentPage * DEALS_PER_PAGE);
+            const tempDiv = document.createElement('div');
+            tempDiv.innerHTML = newCards.map(createCard).join('');
+            Array.from(tempDiv.children).forEach(card => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                el.grid.appendChild(card);
+                requestAnimationFrame(() => {
+                    card.style.transition = 'opacity 0.3s, transform 0.3s';
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                });
+            });
+        } else {
+            el.grid.innerHTML = toShow.map(createCard).join('');
+        }
+        
+        toShow.forEach(d => startCountdown('cd-'+(d.bcpea_id || d.id), d.auction_end));
+        
+        // Show/hide load more button
+        if (el.loadMore) {
+            if (displayedDeals < deals.length) {
+                el.loadMore.classList.remove('hidden');
+                el.loadMore.querySelector('.load-more-count').textContent = 
+                    (deals.length - displayedDeals) + ' имота';
+            } else {
+                el.loadMore.classList.add('hidden');
+            }
+        }
+    }
+    
+    function loadMore() {
+        currentPage++;
+        render(filteredDeals, true);
+        // Smooth scroll to new content
+        const cards = el.grid.querySelectorAll('.deal-card');
+        if (cards.length > DEALS_PER_PAGE) {
+            cards[(currentPage - 1) * DEALS_PER_PAGE]?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
     }
     
     function updateHero() {
@@ -263,9 +317,16 @@
     }
     
     function getActive() {
+        const typeLabels = {
+            'apartment': 'Апартамент',
+            'house': 'Къща',
+            'garage': 'Гараж',
+            'commercial': 'Търговски',
+            'other': 'Други'
+        };
         const f = [];
         if (el.city.value !== 'all') f.push({type:'city', label:el.city.value});
-        if (el.type.value !== 'all') f.push({type:'type', label:el.type.value});
+        if (el.type.value !== 'all') f.push({type:'type', label:typeLabels[el.type.value] || el.type.value});
         if (el.minPrice.value) f.push({type:'minPrice', label:'От '+fmtPrice(parseInt(el.minPrice.value))});
         if (el.maxPrice.value) f.push({type:'maxPrice', label:'До '+fmtPrice(parseInt(el.maxPrice.value))});
         if (parseInt(el.discount.value) > 0) f.push({type:'discount', label:el.discount.value+'%+ отстъпка'});
@@ -287,6 +348,8 @@
     };
     
     function filter() {
+        currentPage = 1; // Reset pagination on filter change
+        updateURL(); // Save filter state to URL
         const city = el.city.value, type = el.type.value;
         const minP = parseInt(el.minPrice.value) || 0, maxP = parseInt(el.maxPrice.value) || Infinity;
         const minD = parseInt(el.discount.value) || 0;
@@ -329,7 +392,47 @@
         renderActive();
     }
     
-    async function load() {
+    
+    // URL State Management
+    function updateURL() {
+        const params = new URLSearchParams();
+        if (el.city.value !== 'all') params.set('city', el.city.value);
+        if (el.type.value !== 'all') params.set('type', el.type.value);
+        if (el.minPrice.value) params.set('min', el.minPrice.value);
+        if (el.maxPrice.value) params.set('max', el.maxPrice.value);
+        if (parseInt(el.discount.value) > 0) params.set('discount', el.discount.value);
+        if (el.sort.value !== 'discount') params.set('sort', el.sort.value);
+        
+        const newURL = params.toString() ? '?' + params.toString() : window.location.pathname;
+        history.replaceState(null, '', newURL);
+    }
+    
+    function loadFromURL() {
+        const params = new URLSearchParams(window.location.search);
+        if (params.get('city')) el.city.value = params.get('city');
+        if (params.get('type')) el.type.value = params.get('type');
+        if (params.get('min')) el.minPrice.value = params.get('min');
+        if (params.get('max')) el.maxPrice.value = params.get('max');
+        if (params.get('discount')) el.discount.value = params.get('discount');
+        if (params.get('sort')) el.sort.value = params.get('sort');
+    }
+    
+    // Back to top functionality
+    function initBackToTop() {
+        if (!el.backToTop) return;
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 500) {
+                el.backToTop.classList.add('visible');
+            } else {
+                el.backToTop.classList.remove('visible');
+            }
+        });
+        el.backToTop.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    }
+
+async function load() {
         el.loading.classList.remove('hidden');
         el.error.classList.add('hidden');
         el.grid.classList.add('hidden');
@@ -344,6 +447,7 @@
             allDeals = [];
         }
         populateCities();
+        loadFromURL(); // Apply URL filters after cities are populated
         updateHero();
         el.loading.classList.add('hidden');
         filter();

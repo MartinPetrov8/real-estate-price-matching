@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>КЧСИ Сделки | Изгодни имоти на принудителни търгове в България</title>
-    <meta name="description" content="Намерете имоти под пазарна цена на принудителни търгове в България. Сравняваме тръжни цени с реални пазарни цени от imot.bg и alo.bg. Апартаменти, къщи, гаражи с до 50% отстъпка.">
+    <meta name="description" content="Намерете имоти под пазарна цена на принудителни търгове в България. Сравняваме тръжни цени с реални пазарни цени от imot.bg и olx.bg. Апартаменти, къщи, гаражи с до 50% отстъпка.">
     <meta name="keywords" content="принудителни търгове, КЧСИ, имоти на търг, изгодни имоти, публична продан, апартаменти под пазарна цена, България, София">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://martinpetrov8.github.io/real-estate-price-matching/">
@@ -16,7 +16,7 @@
     <meta property="og:url" content="https://martinpetrov8.github.io/real-estate-price-matching/">
     <meta property="og:title" content="КЧСИ Сделки | Изгодни имоти на принудителни търгове">
     <meta property="og:description" content="Намерете имоти под пазарна цена на принудителни търгове. Сравняваме тръжни цени с пазарни за да откриете най-добрите сделки.">
-    <meta property="og:image" content="https://martinpetrov8.github.io/real-estate-price-matching/og-image.svg">
+    <meta property="og:image" content="https://martinpetrov8.github.io/real-estate-price-matching/og-image.png">
     
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image">
@@ -116,6 +116,7 @@
                 <nav class="header-nav">
                     <a href="#deals" class="nav-link">Сделки</a>
                     <a href="#how-it-works" class="nav-link">Как работи</a>
+                    <a href="cities/" class="nav-link">Градове</a>
                     <a href="blog/" class="nav-link">Блог</a>
                 </nav>
             </div>
@@ -181,40 +182,42 @@
                     <div class="filter-row">
                         <div class="filter-group">
                             <label for="cityFilter">Град</label>
-                            <select id="cityFilter">
+                            <select id="cityFilter" aria-label="Филтър по град">
                                 <option value="all">Всички градове</option>
                             </select>
                         </div>
                         <div class="filter-group">
                             <label for="typeFilter">Тип имот</label>
-                            <select id="typeFilter">
+                            <select id="typeFilter" aria-label="Филтър по тип имот">
                                 <option value="all">Всички типове</option>
-                                <option value="апартамент">Апартамент</option>
-                                <option value="къща">Къща</option>
-                                <option value="гараж">Гараж</option>
+                                <option value="apartment">Апартамент</option>
+                                <option value="house">Къща</option>
+                                <option value="garage">Гараж</option>
+                                <option value="commercial">Търговски</option>
+                                <option value="other">Други</option>
                             </select>
                         </div>
                         <div class="filter-group filter-range">
                             <label>Цена (EUR)</label>
                             <div class="range-inputs">
-                                <input type="number" id="minPrice" placeholder="От" min="0">
+                                <input type="number" id="minPrice" aria-label="Минимална цена" placeholder="От" min="0">
                                 <span>-</span>
-                                <input type="number" id="maxPrice" placeholder="До" min="0">
+                                <input type="number" id="maxPrice" aria-label="Максимална цена" placeholder="До" min="0">
                             </div>
                         </div>
                         <div class="filter-group">
                             <label for="discountFilter">Отстъпка</label>
-                            <select id="discountFilter">
-                                
+                            <select id="discountFilter" aria-label="Минимална отстъпка">
+                                <option value="0" selected>Всички</option>
                                 <option value="20">20%+</option>
                                 <option value="30">30%+</option>
-                                <option value="0" selected>Всички</option>
+                                <option value="40">40%+</option>
                                 <option value="50">50%+</option>
                             </select>
                         </div>
                         <div class="filter-group">
                             <label for="sortBy">Подреди по</label>
-                            <select id="sortBy">
+                            <select id="sortBy" aria-label="Сортиране">
                                 <option value="best">Най-добри сделки</option>
                                 <option value="ending">Приключват скоро</option>
                                 <option value="newest">Най-нови</option>
@@ -252,7 +255,16 @@
                 <button class="btn btn-primary" id="emptyResetFilters">Изчисти филтрите</button>
             </div>
 
-            <div id="dealsGrid" class="deals-grid hidden"></div>
+            <div id="dealsGrid" class="deals-grid hidden" role="list" aria-label="Списък с имоти"></div>
+            
+            <!-- Load More Button -->
+            <div id="loadMoreBtn" class="load-more-container hidden">
+                <button class="load-more-btn" aria-label="Зареди още имоти">
+                    <span class="load-more-icon">↓</span>
+                    <span>Покажи още</span>
+                    <span class="load-more-count">12 имота</span>
+                </button>
+            </div>
         </div>
     </main>
 
@@ -388,7 +400,7 @@
                 <div class="footer-links">
                     <h4>Източници</h4>
                     <a href="https://sales.bcpea.org" target="_blank">sales.bcpea.org</a>
-                    <a href="https://www.alo.bg" target="_blank">alo.bg</a>
+                    <a href="https://www.olx.bg" target="_blank">olx.bg</a>
                     <a href="https://www.imot.bg" target="_blank">imot.bg</a>
                 </div>
                 <div class="footer-links">
@@ -397,11 +409,15 @@
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>© 2026 КЧСИ Сделки. Неофициален инструмент за търсене.</p>
+                <p>© 2026 КЧСИ Сделки. Неофициален инструмент за търсене. <a href="privacy.html" style="color: #64748b;">Поверителност</a></p>
             </div>
         </div>
     </footer>
 
     <script src="app.js"></script>
+<!-- Back to Top -->
+    <button id="backToTop" class="back-to-top" aria-label="Към началото">
+        <span>↑</span>
+    </button>
 </body>
 </html>
