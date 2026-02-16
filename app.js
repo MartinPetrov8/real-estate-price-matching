@@ -607,8 +607,8 @@ async function load() {
     el.maxPrice.addEventListener('input', debounce(filter, 300));
     el.discount.addEventListener('change', filter);
     el.sort.addEventListener('change', filter);
-    document.getElementById('resetFilters').addEventListener('click', reset);
-    document.getElementById('emptyResetFilters').addEventListener('click', reset);
+    document.getElementById('resetFilters')?.addEventListener('click', reset);
+    document.getElementById('emptyResetFilters')?.addEventListener('click', reset);
     document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
     
     load();
