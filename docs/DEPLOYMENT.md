@@ -1,67 +1,68 @@
 # Deployment Guide
 
-## Current Setup (GitHub Pages)
-- URL: https://martinpetrov8.github.io/real-estate-price-matching/
-- Hosting: GitHub Pages (free)
-- SSL: Automatic via GitHub
+## Railway API Deployment
 
-## Production Deployment (Custom Domain)
+### Initial Setup
+1. Go to [railway.app](https://railway.app)
+2. Create new project → Deploy from GitHub
+3. Select `real-estate-price-matching` repo
 
-### 1. Buy Domain
-Recommended: `kchsi-sdelki.bg` or similar
-Registrars: ICN.bg, Superhosting.bg, Namecheap
+### Configuration
+Railway looks for `app.py` in project root. The app uses:
+- `Procfile`: `web: python -m gunicorn app:app --bind 0.0.0.0:$PORT`
+- `railway.toml`: Build and deploy settings
 
-### 2. DNS Setup (Cloudflare recommended)
+### Environment Variables
+Add in Railway → Service → Variables:
 
-```
-Type  | Name | Value
-------|------|------
-A     | @    | 185.199.108.153
-A     | @    | 185.199.109.153
-A     | @    | 185.199.110.153
-A     | @    | 185.199.111.153
-CNAME | www  | kchsi-sdelki.bg
-```
+| Variable | Value | Required |
+|----------|-------|----------|
+| `RESEND_API_KEY` | Your Resend API key | Yes |
+| `SENDER_EMAIL` | `onboarding@resend.dev` | Yes |
+| `SENDER_NAME` | `Изгоден Имот` | Optional |
+| `SITE_URL` | `https://martinpetrov8.github.io/real-estate-price-matching` | Yes |
 
-### 3. GitHub Pages Custom Domain
-1. Go to repo Settings → Pages
-2. Add custom domain: `kchsi-sdelki.bg`
-3. Enable "Enforce HTTPS"
+### Expose API
+1. Click service card
+2. Go to Settings tab
+3. Scroll to Networking
+4. Click "Generate Domain"
 
-### 4. Run Domain Migration
+### Common Issues
+
+**`gunicorn: command not found`**
+- Use `python -m gunicorn` instead of `gunicorn`
+- Ensure `gunicorn` is in `requirements.txt`
+
+**Build succeeds but app crashes**
+- Check Deploy Logs for errors
+- Verify all env vars are set
+- Make sure `app.py` is in project root
+
+**502 Application failed to respond**
+- App is crashing on startup
+- Check for missing dependencies
+- Verify database path exists
+
+## Scraper Deployment
+
+### OLX (Playwright)
+OLX.bg requires Playwright to bypass CAPTCHA:
+
 ```bash
-./scripts/migrate-domain.sh kchsi-sdelki.bg
-git add -A && git commit -m "chore: migrate to production domain"
-git push
+# Install Playwright
+pip install playwright
+
+# Install browsers (specify custom path)
+PLAYWRIGHT_BROWSERS_PATH=/path/to/browsers playwright install chromium
+
+# Run scraper
+PLAYWRIGHT_BROWSERS_PATH=/path/to/browsers python scrapers/olx_playwright.py
 ```
 
-### 5. Update CNAME File
+### Daily Cron
+Add to crontab:
 ```bash
-echo "kchsi-sdelki.bg" > CNAME
-git add CNAME && git commit -m "chore: add CNAME" && git push
+# Run pipeline at 6 AM Sofia time (4 AM UTC)
+0 4 * * * cd /path/to/repo && PLAYWRIGHT_BROWSERS_PATH=/path/to/browsers python run_pipeline.py
 ```
-
-### 6. Submit to Search Engines
-- Google Search Console: https://search.google.com/search-console
-- Bing Webmaster Tools: https://www.bing.com/webmasters
-
-### 7. Set Up 301 Redirects (Optional)
-If keeping GitHub Pages URL active, add redirect in DNS or use Cloudflare Page Rules.
-
-## Monitoring
-
-### Uptime
-- Use UptimeRobot (free) or Better Uptime
-- Monitor: `https://kchsi-sdelki.bg/deals.json`
-
-### Analytics (Privacy-Friendly)
-Options:
-- Plausible.io (~€9/mo)
-- GoatCounter (free, self-host)
-- Cloudflare Analytics (free with Cloudflare)
-
-## Daily Pipeline
-Cron job runs at 9:00 AM Sofia time:
-1. Scrapes КЧСИ + market data
-2. Exports deals.json
-3. Pushes to GitHub (auto-deploys)

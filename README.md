@@ -88,3 +88,46 @@ bargain_score = discount * 100  # e.g., 30 = 30% below market
 ## ⚠️ Disclaimer
 
 This tool is for research purposes only. Always verify auction details directly on [sales.bcpea.org](https://sales.bcpea.org) before making any decisions. Property auctions involve legal complexity and risk.
+
+## 🚀 Deployment
+
+### Frontend (GitHub Pages)
+Automatically deployed from `main` branch to:
+https://martinpetrov8.github.io/real-estate-price-matching/
+
+### API (Railway)
+Flask API for email subscriptions:
+https://web-production-36c65.up.railway.app
+
+**Deploy to Railway:**
+1. Connect GitHub repo
+2. Add environment variables:
+   ```
+   RESEND_API_KEY=your_key
+   SENDER_EMAIL=onboarding@resend.dev
+   SITE_URL=https://martinpetrov8.github.io/real-estate-price-matching
+   ```
+3. Generate domain in Settings → Networking
+
+### Scrapers
+Run locally or via cron:
+```bash
+# Set Playwright browsers path
+export PLAYWRIGHT_BROWSERS_PATH=/path/to/browsers
+
+# Run full pipeline
+python run_pipeline.py
+```
+
+## 📧 Email Alerts
+
+Users can subscribe for deal alerts via the website. System uses:
+- **Resend** for email delivery (free tier: 3K/month)
+- **SQLite** for subscriber storage
+- **Flask** API on Railway
+
+### Manual alert send:
+```bash
+cd /path/to/repo
+python alerts/send_alerts.py
+```
