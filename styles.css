@@ -953,3 +953,33 @@ body {
         font-size: 14px;
     }
 }
+
+/* Subscribe link - matches nav-link */
+.subscribe-link {
+    color: var(--primary) !important;
+}
+.subscribe-link:hover {
+    color: var(--primary-dark) !important;
+}
+.bell-icon {
+    display: inline-block;
+}
+.subscribe-link:hover .bell-icon {
+    animation: bellRing 0.5s ease;
+}
+@keyframes bellRing {
+    0%, 100% { transform: rotate(0); }
+    20% { transform: rotate(15deg); }
+    40% { transform: rotate(-15deg); }
+    60% { transform: rotate(10deg); }
+    80% { transform: rotate(-5deg); }
+}
+
+/* Mobile: show bell in nav */
+@media (max-width: 768px) {
+    .subscribe-link {
+        display: inline-flex !important;
+        align-items: center;
+        gap: 4px;
+    }
+}
