@@ -53,3 +53,23 @@ python bcpea_scraper.py
 ## Archive
 
 Old scraper versions are in `archive/` (not tracked in git).
+
+## OLX Playwright Scraper (NEW)
+
+OLX.bg now requires Playwright to bypass CAPTCHA protection.
+
+### Setup
+```bash
+pip install playwright
+PLAYWRIGHT_BROWSERS_PATH=/path/to/browsers playwright install chromium
+```
+
+### Usage
+```bash
+export PLAYWRIGHT_BROWSERS_PATH=/host-workspace/.playwright-browsers
+python3 scrapers/olx_playwright.py
+```
+
+### Output
+- Saves to `data/market.db` (same table as imot.bg)
+- ~50 listings per city (Sofia, Plovdiv, Varna, Burgas)

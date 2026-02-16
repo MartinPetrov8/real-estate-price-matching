@@ -1,38 +1,39 @@
 # Changelog
 
-## [2026-02-15] - Major Cleanup & Features
+## [2026-02-16] OLX Playwright Scraper
 
 ### Added
-- **Neighborhood matching** - Extract district from auction addresses for better price comparison
-- **"No Comparison" filter** - Frontend pill to show deals without market data
-- **Code audit report** - Security and quality review (`docs/AUDIT_2026-02-15.md`)
-- **size_sqm index** - Performance improvement for market queries
-
-### Changed
-- **market_scraper.py** - Fixed DB path (`data/market.db` instead of `scrapers/data/market.db`)
-- **export_deals.py** - Now uses neighborhood_matcher for address parsing
-- **README.md** - Updated with clean project structure
-
-### Removed
-- **29 legacy files** (14,683 lines deleted)
-  - bcpea_v2, v4, v5, active, fixed, full, id_scan, production scrapers
-  - market_scraper_v2, market_data_scraper, etc.
-  - Duplicate server.py files
-  - Debug HTML/PNG files
-  - Legacy src/ code
-
-### Security
-- ✅ No SQL injection vulnerabilities
-- ✅ No hardcoded credentials
-- ✅ All queries parameterized
-
-## [2026-02-13] - Initial Scraper Fixes
-
-### Added
-- bcpea_scraper v6 with smart incremental scraping
-- market_scraper v4 with requests+BeautifulSoup
+- `scrapers/olx_playwright.py` - Playwright-based OLX scraper (bypasses CAPTCHA)
+- Playwright to requirements.txt
 
 ### Fixed
-- Brotli encoding issue (removed `br` from Accept-Encoding)
-- OLX URL format (sofiya not sofia)
-- imot.bg windows-1251 encoding
+- OLX scraping now works (was blocked by CAPTCHA since ~Feb 2026)
+- EUR price extraction (was grabbing BGN first)
+
+### Changed
+- `run_pipeline.py` - Now runs both imot.bg (requests) and OLX (Playwright)
+- Pipeline uses `PLAYWRIGHT_BROWSERS_PATH` environment variable
+
+### Stats
+- imot.bg: 178 listings (6 cities)
+- OLX: 179 listings (4 cities)
+- BCPEA: 1,114 auctions
+
+---
+
+## [2026-02-15] Production Ready
+
+### Added
+- FAQ section explaining rating system (Bulgarian)
+- Mobile-responsive fixes
+- Data quality: require ≥3 comparables for discount
+
+### Fixed
+- SQL injection vulnerability
+- Database indexes
+- Removed 29 duplicate files (14,683 lines)
+
+### Stats
+- 94 deals exported
+- 15 validated with ≥3 comparables
+- Top deal: Varna -53%
