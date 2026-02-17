@@ -153,7 +153,7 @@ def export_deals():
     query = """
         SELECT 
             id, city, neighborhood, address, 
-            price_eur, size_sqm,
+            price_eur, size_sqm, floor,
             property_type, is_partial_ownership,
             auction_start, auction_end, is_expired
         FROM auctions 
@@ -228,6 +228,7 @@ def export_deals():
             'comparables_count': sample_size if market_avg else 0,
             'discount': discount if not is_partial else None,
             'property_type': frontend_type,
+            'floor': row.get('floor'),
             'property_type_bg': row['property_type'],
             'auction_start': row['auction_start'],
             'auction_end': row['auction_end'],

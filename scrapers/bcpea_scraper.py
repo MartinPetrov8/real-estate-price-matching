@@ -117,11 +117,10 @@ def parse_property_detail(html_content, prop_id):
     if size_match:
         data['size_sqm'] = float(size_match.group(1).replace(',', '.'))
     
-    # Floor - extract from structured field
-    floor_match = re.search(r'<div class="label">Етаж</div>\s*<div class="info">(-?\d+)</div>', html_content)
+    # Floor - extract from description text (e.g., 'ет.3' or 'етаж 3')
+    floor_match = re.search(r'(?:ет\.?|етаж)\s*(\d+)', html_content, re.I)
     if floor_match:
         data['floor'] = int(floor_match.group(1))
-    
     # Rooms
     rooms_match = re.search(r'(\d+)\s*(?:-?стаен|стаи|стая)', html_content, re.I)
     if rooms_match:
