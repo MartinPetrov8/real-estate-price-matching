@@ -22,36 +22,36 @@ OUTPUT_PATH = "deals.json"
 
 # Property types that are apartments (for market comparison)
 APARTMENT_TYPES = [
-    'едностаен апартамент',
-    'двустаен апартамент', 
-    'тристаен апартамент',
-    'многостаен апартамент',
-    'апартамент'
+    'Едностаен апартамент',
+    'Двустаен апартамент',
+    'Тристаен апартамент',
+    'Многостаен апартамент',
+    'Апартамент'
 ]
 
 # Property types to exclude entirely (land, etc.)
 EXCLUDE_TYPES = [
-    'земеделска земя',
-    'парцел',
+    'Земеделска земя',
+    'Парцел',
     'none'
 ]
 
 # Map property types to frontend categories
 TYPE_MAP = {
-    'едностаен апартамент': 'apartment',
-    'двустаен апартамент': 'apartment',
-    'тристаен апартамент': 'apartment',
-    'многостаен апартамент': 'apartment',
-    'къща': 'house',
-    'къща с парцел': 'house',
-    'етаж от къща': 'house',
-    'вила': 'house',
-    'парцел с къща': 'house',
-    'гараж': 'garage',
-    'магазин': 'commercial',
-    'офис': 'commercial',
-    'склад': 'commercial',
-    'ателие, таван': 'other',
+    'Едностаен апартамент': 'apartment',
+    'Двустаен апартамент': 'apartment',
+    'Тристаен апартамент': 'apartment',
+    'Многостаен апартамент': 'apartment',
+    'Къща': 'house',
+    'Къща с парцел': 'house',
+    'Етаж от къща': 'house',
+    'Вила': 'house',
+    'Парцел с къща': 'house',
+    'Гараж': 'garage',
+    'Магазин': 'commercial',
+    'Офис': 'commercial',
+    'Склад': 'commercial',
+    'Ателие, Таван': 'other',
 }
 
 
@@ -158,7 +158,6 @@ def export_deals():
             auction_start, auction_end, is_expired
         FROM auctions 
         WHERE is_expired = 0
-        AND city IN ('гр. София', 'гр. Пловдив', 'гр. Варна', 'гр. Бургас')
         AND size_sqm > 0 AND price_eur > 0
         ORDER BY price_eur
     """
@@ -173,7 +172,7 @@ def export_deals():
         row = dict(row)
         stats['total'] += 1
         
-        prop_type = (row['property_type'] or '').lower().strip()
+        prop_type = (row['property_type'] or '').strip()
         
         # Skip excluded types (land, plots)
         if prop_type in EXCLUDE_TYPES or not prop_type:
