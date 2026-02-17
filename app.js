@@ -327,10 +327,21 @@
     }
     
     function populateCities() {
-        const cities = [...new Set(allDeals.map(d => d.city).filter(Boolean))].sort();
+        const MAJOR_CITIES = ['София', 'Варна', 'Пловдив', 'Бургас', 'Стара Загора', 'Русе'];
+        const allCities = [...new Set(allDeals.map(d => d.city).filter(Boolean))];
         const val = el.city.value;
         el.city.innerHTML = '<option value="all">Всички градове</option>';
-        cities.forEach(c => { const o = document.createElement('option'); o.value = c; o.textContent = c; el.city.appendChild(o); });
+        // Add major cities in fixed order (only if they have deals)
+        MAJOR_CITIES.forEach(c => {
+            if (allCities.includes(c)) {
+                const o = document.createElement('option'); o.value = c; o.textContent = c; el.city.appendChild(o);
+            }
+        });
+        // Add "Други" option for everything else
+        const otherCities = allCities.filter(c => !MAJOR_CITIES.includes(c));
+        if (otherCities.length > 0) {
+            const o = document.createElement('option'); o.value = '_other'; o.textContent = 'Други'; el.city.appendChild(o);
+        }
         el.city.value = val;
     }
     
@@ -343,7 +354,7 @@
             'other': 'Други'
         };
         const f = [];
-        if (el.city.value !== 'all') f.push({type:'city', label:el.city.value});
+        if (el.city.value !== 'all') f.push({type:'city', label: el.city.value === '_other' ? 'Други' : el.city.value});
         if (el.type.value !== 'all') f.push({type:'type', label:typeLabels[el.type.value] || el.type.value});
         if (el.minPrice.value) f.push({type:'minPrice', label:'От '+fmtPrice(parseInt(el.minPrice.value))});
         if (el.maxPrice.value) f.push({type:'maxPrice', label:'До '+fmtPrice(parseInt(el.maxPrice.value))});
@@ -375,7 +386,7 @@
         filteredDeals = allDeals.filter(d => {
             const auctionPrice = d.auction_price || d.effective_price || d.price || 0;
             const discountPct = d.discount_pct !== undefined ? d.discount_pct : (d.discount || 0);
-            if (city !== 'all' && d.city !== city) return false;
+            if (city === '_other') { if (['София','Варна','Пловдив','Бургас','Стара Загора','Русе'].includes(d.city)) return false; } else if (city !== 'all' && d.city !== city) return false;
             if (type !== 'all' && d.property_type?.toLowerCase() !== type.toLowerCase()) return false;
             if (auctionPrice < minP || auctionPrice > maxP) return false;
             if (discountPct < minD) return false;
