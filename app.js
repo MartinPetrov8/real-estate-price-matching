@@ -2,6 +2,8 @@
     'use strict';
     let allDeals = [], filteredDeals = [], countdownIntervals = [];
     const DEALS_PER_PAGE = 12;
+    // XSS protection: escape HTML in user-controlled data
+    const escHtml = (s) => s ? String(s).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])) : '';
     let currentPage = 1;
     let displayedDeals = 0;
     const el = {
@@ -530,8 +532,8 @@ async function load() {
             ${ownershipHtml}
             ${dataWarningHtml}
             ${negativeWarningHtml}
-            <h2 style="font-size:24px;font-weight:700;margin-bottom:8px;">${propertyType.charAt(0).toUpperCase() + propertyType.slice(1)} в ${city}</h2>
-            <p style="color:var(--gray-500);margin-bottom:24px;">${neighborhood && neighborhood !== 'Неизвестен' ? neighborhood : ''}</p>
+            <h2 style="font-size:24px;font-weight:700;margin-bottom:8px;">${escHtml(propertyType.charAt(0).toUpperCase() + propertyType.slice(1))} в ${escHtml(city)}</h2>
+            <p style="color:var(--gray-500);margin-bottom:24px;">${neighborhood && neighborhood !== 'Неизвестен' ? escHtml(neighborhood) : ''}</p>
             <div style="display:grid;grid-template-columns:${marketPrice ? '1fr 1fr' : '1fr'};gap:16px;margin-bottom:24px;">
                 <div style="background:${discountPct >= 0 ? 'var(--success-light)' : 'var(--danger-light)'};padding:16px;border-radius:var(--radius);">
                     <div style="font-size:12px;color:var(--gray-500);text-transform:uppercase;font-weight:600;">Тръжна цена</div>

@@ -126,7 +126,7 @@ def scrape_olx_city(page, city, url):
                     price_eur=round(price_eur, 2), price_per_sqm=round(price_eur / size_sqm, 2),
                     rooms=rooms, source='olx.bg', scraped_at=datetime.utcnow().isoformat()
                 ))
-            except:
+            except (ValueError, TypeError, AttributeError):
                 continue
     except Exception as e:
         print(f" ERROR: {e}", end="")

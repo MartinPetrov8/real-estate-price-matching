@@ -13,7 +13,7 @@ from datetime import datetime
 import os
 import re
 import sys
-sys.path.insert(0, 'src/matching')
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), 'src', 'matching'))
 from neighborhood_matcher import extract_neighborhood, normalize_neighborhood
 
 DB_PATH = "data/auctions.db"
@@ -76,7 +76,7 @@ def get_market_median(city, size_sqm, address=None, size_tolerance=15):
         cursor.execute("""
             SELECT price_per_sqm, neighborhood FROM market_listings 
             WHERE city = ? AND neighborhood = ? AND size_sqm BETWEEN ? AND ?
-            AND price_per_sqm IS NOT NULL AND price_per_sqm > 0
+            AND price_per_sqm IS NOT NULL AND price_per_sqm > 200 AND price_per_sqm < 5000
         """, (city_clean, auction_hood, size_min, size_max))
         results = cursor.fetchall()
         
@@ -90,7 +90,7 @@ def get_market_median(city, size_sqm, address=None, size_tolerance=15):
     cursor.execute("""
         SELECT price_per_sqm FROM market_listings 
         WHERE city = ? AND size_sqm BETWEEN ? AND ?
-        AND price_per_sqm IS NOT NULL AND price_per_sqm > 0
+        AND price_per_sqm IS NOT NULL AND price_per_sqm > 200 AND price_per_sqm < 5000
     """, (city_clean, size_min, size_max))
     results = cursor.fetchall()
     
@@ -100,10 +100,10 @@ def get_market_median(city, size_sqm, address=None, size_tolerance=15):
         market_conn.close()
         return median, len(results), None
     
-    # Final fallback: city only
+    # Final fallback: city only (with outlier filtering)
     cursor.execute("""
         SELECT price_per_sqm FROM market_listings 
-        WHERE city = ? AND price_per_sqm IS NOT NULL AND price_per_sqm > 0
+        WHERE city = ? AND price_per_sqm IS NOT NULL AND price_per_sqm > 200 AND price_per_sqm < 5000
     """, (city_clean,))
     results = cursor.fetchall()
     
@@ -126,14 +126,14 @@ def is_expired(auction_end):
         # Try DD.MM.YYYY format
         end_date = datetime.strptime(auction_end, '%d.%m.%Y')
         return end_date < datetime.now()
-    except:
+    except ValueError:
         pass
     
     try:
         # Try YYYY-MM-DD format
         end_date = datetime.strptime(auction_end, '%Y-%m-%d')
         return end_date < datetime.now()
-    except:
+    except ValueError:
         pass
     
     return False
@@ -148,6 +148,16 @@ def export_deals():
     
     conn = sqlite3.connect(DB_PATH)
     conn.row_factory = sqlite3.Row
+    
+    # Ensure composite index exists for market queries
+    if os.path.exists(MARKET_DB):
+        try:
+            mconn = sqlite3.connect(MARKET_DB)
+            mconn.execute('CREATE INDEX IF NOT EXISTS idx_city_size ON market_listings(city, size_sqm)')
+            mconn.commit()
+            mconn.close()
+        except Exception:
+            pass
     
     # Get all non-expired, non-excluded properties in target cities
     query = """
@@ -206,7 +216,7 @@ def export_deals():
                 price_per_sqm = price / size
                 discount = round(((market_median - price_per_sqm) / market_median) * 100, 1)
                 if discount < 0:
-                    discount = 0  # Don't show negative discounts
+                    discount = None  # Negative = overpriced, don't show unreliable discount
             elif market_median:
                 # Not enough comparables for reliable discount
                 market_avg = round(market_median)

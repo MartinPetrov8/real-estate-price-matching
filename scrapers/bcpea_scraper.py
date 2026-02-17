@@ -16,6 +16,9 @@ import urllib.request
 import argparse
 from datetime import datetime
 from concurrent.futures import ThreadPoolExecutor, as_completed
+import threading
+
+_db_lock = threading.Lock()
 import os
 import sys
 import socket
@@ -26,7 +29,7 @@ DB_PATH = "data/auctions.db"
 
 REQUEST_TIMEOUT = 25
 MAX_RETRIES = 2
-MAX_WORKERS = 8
+MAX_WORKERS = 4  # Reduced for rate limiting
 
 COURTS = {
     1: "Благоевград", 2: "Бургас", 3: "Варна", 4: "Велико Търново",
@@ -88,7 +91,7 @@ def parse_property_detail(html_content, prop_id):
             if 'лв' in price_match.group(2):
                 price = round(price / 1.96, 2)
             data['price_eur'] = price
-        except:
+        except (ValueError, TypeError):
             pass
     
     # Property type - look after </ul> to skip dropdown options
@@ -107,20 +110,30 @@ def parse_property_detail(html_content, prop_id):
     if city_match:
         data['city'] = city_match.group(1).strip().rstrip(',').rstrip('<')
     
-    # Address
+    # Address - extract clean address, reject HTML/URLs
     addr_match = re.search(r'Адрес[^:]*:\s*([^<]+)', html_content)
     if addr_match:
-        data['address'] = html.unescape(addr_match.group(1).strip())
+        addr_raw = html.unescape(addr_match.group(1).strip())
+        # Validate: must contain Cyrillic, reject URLs and garbage
+        if re.search(r'[А-Яа-я]', addr_raw) and not re.search(r'https?://', addr_raw) and len(addr_raw) > 2:
+            data['address'] = addr_raw
+        else:
+            data['address'] = None
     
     # Size
     size_match = re.search(r'(\d+(?:[,\.]\d+)?)\s*(?:кв\.?\s*м|м2|m2)', html_content, re.I)
     if size_match:
         data['size_sqm'] = float(size_match.group(1).replace(',', '.'))
     
-    # Floor - extract from description text (e.g., 'ет.3' or 'етаж 3')
-    floor_match = re.search(r'(?:ет\.?|етаж)\s*(\d+)', html_content, re.I)
-    if floor_match:
-        data['floor'] = int(floor_match.group(1))
+    # Floor - extract from description/address only (not navigation/forms)
+    # Look for "ет.X" pattern in the info/description div
+    desc_section = re.search(r'<div class="info">(.*?)</div>', html_content, re.DOTALL)
+    if desc_section:
+        floor_match = re.search(r'(?:ет\.\s*|етаж\s+)(\d{1,2})(?!\d)', desc_section.group(1), re.I)
+        if floor_match:
+            floor_val = int(floor_match.group(1))
+            if 0 < floor_val <= 30:  # Sanity check
+                data['floor'] = floor_val
     # Rooms
     rooms_match = re.search(r'(\d+)\s*(?:-?стаен|стаи|стая)', html_content, re.I)
     if rooms_match:
@@ -144,7 +157,7 @@ def parse_property_detail(html_content, prop_id):
             try:
                 end_date = datetime.strptime(end_match.group(1), '%d.%m.%Y')
                 data['is_expired'] = end_date < datetime.now()
-            except:
+            except ValueError:
                 data['is_expired'] = False
         else:
             data['is_expired'] = False
@@ -234,24 +247,26 @@ def run_full_scan():
                     if not data.get('is_expired'):
                         active += 1
                     
-                    cursor.execute("""
-                        INSERT INTO auctions 
-                        (id, url, price_eur, city, address, property_type, size_sqm, rooms, 
-                         is_partial_ownership, is_expired, auction_end, scraped_at, first_seen_at, last_updated_at)
-                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-                    """, (
-                        data['id'], data.get('url'), data.get('price_eur'), data.get('city'),
-                        data.get('address'), data.get('property_type'), data.get('size_sqm'),
-                        data.get('rooms'), int(data.get('is_partial_ownership', False)),
-                        int(data.get('is_expired', False)), data.get('auction_end'), now, now, now
-                    ))
-                    
-                    # Commit every 50 records
+                    with _db_lock:
+                        cursor.execute("""
+                            INSERT INTO auctions 
+                            (id, url, price_eur, city, address, property_type, size_sqm, rooms, floor,
+                             is_partial_ownership, is_expired, auction_end, scraped_at, first_seen_at, last_updated_at)
+                            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                        """, (
+                            data['id'], data.get('url'), data.get('price_eur'), data.get('city'),
+                            data.get('address'), data.get('property_type'), data.get('size_sqm'),
+                            data.get('rooms'), data.get('floor'), int(data.get('is_partial_ownership', False)),
+                            int(data.get('is_expired', False)), data.get('auction_end'), now, now, now
+                        ))
+                        
+                        # Commit every 50 records
+                        if fetched % 50 == 0:
+                            conn.commit()
                     if fetched % 50 == 0:
-                        conn.commit()
                         log(f"  Progress: {fetched}/{len(all_ids)} ({active} active)")
             except Exception as e:
-                pass
+                log(f"  Error processing property {futures[future]}: {e}")
     
     conn.commit()
     
@@ -302,17 +317,18 @@ def run_incremental_scan():
             for future in as_completed({executor.submit(fetch_property_detail, pid): pid for pid in new_ids}):
                 data = future.result()
                 if data and not data.get('is_expired'):
-                    cursor.execute("""
-                        INSERT INTO auctions 
-                        (id, url, price_eur, city, address, property_type, size_sqm, rooms, 
-                         is_partial_ownership, is_expired, auction_end, scraped_at, first_seen_at, last_updated_at)
-                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-                    """, (
-                        data['id'], data.get('url'), data.get('price_eur'), data.get('city'),
-                        data.get('address'), data.get('property_type'), data.get('size_sqm'),
-                        data.get('rooms'), int(data.get('is_partial_ownership', False)), 0,
-                        data.get('auction_end'), now, now, now
-                    ))
+                    with _db_lock:
+                        cursor.execute("""
+                            INSERT INTO auctions 
+                            (id, url, price_eur, city, address, property_type, size_sqm, rooms, floor,
+                             is_partial_ownership, is_expired, auction_end, scraped_at, first_seen_at, last_updated_at)
+                            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                        """, (
+                            data['id'], data.get('url'), data.get('price_eur'), data.get('city'),
+                            data.get('address'), data.get('property_type'), data.get('size_sqm'),
+                            data.get('rooms'), data.get('floor'), int(data.get('is_partial_ownership', False)), 0,
+                            data.get('auction_end'), now, now, now
+                        ))
     
     # Mark expired
     for pid in expired_ids:

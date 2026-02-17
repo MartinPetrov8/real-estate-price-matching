@@ -67,7 +67,7 @@ def save_listings(conn, listings):
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?)''',
                 (l.city, l.neighborhood, l.size_sqm, l.price_eur, l.price_per_sqm, l.rooms, l.source, l.scraped_at))
             saved += 1
-        except:
+        except (sqlite3.Error, ValueError) as e:
             continue
     conn.commit()
     return saved
@@ -145,7 +145,7 @@ def scrape_alo_city(city, url):
                 scraped_at=datetime.utcnow().isoformat()
             ))
             
-        except Exception:
+        except (ValueError, TypeError, AttributeError):
             continue
     
     return listings[:60]

@@ -24,7 +24,7 @@ def run_cmd(cmd, cwd=None, env=None):
     full_env = os.environ.copy()
     if env:
         full_env.update(env)
-    result = subprocess.run(cmd, shell=True, cwd=cwd, capture_output=True, text=True, env=full_env)
+    result = subprocess.run(cmd.split() if isinstance(cmd, str) else cmd, cwd=cwd, capture_output=True, text=True, env=full_env)
     if result.returncode != 0:
         print(f"  STDERR: {result.stderr}")
         return False
@@ -48,7 +48,8 @@ def main():
     log("=" * 60)
     
     success = True
-    pw_env = {"PLAYWRIGHT_BROWSERS_PATH": os.environ.get("PLAYWRIGHT_BROWSERS_PATH", "/host-workspace/.playwright-browsers")}
+    pw_browsers_path = os.environ.get("PLAYWRIGHT_BROWSERS_PATH")
+    pw_env = {"PLAYWRIGHT_BROWSERS_PATH": pw_browsers_path} if pw_browsers_path else {}
     
     if not args.export_only:
         # Step 1: imot.bg scraper (requests)
