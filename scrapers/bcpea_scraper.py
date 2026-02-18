@@ -147,7 +147,7 @@ def parse_property_detail(html_content, prop_id):
         try:
             end_date = datetime.strptime(srok_match.group(1), '%d.%m.%Y')
             data['is_expired'] = end_date < datetime.now()
-        except:
+        except (ValueError, TypeError):
             data['is_expired'] = False
     else:
         # Fallback: try "Край" pattern
