@@ -1,7 +1,8 @@
 // Subscribe Modal for Real Estate Alerts
 // Inject this into index.html
 
-const ALERT_API_URL = 'https://web-production-36c65.up.railway.app'; // TODO: Update when deployed
+// API URL - reads from config or falls back to Railway deployment
+const ALERT_API_URL = (typeof CONFIG !== 'undefined' && CONFIG.API_URL) || 'https://web-production-36c65.up.railway.app';
 
 function createSubscribeModal() {
     // Create modal HTML

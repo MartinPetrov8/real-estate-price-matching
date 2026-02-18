@@ -121,21 +121,22 @@
         const savingsEur = deal.savings_eur !== undefined ? deal.savings_eur : (marketPrice ? Math.max(0, marketPrice - auctionPrice) : 0);
         const pricePerSqm = deal.price_per_sqm || (deal.auction_price && deal.sqm ? deal.auction_price / deal.sqm : 0);
         const auctionEnd = deal.auction_end || null;
-        const city = deal.city || 'Неизвестен';
-        const neighborhood = deal.neighborhood || 'Неизвестен';
+        const city = escHtml(deal.city || 'Неизвестен');
+        const neighborhood = escHtml(deal.neighborhood || 'Неизвестен');
         const sqm = deal.sqm;
         const buildingSqm = deal.building_sqm;
         const plotSqm = deal.plot_sqm;
         const isHouse = deal.property_type === 'къща';
         const floor = deal.floor;
-        const propertyType = deal.property_type || 'апартамент';
-        const propertyTypeBg = deal.property_type_bg || '';
-        const roomType = propertyTypeBg.match(/(едностаен|двустаен|тристаен|многостаен|четиристаен)/i)?.[1] || null;
-        const roomTypeDisplay = roomType ? roomType.charAt(0).toUpperCase() + roomType.slice(1) : null;
+        const propertyType = escHtml(deal.property_type || 'апартамент');
+        const propertyTypeBg = escHtml(deal.property_type_bg || '');
+        const roomType = (deal.property_type_bg || '').match(/(едностаен|двустаен|тристаен|многостаен|четиристаен)/i)?.[1] || null;
+        const roomTypeDisplay = roomType ? escHtml(roomType.charAt(0).toUpperCase() + roomType.slice(1)) : null;
         const isPartialOwnership = deal.is_partial_ownership || false;
         // comparables already defined above
         const partialOwnership = deal.partial_ownership;
-        const url = deal.url || `${BCPEA_URL}/${bcpeaId}`;
+        const rawUrl = deal.url || `${BCPEA_URL}/${bcpeaId}`;
+        const url = rawUrl.startsWith('https://sales.bcpea.org/') ? escHtml(rawUrl) : escHtml(`${BCPEA_URL}/${bcpeaId}`);
         
         const r = getRating(discountPct), days = daysUntil(auctionEnd);
         const isNewFlag = days !== null && days > 20;
@@ -237,7 +238,7 @@
                             `<div class="why-deal-item"><span class="why-deal-icon">⚠️</span><span>Цената е с <strong>${Math.abs(Math.round(discountPct))}%</strong> над пазарната ниво</span></div>`
                         }
                         <div class="why-deal-item"><span class="why-deal-icon">📏</span><span>€/м²: <strong>${fmtSqm(auctionPrice, sqm)}</strong> при пазарни <strong>${fmtSqm(marketPrice, sqm)}</strong></span></div>
-                        ${deal.neighborhood_range ? `<div class="why-deal-item"><span class="why-deal-icon">🏘️</span><span>Ценови диапазон в района: ${deal.neighborhood_range}</span></div>` : ''}
+                        ${deal.neighborhood_range ? `<div class="why-deal-item"><span class="why-deal-icon">🏘️</span><span>Ценови диапазон в района: ${escHtml(deal.neighborhood_range)}</span></div>` : ''}
                         ${comparables > 0 ? `<div class="why-deal-item"><span class="why-deal-icon">🔍</span><span>Базирано на ${comparables} сравними обяви</span></div>` : '<div class="why-deal-item"><span class="why-deal-icon">⚠️</span><span>Няма достатъчно сравними обяви за надеждна оценка</span></div>'}
                     </div>
                 </div>
@@ -364,7 +365,7 @@
     
     function renderActive() {
         const f = getActive();
-        el.activeFilters.innerHTML = f.length ? f.map(x => `<span class="active-filter">${x.label}<button onclick="rmFilter('${x.type}')">✕</button></span>`).join('') : '';
+        el.activeFilters.innerHTML = f.length ? f.map(x => `<span class="active-filter">${escHtml(x.label)}<button onclick="rmFilter('${escHtml(x.type)}')">✕</button></span>`).join('') : '';
     }
     
     window.rmFilter = function(t) {
@@ -500,11 +501,11 @@ async function load() {
         const marketPrice = modalHasMarketData ? d.market_price : null;
         const discountPct = d.discount_pct !== undefined ? d.discount_pct : (d.discount || 0);
         const savingsEur = Math.max(0, d.savings_eur !== undefined ? d.savings_eur : (marketPrice - auctionPrice));
-        const city = d.city || 'Неизвестен';
-        const neighborhood = d.neighborhood || 'Неизвестен';
+        const city = escHtml(d.city || 'Неизвестен');
+        const neighborhood = escHtml(d.neighborhood || 'Неизвестен');
         const sqm = d.sqm;
-        const propertyType = d.property_type || 'Имот';
-        const auctionEnd = d.auction_end;
+        const propertyType = escHtml(d.property_type || 'Имот');
+        const auctionEnd = escHtml(d.auction_end || '');
         const comparables = d.comparables_count || 0;
         const partialOwnership = d.partial_ownership;
         const url = d.url || `${BCPEA_URL}/${bcpeaId}`;
@@ -568,7 +569,7 @@ async function load() {
                         `<li>⚠ Цената е с <strong>${Math.abs(Math.round(discountPct))}%</strong> над пазарната ниво</li>
                          <li>⚠ Тръжната цена е с <strong>${fmtPrice(auctionPrice - marketPrice)}</strong> по-висока от пазарната</li>`
                     ) : '<li>⚠ Няма достатъчно данни за пазарна оценка</li>'}
-                    ${d.neighborhood_range ? `<li>✓ Ценови диапазон в района: ${d.neighborhood_range}</li>` : ''}
+                    ${d.neighborhood_range ? `<li>✓ Ценови диапазон в района: ${escHtml(d.neighborhood_range)}</li>` : ''}
                     ${comparables > 0 ? `<li>✓ Базирано на ${comparables} сравними обяви</li>` : '<li>⚠ Няма достатъчно сравними обяви за надеждна оценка</li>'}
                 </ul>
             </div>

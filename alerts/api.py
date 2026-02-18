@@ -46,6 +46,17 @@ SENDER_NAME = os.getenv("SENDER_NAME", "Изгоден Имот")
 SITE_URL = os.getenv("SITE_URL", "https://martinpetrov8.github.io/real-estate-price-matching")
 API_URL = os.getenv("RAILWAY_PUBLIC_DOMAIN", os.getenv("API_URL", ""))
 
+# Redirect safety — only allow known hosts
+from urllib.parse import urlparse
+ALLOWED_REDIRECT_HOSTS = {'martinpetrov8.github.io', 'kchsi-sdelki.bg'}
+
+def safe_redirect(url):
+    """Only redirect to allowed hosts."""
+    parsed = urlparse(url)
+    if parsed.hostname not in ALLOWED_REDIRECT_HOSTS:
+        return redirect("https://martinpetrov8.github.io/real-estate-price-matching")
+    return redirect(url)
+
 def init_db():
     """Initialize database if not exists."""
     os.makedirs(os.path.dirname(DB_PATH) if os.path.dirname(DB_PATH) else '.', exist_ok=True)
@@ -119,6 +130,14 @@ def add_security_headers(response):
     response.headers['Strict-Transport-Security'] = 'max-age=31536000; includeSubDomains'
     return response
 
+@app.errorhandler(500)
+def internal_error(e):
+    return jsonify({"error": "Internal server error"}), 500
+
+@app.errorhandler(404)
+def not_found(e):
+    return jsonify({"error": "Not found"}), 404
+
 @app.route('/', methods=['GET'])
 def home():
     return jsonify({"status": "ok", "service": "real-estate-alerts-api"})
@@ -129,6 +148,8 @@ def health():
 
 @app.route('/subscribe', methods=['POST'])
 def subscribe():
+    if not request.is_json:
+        return jsonify({"error": "Content-Type must be application/json"}), 415
     data = request.json or {}
     email = data.get('email', '').strip().lower()
     cities = data.get('cities', [])
@@ -177,7 +198,7 @@ def subscribe():
 def verify():
     token = request.args.get('token', '')
     if not token:
-        return redirect(f"{SITE_URL}?error=invalid_token")
+        return safe_redirect(f"{SITE_URL}?error=invalid_token")
     
     conn = get_db()
     c = conn.cursor()
@@ -186,26 +207,26 @@ def verify():
     
     if not sub:
         conn.close()
-        return redirect(f"{SITE_URL}?error=invalid_token")
+        return safe_redirect(f"{SITE_URL}?error=invalid_token")
     
     c.execute('UPDATE subscribers SET verified = 1, verified_at = ?, verify_token = NULL WHERE id = ?',
               (datetime.utcnow().isoformat(), sub['id']))
     conn.commit()
     conn.close()
-    return redirect(f"{SITE_URL}?verified=true")
+    return safe_redirect(f"{SITE_URL}?verified=true")
 
 @app.route('/unsubscribe', methods=['GET'])
 def unsubscribe():
     token = request.args.get('token', '')
     if not token:
-        return redirect(f"{SITE_URL}?error=invalid_token")
+        return safe_redirect(f"{SITE_URL}?error=invalid_token")
     
     conn = get_db()
     c = conn.cursor()
     c.execute('DELETE FROM subscribers WHERE unsubscribe_token = ?', (token,))
     conn.commit()
     conn.close()
-    return redirect(f"{SITE_URL}?unsubscribed=true")
+    return safe_redirect(f"{SITE_URL}?unsubscribed=true")
 
 @app.route('/stats', methods=['GET'])
 def stats():
@@ -218,4 +239,4 @@ def stats():
 
 if __name__ == '__main__':
     port = int(os.getenv('PORT', 5000))
-    app.run(host='0.0.0.0', port=port)
+    app.run(host='0.0.0.0', port=port, debug=False)
