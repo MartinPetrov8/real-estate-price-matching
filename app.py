@@ -5,7 +5,7 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, origins=["https://martinpetrov8.github.io"])
 
 DB_PATH = os.environ.get('DB_PATH', 'data/subscribers.db')
 

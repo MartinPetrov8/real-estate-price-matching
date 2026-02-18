@@ -39,3 +39,7 @@ market_listings.json
 # Databases (keep in repo for GitHub Pages)
 scrapers/data/*.db
 .env
+data/logs/
+data/subscribers.db
+-e *.db-wal
+*.db-shm

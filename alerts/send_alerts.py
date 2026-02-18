@@ -225,8 +225,13 @@ def main():
             log(f"  {sub['email']}: 0 matching deals, skipping")
             continue
         
-        # Generate unsubscribe URL (would need token in real implementation)
-        unsubscribe_url = f"{SITE_URL}?unsubscribe={sub['id']}"
+        # Get unsubscribe token from DB
+        c2 = conn.cursor()
+        c2.execute('SELECT unsubscribe_token FROM subscribers WHERE id = ?', (sub['id'],))
+        row = c2.fetchone()
+        unsub_token = row[0] if row else ''
+        api_base = os.getenv("API_URL", "https://web-production-36c65.up.railway.app")
+        unsubscribe_url = f"{api_base}/unsubscribe?token={unsub_token}"
         
         # Generate email
         subject = f"🏠 {len(matching_deals)} нови оферти под пазарната цена"

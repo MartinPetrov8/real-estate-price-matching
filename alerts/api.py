@@ -20,7 +20,24 @@ except ImportError:
     HAS_RESEND = False
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, origins=["https://martinpetrov8.github.io"])
+
+# Rate limiting (in-memory, simple)
+from collections import defaultdict
+import time as _time
+_rate_limit = defaultdict(list)  # IP -> [timestamps]
+RATE_LIMIT_MAX = 5  # max requests per window
+RATE_LIMIT_WINDOW = 60  # seconds
+
+@app.before_request
+def check_rate_limit():
+    if request.endpoint in ('subscribe',):
+        ip = request.remote_addr or 'unknown'
+        now = _time.time()
+        _rate_limit[ip] = [t for t in _rate_limit[ip] if now - t < RATE_LIMIT_WINDOW]
+        if len(_rate_limit[ip]) >= RATE_LIMIT_MAX:
+            return jsonify({"error": "Твърде много заявки. Опитай отново след минута."}), 429
+        _rate_limit[ip].append(now)
 
 # Config
 DB_PATH = os.getenv("SUBSCRIBERS_DB", "data/subscribers.db")
@@ -94,6 +111,14 @@ def send_verification_email(email, token):
 # Initialize DB on startup
 init_db()
 
+@app.after_request
+def add_security_headers(response):
+    response.headers['X-Content-Type-Options'] = 'nosniff'
+    response.headers['X-Frame-Options'] = 'DENY'
+    response.headers['X-XSS-Protection'] = '1; mode=block'
+    response.headers['Strict-Transport-Security'] = 'max-age=31536000; includeSubDomains'
+    return response
+
 @app.route('/', methods=['GET'])
 def home():
     return jsonify({"status": "ok", "service": "real-estate-alerts-api"})
@@ -109,7 +134,10 @@ def subscribe():
     cities = data.get('cities', [])
     min_discount = data.get('min_discount', 20)
     
-    if not email or '@' not in email:
+    import re as _re
+    if not email or not _re.match(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$', email):
+        return jsonify({"error": "Невалиден имейл адрес"}), 400
+    if len(email) > 254:
         return jsonify({"error": "Невалиден имейл адрес"}), 400
     
     valid_cities = ['София', 'Пловдив', 'Варна', 'Бургас', 'Русе', 'Стара Загора']
