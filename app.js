@@ -165,7 +165,7 @@
             <div class="card-header deal-${r.level}">
                 <div class="card-badges">
                     ${isNewFlag ? '<span class="badge badge-new">НОВО</span>' : ''}
-                    ${isUrgent ? '<span class="badge badge-urgent">СКОРО</span>' : ''}
+                    ${isUrgent ? '<span class="badge badge-urgent">ИЗТИЧАЩ</span>' : ''}
                     <span class="badge badge-type">${icon} ${translatePropType(propertyType)}</span>${isPartialOwnership ? '<span class="badge badge-warning" title="Дробна собственост - цените не са съпоставими">⚠️ Дробна собственост</span>' : ''}
                 </div>
                 <div class="discount-badge">
