@@ -29,7 +29,7 @@
     {
         "@context": "https://schema.org",
         "@type": "WebSite",
-        "name": "КЧСИ Сделки",
+        "name": "КЧСИ Търгове",
         "url": "https://martinpetrov8.github.io/real-estate-price-matching/",
         "description": "Сравнение на тръжни и пазарни цени на имоти от принудителни търгове в България",
         "potentialAction": {
@@ -43,7 +43,7 @@
     {
         "@context": "https://schema.org",
         "@type": "Organization",
-        "name": "КЧСИ Сделки",
+        "name": "КЧСИ Търгове",
         "url": "https://martinpetrov8.github.io/real-estate-price-matching/",
         "logo": "https://martinpetrov8.github.io/real-estate-price-matching/favicon.svg",
         "description": "Неофициален инструмент за търсене на изгодни имоти от принудителни търгове"
@@ -134,7 +134,7 @@
                 <div class="logo">
                     <span class="logo-icon">🏛️</span>
                     <div class="logo-text">
-                        <h1>КЧСИ Сделки</h1>
+                        <h1>КЧСИ Търгове: Имоти от Частни Съдебни Изпълнители</h1>
                         <span class="logo-tagline">Изгодни имоти от търгове</span>
                     </div>
                 </div>
@@ -204,7 +204,10 @@
                     </button>
                 </div>
 
-                <div class="advanced-filters">
+                <button class="mobile-filter-toggle" id="mobileFilterToggle" onclick="toggleMobileFilters()">
+                    ⚙️ Филтри <span id="mobileFilterChevron">▼</span>
+                </button>
+                <div class="advanced-filters" id="advancedFilters">
                     <div class="filter-row">
                         <div class="filter-group">
                             <label for="cityFilter">Град</label>
@@ -260,6 +263,9 @@
             <div class="results-header">
                 <h3 class="results-title">Намерени сделки <span class="results-count" id="resultsCount">0</span></h3>
                 <button class="btn-reset" id="resetFilters">Изчисти филтрите</button>
+            </div>
+            <div class="listing-disclaimer">
+                ⚠️ Имотите от КЧСИ търгове могат да носят рискове — тежести, ипотеки, наематели. Преди участие <a href="blog/riskove-pri-pokupka-ot-kchsi.html">проверете документите</a> и се консултирайте с юрист.
             </div>
 
             <div id="loadingState" class="loading-state">

@@ -176,7 +176,7 @@
                 </div>
                 <div class="price-comparison-bar">
                     <div class="price-bar-track"><div class="price-bar-fill" style="width:${barW}%"></div></div>
-                    <div class="price-bar-labels"><span>Тръжна цена</span><span>Пазарна цена</span></div>
+                    <div class="price-bar-labels"><span>Тръжна цена</span><span>Пазарна цена →</span></div>
                 </div>
             </div>
             <div class="card-body">
@@ -184,16 +184,16 @@
                 ${dataWarning}
                 ${marketPrice ? `
                 <div class="price-section">
-                    <div class="price-block price-auction">
-                        <div class="price-block-label">Тръжна цена</div>
-                        <div class="price-block-value">${fmtPrice(auctionPrice)}</div>
-                        <div class="price-block-sub">${fmtSqm(auctionPrice, sqm)}</div>
-                    </div>
-                    <div class="price-arrow">→</div>
                     <div class="price-block price-market">
                         <div class="price-block-label">Пазарна цена</div>
                         <div class="price-block-value">${fmtPrice(marketPrice)}</div>
                         <div class="price-block-sub">${fmtSqm(marketPrice, sqm)}</div>
+                    </div>
+                    <div class="price-arrow">→</div>
+                    <div class="price-block price-auction">
+                        <div class="price-block-label">Тръжна цена</div>
+                        <div class="price-block-value">${fmtPrice(auctionPrice)}</div>
+                        <div class="price-block-sub">${fmtSqm(auctionPrice, sqm)}</div>
                     </div>
                 </div>
                 ` : `
@@ -628,3 +628,12 @@ async function load() {
     
     load();
 })();
+
+// Mobile filter toggle (global scope for onclick)
+function toggleMobileFilters() {
+    const panel = document.getElementById('advancedFilters');
+    const chevron = document.getElementById('mobileFilterChevron');
+    if (!panel) return;
+    const isOpen = panel.classList.toggle('open');
+    if (chevron) chevron.textContent = isOpen ? '▲' : '▼';
+}

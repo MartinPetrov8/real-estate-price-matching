@@ -992,3 +992,67 @@ body {
 .about-content strong {
     color: var(--text-primary, #333);
 }
+
+/* ===== SEO & UX Improvements (Feb 2026) ===== */
+
+/* H1 in logo — visually small but semantically correct */
+.logo-text h1 {
+    font-size: 20px !important;
+    font-weight: 700;
+    color: var(--gray-700);
+    letter-spacing: -0.5px;
+    line-height: 1.2;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 280px;
+}
+
+@media (max-width: 480px) {
+    .logo-text h1 { max-width: 160px; font-size: 15px !important; }
+}
+
+/* Listing disclaimer */
+.listing-disclaimer {
+    background: #FFF8E1;
+    border: 1px solid #FFE082;
+    border-radius: var(--radius);
+    padding: 10px 14px;
+    font-size: 13px;
+    color: #795548;
+    margin-bottom: var(--space-md);
+    line-height: 1.5;
+}
+.listing-disclaimer a {
+    color: var(--primary);
+    text-decoration: underline;
+    font-weight: 500;
+}
+
+/* Mobile filter toggle button */
+.mobile-filter-toggle {
+    display: none;
+    width: 100%;
+    padding: 10px 16px;
+    background: #fff;
+    border: 1px solid var(--gray-300);
+    border-radius: var(--radius);
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--gray-700);
+    cursor: pointer;
+    text-align: left;
+    margin-bottom: var(--space-sm);
+    transition: var(--transition);
+}
+.mobile-filter-toggle:hover { background: var(--gray-50); }
+
+@media (max-width: 768px) {
+    .mobile-filter-toggle { display: block; }
+    .advanced-filters {
+        display: none;
+    }
+    .advanced-filters.open {
+        display: block;
+    }
+}
