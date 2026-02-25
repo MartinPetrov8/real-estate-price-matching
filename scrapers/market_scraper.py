@@ -61,6 +61,18 @@ def signal_handler(signum, frame):
 signal.signal(signal.SIGTERM, signal_handler)
 signal.signal(signal.SIGINT, signal_handler)
 
+# Neighborhoods not covered by OLX district filters — scraped via text search instead.
+# Format: {city: [(neighborhood_label, search_slug), ...]}
+# search_slug is the URL-encoded query string (Bulgarian text).
+# IMPORTANT: these use /prodazhbi/ (sales) to exclude rentals.
+OLX_SEARCH_SUPPLEMENTS = {
+    'София': [
+        ('сухата река', 'Сухата-река'),
+        ('подуяне',     'Подуяне'),
+        ('хиподрума',   'Хиподрума'),
+    ],
+}
+
 # Cities with correct URL formats
 CITIES = {
     'София': {
@@ -501,10 +513,66 @@ def scrape_olx_district(session: requests.Session, city_url: str, city: str,
     return listings
 
 
+def scrape_olx_search(session: requests.Session, city: str,
+                       neighborhood_label: str, search_slug: str) -> List[Listing]:
+    """
+    Scrape OLX via text search for a neighborhood not covered by district filters.
+    Uses /nedvizhimi-imoti/prodazhbi/ (sales only — excludes rentals).
+    search_slug: Bulgarian text as it appears in the OLX search URL, e.g. 'Сухата-река'.
+    """
+    listings = []
+    neighborhood = normalize_neighborhood(neighborhood_label) or neighborhood_label.lower().strip()
+    base_url = f"https://www.olx.bg/nedvizhimi-imoti/prodazhbi/q-{search_slug}/"
+
+    for page_num in range(1, 3):  # 2 pages max
+        if SHUTDOWN_REQUESTED:
+            break
+        page_url = base_url if page_num == 1 else f"{base_url}?page={page_num}"
+        html = fetch_page(session, page_url)
+        if not html:
+            break
+
+        soup = BeautifulSoup(html, 'html.parser')
+        pattern = re.compile(r'(\d+)\s*кв\.м\s*-\s*([\d\.,]+)')
+        cards = soup.select('[data-cy="l-card"], .offer-wrapper, article')
+        items = cards if cards else [soup]
+
+        for item in items:
+            text = item.get_text()
+            # Skip rental listings: they show monthly prices (very low total EUR amount)
+            # Sales listings are always > 10000 EUR; rentals are 200-2000 EUR/month
+            # The price_per_sqm filter (200-15000) handles this, but double-check total price
+            match = pattern.search(text)
+            if not match:
+                continue
+            try:
+                size_sqm = float(match.group(1))
+                price_per_sqm = float(match.group(2).replace(',', '.'))
+                if not (15 <= size_sqm <= 500) or not (200 <= price_per_sqm <= 15000):
+                    continue
+                price_eur = round(size_sqm * price_per_sqm, 2)
+                # Hard floor: anything under 15000 EUR total is a rental leaking through
+                if price_eur < 15000:
+                    continue
+                listings.append(Listing(
+                    neighborhood=neighborhood, city=city, size_sqm=size_sqm,
+                    price_eur=price_eur, price_per_sqm=price_per_sqm,
+                    rooms=None, source='olx.bg',
+                    scraped_at=datetime.utcnow().isoformat()
+                ))
+            except (ValueError, TypeError):
+                continue
+
+        time.sleep(0.4)
+
+    return listings
+
+
 def scrape_olx(session: requests.Session, url: str, city: str) -> Tuple[List[Listing], bool, str]:
     """
     Scrape OLX per-district for 100% neighborhood coverage.
     Discovers district IDs dynamically from the city page, then scrapes each.
+    Supplements with text-search scraping for neighborhoods not in district filters.
     Falls back to city-level scrape if district discovery fails.
     """
     # Step 1: discover districts
@@ -522,6 +590,21 @@ def scrape_olx(session: requests.Session, url: str, city: str) -> Tuple[List[Lis
         district_listings = scrape_olx_district(session, url, city, did, dname)
         all_listings.extend(district_listings)
         logging.debug(f"    District {dname!r}: {len(district_listings)} listings")
+
+    # Step 2: supplement with search-based scraping for unlisted neighborhoods
+    supplements = OLX_SEARCH_SUPPLEMENTS.get(city, [])
+    if supplements:
+        district_names_lower = {n.lower() for n in districts.values()}
+        for hood_label, search_slug in supplements:
+            if SHUTDOWN_REQUESTED:
+                break
+            # Skip if this neighborhood is already covered by a district filter
+            if hood_label.lower() in district_names_lower:
+                logging.debug(f"  OLX search supplement skipped (already in districts): {hood_label}")
+                continue
+            search_listings = scrape_olx_search(session, city, hood_label, search_slug)
+            all_listings.extend(search_listings)
+            logging.info(f"  OLX search supplement '{hood_label}': {len(search_listings)} listings")
 
     if len(all_listings) < MIN_LISTINGS_PER_SOURCE:
         return all_listings, False, f"Too few listings after district scrape: {len(all_listings)}"
