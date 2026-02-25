@@ -1,0 +1,24 @@
+{
+  "name": "kcsi-deal-finder",
+  "version": "0.3.0",
+  "description": "КЧСИ auction deal finder with market price comparison",
+  "main": "run-analysis.js",
+  "scripts": {
+    "scrape": "node scraper.js",
+    "market": "node browser-scraper.js",
+    "market:simple": "node market-scraper.js",
+    "deals": "node deal-finder.js",
+    "analyze": "node run-analysis.js",
+    "analyze:fresh": "node run-analysis.js --scrape",
+    "full": "node full-pipeline.js",
+    "test": "node test.js"
+  },
+  "dependencies": {
+    "axios": "^1.6.0",
+    "cheerio": "^1.0.0-rc.12",
+    "better-sqlite3": "^9.0.0",
+    "puppeteer": "^21.0.0"
+  },
+  "author": "Cookie",
+  "license": "MIT"
+}
