@@ -110,15 +110,20 @@ def parse_property_detail(html_content, prop_id):
     if city_match:
         data['city'] = city_match.group(1).strip().rstrip(',').rstrip('<')
     
-    # Address - extract clean address, reject HTML/URLs
-    addr_match = re.search(r'Адрес[^:]*:\s*([^<]+)', html_content)
+    # Address - extract from <div class="label">Адрес</div><div class="info">...</div> pattern
+    addr_match = re.search(
+        r'<div[^>]*class="label"[^>]*>\s*Адрес\s*</div>\s*<div[^>]*class="info"[^>]*>(.*?)</div>',
+        html_content, re.DOTALL | re.IGNORECASE
+    )
     if addr_match:
-        addr_raw = html.unescape(addr_match.group(1).strip())
-        # Validate: must contain Cyrillic, reject URLs and garbage
-        if re.search(r'[А-Яа-я]', addr_raw) and not re.search(r'https?://', addr_raw) and len(addr_raw) > 2:
+        addr_raw = re.sub(r'<[^>]+>', '', addr_match.group(1))  # strip inner tags
+        addr_raw = html.unescape(addr_raw).strip()
+        if re.search(r'[А-Яа-я]', addr_raw) and len(addr_raw) > 3:
             data['address'] = addr_raw
         else:
             data['address'] = None
+    else:
+        data['address'] = None
     
     # Size
     size_match = re.search(r'(\d+(?:[,\.]\d+)?)\s*(?:кв\.?\s*м|м2|m2)', html_content, re.I)

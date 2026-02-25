@@ -55,7 +55,7 @@ TYPE_MAP = {
 }
 
 
-def get_market_median(city, size_sqm, address=None, size_tolerance=15):
+def get_market_median(city, size_sqm, address=None, db_neighborhood=None, size_tolerance=15):
     """Get market median from scraped data with neighborhood matching."""
     if not os.path.exists(MARKET_DB):
         return None, 0, None
@@ -67,8 +67,8 @@ def get_market_median(city, size_sqm, address=None, size_tolerance=15):
     size_min = size_sqm - size_tolerance
     size_max = size_sqm + size_tolerance
     
-    # Extract neighborhood from auction address
-    auction_hood = extract_neighborhood(address) if address else None
+    # Use DB neighborhood (from geocoding) first, fallback to text extraction from address
+    auction_hood = db_neighborhood or (extract_neighborhood(address) if address else None)
     matched_neighborhood = None
     
     # Try city + neighborhood + size match (fuzzy)
@@ -217,9 +217,12 @@ def export_deals():
         # Get market data only for apartments
         market_avg = None
         discount = None
+        matched_hood = None
         
         if is_apartment and not is_partial:
-            market_median, sample_size, matched_hood = get_market_median(city, size, row['address'])
+            market_median, sample_size, matched_hood = get_market_median(
+                city, size, row['address'], db_neighborhood=row.get('neighborhood')
+            )
             if market_median and sample_size >= 3:
                 market_avg = round(market_median)
                 price_per_sqm = price / size
@@ -252,6 +255,7 @@ def export_deals():
             'auction_start': row['auction_start'],
             'auction_end': row['auction_end'],
             'url': f"https://sales.bcpea.org/properties/{row['id']}",
+            'matched_neighborhood': matched_hood,
             'partial_ownership': 'Дробна собственост' if is_partial else None,
             'score': 0  # Will calculate below
         }

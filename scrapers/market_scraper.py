@@ -99,14 +99,12 @@ USER_AGENTS = [
 
 HEADERS = {
     'User-Agent': USER_AGENTS[0],  # default; rotated per session below
-    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
-    'Accept-Language': 'bg-BG,bg;q=0.9,en-US;q=0.7,en;q=0.5',
-    'Accept-Encoding': 'gzip, deflate, br',
+    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+    'Accept-Language': 'bg-BG,bg;q=0.9,en;q=0.8',
+    # Note: intentionally omitting Accept-Encoding — imot.bg returns undecodable
+    # compressed/obfuscated responses when br/gzip is advertised from datacenter IPs.
     'Connection': 'keep-alive',
     'Upgrade-Insecure-Requests': '1',
-    'Sec-Fetch-Dest': 'document',
-    'Sec-Fetch-Mode': 'navigate',
-    'Sec-Fetch-Site': 'none',
 }
 
 # ============================================================================
@@ -545,9 +543,9 @@ def save_listings(conn: sqlite3.Connection, listings: List[Listing]) -> int:
         try:
             conn.execute("""
                 INSERT OR REPLACE INTO market_listings
-                (city, size_sqm, price_eur, price_per_sqm, rooms, source, scraped_at)
-                VALUES (?, ?, ?, ?, ?, ?, ?)
-            """, (l.city, l.size_sqm, l.price_eur, l.price_per_sqm, l.rooms, l.source, l.scraped_at))
+                (city, neighborhood, size_sqm, price_eur, price_per_sqm, rooms, source, scraped_at)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+            """, (l.city, l.neighborhood, l.size_sqm, l.price_eur, l.price_per_sqm, l.rooms, l.source, l.scraped_at))
             saved += 1
         except sqlite3.Error as e:
             logging.warning(f"DB insert error: {e}")

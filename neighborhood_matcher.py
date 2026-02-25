@@ -81,35 +81,78 @@ def normalize_neighborhood(text):
 def extract_neighborhood(address):
     """
     Extract neighborhood/district from Bulgarian address string.
-    
-    Handles patterns like:
-    - ж.к. Люлин
-    - жк Младост 1
-    - кв. Лозенец
-    - район Триадица
+
+    Handles:
+    - ж.к. Люлин / жк Младост / кв. Лозенец / район X / местност X
+    - imot.bg title pattern: "... в град София, Кръстова вада - ..."
+    - imot.bg URL slug: "grad-sofiya-lyulin-9-ul-..."
+    - Street names (lowest priority, often wrong)
     """
     if not address:
         return None
-    
+
     addr_lower = address.lower()
-    
-    # Patterns in order of specificity
+
+    # Patterns in order of specificity (explicit prefixes first)
     patterns = [
         r'ж\.?\s*к\.?\s*["\']?([а-яА-Я\s\d-]+)',  # ж.к. X
         r'жк\.?\s*["\']?([а-яА-Я\s\d-]+)',         # жк X
-        r'кв\.?\s*["\']?([а-яА-Я\s\d-]+)',         # кв. X
+        r'кв\.?\s*(?!м)(?!м²)["\']?([а-яА-Я\s\d-]+)',  # кв. X (but NOT кв.м = sq meters)
         r'квартал\s*["\']?([а-яА-Я\s-]+)',         # квартал X
         r'район\s*["\']?([а-яА-Я\s-]+)',           # район X
         r'местност\s*["\']?([а-яА-Я\s-]+)',        # местност X
-        r'ул\.\s*["\']?([а-яА-Я\s\d-]+)',          # ул. X (street)
     ]
-    
+
     for pattern in patterns:
         match = re.search(pattern, addr_lower)
         if match:
             hood = match.group(1).strip()
-            return normalize_neighborhood(hood)
-    
+            result = normalize_neighborhood(hood)
+            if result and len(result) > 2:
+                return result
+
+    # imot.bg title/H1 pattern: "... град [City], [Neighborhood]\n" or "... в [City], [Hood] -"
+    # e.g. "Продава 2-СТАЕН в град София, Кръстова вада - 79 кв.м"
+    city_comma = re.search(
+        r'(?:град|гр\.)\s+[а-яА-Я]+,\s*([А-Яа-я][а-яА-Я\s\d]+?)(?:\s*[-\n,]|\s+кв\.?|\s+м²|\s*$)',
+        address
+    )
+    if city_comma:
+        hood = city_comma.group(1).strip()
+        result = normalize_neighborhood(hood)
+        if result and len(result) > 2:
+            return result
+
+    # imot.bg URL slug: extract segment after city slug
+    # e.g. "grad-sofiya-lyulin-9-ul-asen-yordanov" -> "lyulin"
+    # Known city slugs to skip
+    _city_slugs = {'sofiya', 'plovdiv', 'varna', 'burgas', 'ruse', 'stara-zagora', 'pleven'}
+    slug_match = re.search(r'grad-([a-z]+(?:-[a-z]+)?)-', address)
+    if slug_match:
+        after_city = address[slug_match.end():]
+        # First hyphen-separated segment after city slug is usually the neighborhood
+        seg_match = re.match(r'([a-z][a-z-]+?)(?:-ul-|-bul-|-bl-|-\d+|-[a-z]{1,2}-|\s|$)', after_city)
+        if seg_match:
+            slug_hood = seg_match.group(1).replace('-', ' ')
+            # Transliterate common BG neighborhoods from Latin slugs
+            _slug_map = {
+                'lyulin': 'люлин', 'mladost': 'младост', 'lozenets': 'лозенец',
+                'druzhba': 'дружба', 'nadezhda': 'надежда', 'krasno selo': 'красно село',
+                'studentski': 'студентски', 'ovcha kupel': 'овча купел',
+                'vitosha': 'витоша', 'banishora': 'банишора', 'hipodruma': 'хиподрума',
+                'ilinden': 'илинден', 'poduyane': 'подуяне',
+                'trakia': 'тракия', 'chaika': 'чайка', 'vladislavovo': 'владиславово',
+                'levski': 'левски', 'krastova vada': 'кръстова вада',
+                'geo milev': 'гео милев', 'borovo': 'борово', 'iztok': 'изток',
+                'izgrev': 'изгрев', 'manastirski livadi': 'манастирски ливади',
+                'gotse delchev': 'гоце делчев', 'red light': None,  # skip bad matches
+            }
+            canonical = _slug_map.get(slug_hood)
+            if canonical:
+                return canonical
+            if len(slug_hood) > 3 and slug_hood not in _city_slugs:
+                return normalize_neighborhood(slug_hood)
+
     return None
 
 
