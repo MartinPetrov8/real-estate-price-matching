@@ -19,15 +19,22 @@ NEIGHBORHOOD_ALIASES = {
     'лозенец': ['лозенец', 'lozenec'],
     'дружба': ['дружба', 'druzhba'],
     'надежда': ['надежда', 'nadezhda'],
-    'красно село': ['красно село', 'krasno selo'],
-    'студентски': ['студентски', 'studentski'],
+    'красно село': ['красно село', 'krasno selo', 'красна поляна'],  # р-н Красна поляна contains кв. Красно село
+    'студентски': ['студентски', 'studentski', 'студентски град'],
     'овча купел': ['овча купел', 'ovcha kupel'],
     'витоша': ['витоша', 'vitosha'],
     'банишора': ['банишора', 'banishora'],
-    'хиподрума': ['хиподрума', 'hipodruma'],
+    'хиподрума': ['хиподрума', 'hipodruma', 'красна поляна'],  # also р-н Красна поляна
     'илинден': ['илинден', 'ilinden'],
-    'подуяне': ['подуяне', 'poduyane'],
+    'подуяне': ['подуяне', 'poduyane', 'слатина'],  # р-н Слатина contains подуяне
     'хаджи димитър': ['хаджи димитър', 'hadji dimitar'],
+    'сухата река': ['сухата река', 'suha reka'],
+    'гео милев': ['гео милев', 'geo milev'],
+    'слатина': ['слатина'],
+    'изгрев': ['изгрев', 'izgrev'],
+    'изток': ['изток', 'iztok'],
+    'оборище': ['оборище', 'oborishte'],
+    'яворов': ['яворов', 'yavorov'],
     'център': ['център', 'center', 'centar'],
     
     # Plovdiv
@@ -95,12 +102,13 @@ def extract_neighborhood(address):
 
     # Patterns in order of specificity (explicit prefixes first)
     patterns = [
-        r'ж\.?\s*к\.?\s*["\']?([а-яА-Я\s\d-]+)',  # ж.к. X
-        r'жк\.?\s*["\']?([а-яА-Я\s\d-]+)',         # жк X
-        r'кв\.?\s*(?!м)(?!м²)["\']?([а-яА-Я\s\d-]+)',  # кв. X (but NOT кв.м = sq meters)
-        r'квартал\s*["\']?([а-яА-Я\s-]+)',         # квартал X
-        r'район\s*["\']?([а-яА-Я\s-]+)',           # район X
-        r'местност\s*["\']?([а-яА-Я\s-]+)',        # местност X
+        r'ж\.?\s*к\.?\s*["\u201e\u201c]?([а-яА-Я\s\d-]+)',   # ж.к. X
+        r'жк\.?\s*["\u201e\u201c]?([а-яА-Я\s\d-]+)',          # жк X
+        r'кв\.?\s*(?!м)(?!м²)["\u201e\u201c]?([а-яА-Я\s\d-]+)',  # кв. X (not кв.м)
+        r'квартал\s*["\u201e\u201c]?([а-яА-Я\s-]+)',          # квартал X
+        r'р-н\s*["\u201e\u201c]?([а-яА-Я\s-]+)',              # р-н X (short for район)
+        r'район\s*["\u201e\u201c„]?([а-яА-Я\s-]+)',           # район X / район „X"
+        r'местност\s*["\u201e\u201c]?([а-яА-Я\s-]+)',         # местност X
     ]
 
     for pattern in patterns:
@@ -152,6 +160,30 @@ def extract_neighborhood(address):
                 return canonical
             if len(slug_hood) > 3 and slug_hood not in _city_slugs:
                 return normalize_neighborhood(slug_hood)
+
+    # Street → neighborhood lookup (for addresses with no ж.к./кв./район prefix)
+    # Maps well-known street name fragments to their Sofia/Varna/Plovdiv neighborhood
+    _street_hood_map = {
+        # Sofia
+        'патриарх евтимий': 'центъра',
+        'витошка': 'центъра',
+        'цар освободител': 'центъра',
+        'александър стамболийски': 'красно село',
+        'ивайло петров': 'люлин',
+        'светлоструй': 'красно село',
+        'роден кът': 'витоша',
+        # Varna
+        'паско желев': 'владислав варненчик',
+        'скопие': 'владислав варненчик',
+        'ростов': 'младост',
+        'д-р аршинкова': 'победа',
+        # Ruse
+        'рени': 'широк център',
+        'панайот волов': 'широк център',
+    }
+    for street_fragment, hood in _street_hood_map.items():
+        if street_fragment in addr_lower:
+            return normalize_neighborhood(hood)
 
     return None
 
