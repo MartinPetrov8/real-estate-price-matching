@@ -84,8 +84,12 @@ def get_market_median(city, size_sqm, address=None, db_neighborhood=None, size_t
     matched_neighborhood = None
     
     # Try city + neighborhood + size match (fuzzy)
+    # Strategy: try strict size first, then widen to all sizes in neighborhood.
+    # Neighborhood-level data at any size > city-wide data at matching size.
     if auction_hood:
-        # Pull all listings for this city+size with a neighborhood label
+        SIMILARITY_THRESHOLD = 0.7
+        
+        # Pass 1: neighborhood + size match (best: same area, same size)
         cursor.execute("""
             SELECT price_per_sqm, neighborhood FROM market_listings 
             WHERE city = ? AND neighborhood IS NOT NULL AND size_sqm BETWEEN ? AND ?
@@ -93,8 +97,6 @@ def get_market_median(city, size_sqm, address=None, db_neighborhood=None, size_t
         """, (city_clean, size_min, size_max))
         all_hood_results = cursor.fetchall()
 
-        # Score each listing by neighborhood similarity to auction address
-        SIMILARITY_THRESHOLD = 0.7
         matched_prices = []
         for price_per_sqm, market_hood in all_hood_results:
             sim = neighborhood_similarity(auction_hood, market_hood)
@@ -106,6 +108,26 @@ def get_market_median(city, size_sqm, address=None, db_neighborhood=None, size_t
             median = prices[len(prices) // 2]
             market_conn.close()
             return median, len(matched_prices), auction_hood, 'hood'
+        
+        # Pass 2: neighborhood match, ANY size (still better than city-wide)
+        cursor.execute("""
+            SELECT price_per_sqm, neighborhood FROM market_listings 
+            WHERE city = ? AND neighborhood IS NOT NULL
+            AND price_per_sqm IS NOT NULL AND price_per_sqm > 200 AND price_per_sqm < 5000
+        """, (city_clean,))
+        all_hood_any_size = cursor.fetchall()
+
+        matched_prices_wide = []
+        for price_per_sqm, market_hood in all_hood_any_size:
+            sim = neighborhood_similarity(auction_hood, market_hood)
+            if sim >= SIMILARITY_THRESHOLD:
+                matched_prices_wide.append(price_per_sqm)
+
+        if len(matched_prices_wide) >= 3:
+            prices = sorted(matched_prices_wide)
+            median = prices[len(prices) // 2]
+            market_conn.close()
+            return median, len(matched_prices_wide), auction_hood, 'hood'
     
     # Fallback: city + size match (no neighborhood)
     cursor.execute("""
