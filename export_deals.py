@@ -14,7 +14,7 @@ import os
 import re
 import sys
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), 'src', 'matching'))
-from neighborhood_matcher import extract_neighborhood, normalize_neighborhood
+from neighborhood_matcher import extract_neighborhood, normalize_neighborhood, neighborhood_similarity
 
 DB_PATH = "data/auctions.db"
 MARKET_DB = "data/market.db"
@@ -71,20 +71,29 @@ def get_market_median(city, size_sqm, address=None, size_tolerance=15):
     auction_hood = extract_neighborhood(address) if address else None
     matched_neighborhood = None
     
-    # Try city + neighborhood + size match first (most precise)
+    # Try city + neighborhood + size match (fuzzy)
     if auction_hood:
+        # Pull all listings for this city+size with a neighborhood label
         cursor.execute("""
             SELECT price_per_sqm, neighborhood FROM market_listings 
-            WHERE city = ? AND neighborhood = ? AND size_sqm BETWEEN ? AND ?
+            WHERE city = ? AND neighborhood IS NOT NULL AND size_sqm BETWEEN ? AND ?
             AND price_per_sqm IS NOT NULL AND price_per_sqm > 200 AND price_per_sqm < 5000
-        """, (city_clean, auction_hood, size_min, size_max))
-        results = cursor.fetchall()
-        
-        if len(results) >= 3:
-            prices = sorted([r[0] for r in results])
+        """, (city_clean, size_min, size_max))
+        all_hood_results = cursor.fetchall()
+
+        # Score each listing by neighborhood similarity to auction address
+        SIMILARITY_THRESHOLD = 0.7
+        matched_prices = []
+        for price_per_sqm, market_hood in all_hood_results:
+            sim = neighborhood_similarity(auction_hood, market_hood)
+            if sim >= SIMILARITY_THRESHOLD:
+                matched_prices.append(price_per_sqm)
+
+        if len(matched_prices) >= 3:
+            prices = sorted(matched_prices)
             median = prices[len(prices) // 2]
             market_conn.close()
-            return median, len(results), auction_hood
+            return median, len(matched_prices), auction_hood
     
     # Fallback: city + size match (no neighborhood)
     cursor.execute("""
