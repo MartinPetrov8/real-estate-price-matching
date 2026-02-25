@@ -49,9 +49,18 @@ else
     exit 1
 fi
 
+# Step 1.5: Geocode neighborhoods for new auctions (best-effort, non-blocking)
+log ""
+log "Step 1.5/5: Geocoding new auction neighborhoods..."
+if python3 scripts/geocode_neighborhoods.py 2>&1 | tail -10; then
+    success "Geocoding complete"
+else
+    warning "Geocoding failed (non-critical, continuing)"
+fi
+
 # Step 2: Scrape market prices (with resume support)
 log ""
-log "Step 2/4: Scraping market prices (market_scraper.py)..."
+log "Step 2/5: Scraping market prices (market_scraper.py)..."
 
 ATTEMPT=1
 RESUME_FLAG=""
@@ -86,7 +95,7 @@ fi
 
 # Step 3: Export deals
 log ""
-log "Step 3/4: Exporting deals (export_deals.py)..."
+log "Step 3/5: Exporting deals (export_deals.py)..."
 if python3 export_deals.py; then
     success "Export complete"
 else
@@ -97,7 +106,7 @@ fi
 
 # Step 4: Git push
 log ""
-log "Step 4/4: Pushing to GitHub..."
+log "Step 4/5: Pushing to GitHub..."
 if ! git diff --quiet || ! git diff --cached --quiet; then
     DATE_STR=$(date -u +"%Y-%m-%d")
     git add -A
