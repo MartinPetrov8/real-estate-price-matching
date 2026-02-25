@@ -32,11 +32,12 @@ from bs4 import BeautifulSoup
 # Neighborhood extraction (from project root)
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..'))
 try:
-    from neighborhood_matcher import extract_neighborhood
+    from neighborhood_matcher import extract_neighborhood, normalize_neighborhood
     _has_hood_matcher = True
 except ImportError:
     _has_hood_matcher = False
     def extract_neighborhood(text): return None
+    def normalize_neighborhood(text): return (text or '').lower().strip() or None
 
 # ============================================================================
 # CONFIG
@@ -428,74 +429,139 @@ def scrape_imot_city(session: requests.Session, url: str, city: str) -> Tuple[Li
 # OLX.BG SCRAPER
 # ============================================================================
 
-def scrape_olx(session: requests.Session, url: str, city: str) -> Tuple[List[Listing], bool, str]:
-    """Returns (listings, success, error_msg)"""
-    listings = []
+def get_olx_districts(session: requests.Session, city_url: str) -> Dict[str, str]:
+    """
+    Discover OLX district filter IDs from a city listing page.
+    Returns {district_id: district_name} dict.
+    """
+    html = fetch_page(session, city_url)
+    if not html:
+        return {}
+    soup = BeautifulSoup(html, 'html.parser')
+    districts = {}
+    for a in soup.find_all('a', href=True):
+        href = a['href']
+        m = re.search(r'district_id%5D=(\d+)', href)
+        if m:
+            did = m.group(1)
+            # Label is the link text, strip listing count in parens
+            label = re.sub(r'\s*\(\d+\)\s*$', '', a.get_text().strip())
+            if label and did not in districts:
+                districts[did] = label
+    return districts
 
+
+def scrape_olx_district(session: requests.Session, city_url: str, city: str,
+                         district_id: str, district_name: str) -> List[Listing]:
+    """Scrape one OLX district, returning listings with neighborhood pre-tagged."""
+    listings = []
+    neighborhood = normalize_neighborhood(district_name)
+    if not neighborhood:
+        neighborhood = district_name.lower().strip()
+
+    for page in range(1, 3):  # 2 pages per district (40-80 listings, enough)
+        if SHUTDOWN_REQUESTED:
+            break
+        sep = '&' if '?' in city_url else '?'
+        page_url = f"{city_url}{sep}search%5Bdistrict_id%5D={district_id}"
+        if page > 1:
+            page_url += f"&page={page}"
+
+        html = fetch_page(session, page_url)
+        if not html:
+            break
+
+        soup = BeautifulSoup(html, 'html.parser')
+        pattern = re.compile(r'(\d+)\s*кв\.м\s*-\s*([\d\.,]+)')
+        cards = soup.select('[data-cy="l-card"], .offer-wrapper, article')
+
+        items = cards if cards else [soup]  # fallback to full page
+        for item in items:
+            text = item.get_text()
+            match = pattern.search(text)
+            if not match:
+                continue
+            try:
+                size_sqm = float(match.group(1))
+                price_per_sqm = float(match.group(2).replace(',', '.'))
+                if not (15 <= size_sqm <= 500) or not (200 <= price_per_sqm <= 15000):
+                    continue
+                price_eur = round(size_sqm * price_per_sqm, 2)
+                listings.append(Listing(
+                    neighborhood=neighborhood, city=city, size_sqm=size_sqm,
+                    price_eur=price_eur, price_per_sqm=price_per_sqm,
+                    rooms=None, source='olx.bg',
+                    scraped_at=datetime.utcnow().isoformat()
+                ))
+            except (ValueError, TypeError):
+                continue
+
+        time.sleep(0.4)
+
+    return listings
+
+
+def scrape_olx(session: requests.Session, url: str, city: str) -> Tuple[List[Listing], bool, str]:
+    """
+    Scrape OLX per-district for 100% neighborhood coverage.
+    Discovers district IDs dynamically from the city page, then scrapes each.
+    Falls back to city-level scrape if district discovery fails.
+    """
+    # Step 1: discover districts
+    districts = get_olx_districts(session, url)
+    if not districts:
+        logging.warning(f"  OLX district discovery failed for {city}, falling back to city-level")
+        return _scrape_olx_city_fallback(session, url, city)
+
+    logging.info(f"  OLX: {len(districts)} districts found for {city}")
+    all_listings = []
+
+    for did, dname in districts.items():
+        if SHUTDOWN_REQUESTED:
+            break
+        district_listings = scrape_olx_district(session, url, city, did, dname)
+        all_listings.extend(district_listings)
+        logging.debug(f"    District {dname!r}: {len(district_listings)} listings")
+
+    if len(all_listings) < MIN_LISTINGS_PER_SOURCE:
+        return all_listings, False, f"Too few listings after district scrape: {len(all_listings)}"
+
+    return all_listings, True, ""
+
+
+def _scrape_olx_city_fallback(session: requests.Session, url: str, city: str) -> Tuple[List[Listing], bool, str]:
+    """Original city-level OLX scrape without neighborhood tagging (fallback only)."""
+    listings = []
     for page in range(1, 4):
         if SHUTDOWN_REQUESTED:
             return listings, False, "Interrupted by shutdown signal"
-
         page_url = url if page == 1 else f"{url}?page={page}"
         html = fetch_page(session, page_url)
         if not html:
             if page == 1:
                 return [], False, "Failed to fetch page 1"
             break
-
         soup = BeautifulSoup(html, 'html.parser')
-
-        # Try card-level parsing first (gives us title for neighborhood extraction)
-        cards = soup.select('[data-cy="l-card"], .offer-wrapper, article')
-        if cards:
-            pattern = re.compile(r'(\d+)\s*кв\.м\s*-\s*([\d\.,]+)')
-            for card in cards:
-                card_text = card.get_text()
-                match = pattern.search(card_text)
-                if not match:
+        text = soup.get_text()
+        pattern = re.compile(r'(\d+)\s*кв\.м\s*-\s*([\d\.,]+)')
+        for match in pattern.finditer(text):
+            try:
+                size_sqm = float(match.group(1))
+                price_per_sqm = float(match.group(2).replace(',', '.'))
+                if not (15 <= size_sqm <= 500) or not (200 <= price_per_sqm <= 15000):
                     continue
-                try:
-                    size_sqm = float(match.group(1))
-                    price_per_sqm = float(match.group(2).replace(',', '.'))
-                    if not (15 <= size_sqm <= 500) or not (200 <= price_per_sqm <= 15000):
-                        continue
-                    price_eur = round(size_sqm * price_per_sqm, 2)
-                    # Extract neighborhood from card title/location text
-                    neighborhood = extract_neighborhood(card_text)
-                    listings.append(Listing(
-                        neighborhood=neighborhood, city=city, size_sqm=size_sqm,
-                        price_eur=price_eur, price_per_sqm=price_per_sqm,
-                        rooms=None, source='olx.bg',
-                        scraped_at=datetime.utcnow().isoformat()
-                    ))
-                except (ValueError, TypeError):
-                    continue
-        else:
-            # Fallback: full-page regex (no neighborhood)
-            text = soup.get_text()
-            pattern = re.compile(r'(\d+)\s*кв\.м\s*-\s*([\d\.,]+)')
-            for match in pattern.finditer(text):
-                try:
-                    size_sqm = float(match.group(1))
-                    price_per_sqm = float(match.group(2).replace(',', '.'))
-                    if not (15 <= size_sqm <= 500) or not (200 <= price_per_sqm <= 15000):
-                        continue
-                    price_eur = round(size_sqm * price_per_sqm, 2)
-                    listings.append(Listing(
-                        neighborhood=None, city=city, size_sqm=size_sqm,
-                        price_eur=price_eur, price_per_sqm=price_per_sqm,
-                        rooms=None, source='olx.bg',
-                        scraped_at=datetime.utcnow().isoformat()
-                    ))
-                except (ValueError, TypeError):
-                    continue
-
+                listings.append(Listing(
+                    neighborhood=None, city=city, size_sqm=size_sqm,
+                    price_eur=round(size_sqm * price_per_sqm, 2),
+                    price_per_sqm=price_per_sqm, rooms=None, source='olx.bg',
+                    scraped_at=datetime.utcnow().isoformat()
+                ))
+            except (ValueError, TypeError):
+                continue
         if page < 3:
             time.sleep(0.5)
-
     if len(listings) < MIN_LISTINGS_PER_SOURCE:
-        return listings, False, f"Too few listings: {len(listings)} < {MIN_LISTINGS_PER_SOURCE}"
-
+        return listings, False, f"Too few listings: {len(listings)}"
     return listings, True, ""
 
 # ============================================================================
