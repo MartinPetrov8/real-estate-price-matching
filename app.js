@@ -115,6 +115,7 @@
         const bcpeaId = deal.bcpea_id || deal.id;
         const auctionPrice = deal.auction_price || deal.effective_price || deal.price || 0;
         const comparables = deal.comparables_count || deal.market_sample_size || 0;
+        const comparablesLevel = deal.comparables_level || null; // 'hood', 'city_size', 'city', null
         const hasReliableMarketData = comparables > 0 && deal.market_price;
         const marketPrice = hasReliableMarketData ? deal.market_price : null;
         const discountPct = deal.discount_pct !== undefined ? deal.discount_pct : (deal.discount || 0);
@@ -218,7 +219,7 @@
                     ${isHouse && plotSqm ? '<div class="info-item"><span class="info-icon">🌳</span><div class="info-content"><span class="info-label">Парцел</span><span class="info-value">'+plotSqm+' м²</span></div></div>' : ''}
                     <div class="info-item"><span class="info-icon">🏢</span><div class="info-content"><span class="info-label">Етаж</span><span class="info-value">${floor || 'N/A'}</span></div></div>
                     ${roomTypeDisplay ? '<div class="info-item"><span class="info-icon">🚪</span><div class="info-content"><span class="info-label">Тип</span><span class="info-value">'+roomTypeDisplay+'</span></div></div>' : ''}
-                    <div class="info-item"><span class="info-icon">📊</span><div class="info-content"><span class="info-label">Сравнения</span><span class="info-value">${comparables > 0 ? comparables + ' имота' : 'Няма данни'}</span></div></div>
+                    <div class="info-item"><span class="info-icon">📊</span><div class="info-content"><span class="info-label">Сравнения</span><span class="info-value">${comparables > 0 ? comparables + ' имота' + (comparablesLevel === 'hood' ? '' : comparablesLevel === 'city_size' ? ' (в ' + city + ')' : comparablesLevel === 'city' ? ' (в ' + city + ', без размер)' : '') : 'Няма данни'}</span></div></div>
                 </div>
                 <div class="location-section">
                     <span class="location-icon">📍</span>
@@ -497,6 +498,7 @@ async function load() {
         const bcpeaId = d.bcpea_id || d.id;
         const auctionPrice = d.auction_price || d.effective_price || d.price || 0;
         const modalComparables = d.comparables_count || d.market_sample_size || 0;
+        const modalComparablesLevel = d.comparables_level || null;
         const modalHasMarketData = modalComparables > 0 && d.market_price;
         const marketPrice = modalHasMarketData ? d.market_price : null;
         const discountPct = d.discount_pct !== undefined ? d.discount_pct : (d.discount || 0);
@@ -570,7 +572,7 @@ async function load() {
                          <li>⚠ Тръжната цена е с <strong>${fmtPrice(auctionPrice - marketPrice)}</strong> по-висока от пазарната</li>`
                     ) : '<li>⚠ Няма достатъчно данни за пазарна оценка</li>'}
                     ${d.neighborhood_range ? `<li>✓ Ценови диапазон в района: ${escHtml(d.neighborhood_range)}</li>` : ''}
-                    ${comparables > 0 ? `<li>✓ Базирано на ${comparables} сравними обяви</li>` : '<li>⚠ Няма достатъчно сравними обяви за надеждна оценка</li>'}
+                    ${comparables > 0 ? `<li>✓ Базирано на ${comparables} сравними обяви${modalComparablesLevel === 'hood' ? ' в квартала' : modalComparablesLevel === 'city_size' ? ' в ' + city + ' (подобен размер)' : modalComparablesLevel === 'city' ? ' в ' + city + ' (целия град — без квартал)' : ''}</li>` : '<li>⚠ Няма достатъчно сравними обяви за надеждна оценка</li>'}
                 </ul>
             </div>
             <div style="margin-bottom:24px;">

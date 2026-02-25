@@ -56,9 +56,11 @@ TYPE_MAP = {
 
 
 def get_market_median(city, size_sqm, address=None, db_neighborhood=None, size_tolerance=15):
-    """Get market median from scraped data with neighborhood matching."""
+    """Get market median from scraped data with neighborhood matching.
+    Returns (median, count, matched_hood, match_level) where match_level is 'hood', 'city_size', or 'city'.
+    """
     if not os.path.exists(MARKET_DB):
-        return None, 0, None
+        return None, 0, None, None
     
     market_conn = sqlite3.connect(MARKET_DB)
     cursor = market_conn.cursor()
@@ -93,7 +95,7 @@ def get_market_median(city, size_sqm, address=None, db_neighborhood=None, size_t
             prices = sorted(matched_prices)
             median = prices[len(prices) // 2]
             market_conn.close()
-            return median, len(matched_prices), auction_hood
+            return median, len(matched_prices), auction_hood, 'hood'
     
     # Fallback: city + size match (no neighborhood)
     cursor.execute("""
@@ -107,7 +109,7 @@ def get_market_median(city, size_sqm, address=None, db_neighborhood=None, size_t
         prices = sorted([r[0] for r in results])
         median = prices[len(prices) // 2]
         market_conn.close()
-        return median, len(results), None
+        return median, len(results), None, 'city_size'
     
     # Final fallback: city only (with outlier filtering)
     cursor.execute("""
@@ -120,10 +122,10 @@ def get_market_median(city, size_sqm, address=None, db_neighborhood=None, size_t
         prices = sorted([r[0] for r in results])
         median = prices[len(prices) // 2]
         market_conn.close()
-        return median, len(results), None
+        return median, len(results), None, 'city'
     
     market_conn.close()
-    return None, 0, None
+    return None, 0, None, None
 
 
 def is_expired(auction_end):
@@ -218,9 +220,10 @@ def export_deals():
         market_avg = None
         discount = None
         matched_hood = None
+        match_level = None
         
         if is_apartment and not is_partial:
-            market_median, sample_size, matched_hood = get_market_median(
+            market_median, sample_size, matched_hood, match_level = get_market_median(
                 city, size, row['address'], db_neighborhood=row.get('neighborhood')
             )
             if market_median and sample_size >= 3:
@@ -248,6 +251,7 @@ def export_deals():
             'market_price': round(market_avg * size) if market_avg and size else None,
             'savings_eur': round((market_avg * size) - price) if market_avg and size and price else None,
             'comparables_count': sample_size if market_avg else 0,
+            'comparables_level': match_level,  # 'hood', 'city_size', 'city', or None
             'discount': discount if not is_partial else None,
             'property_type': frontend_type,
             'floor': row.get('floor'),
