@@ -18,6 +18,16 @@ from neighborhood_matcher import extract_neighborhood, normalize_neighborhood, n
 
 DB_PATH = "data/auctions.db"
 MARKET_DB = "data/market.db"
+
+
+def _title_hood(name):
+    """Title-case a neighborhood name, handling hyphens: 'здравец-север' → 'Здравец-Север'."""
+    if not name:
+        return name
+    return '-'.join(
+        ' '.join(w.capitalize() for w in part.split())
+        for part in name.strip().split('-')
+    )
 OUTPUT_PATH = "deals.json"
 
 # Property types that are apartments (for market comparison)
@@ -241,7 +251,7 @@ def export_deals():
         deal = {
             'id': str(row['id']),
             'city': city,
-            'neighborhood': (row['neighborhood'] or '').lower().strip() or None,
+            'neighborhood': _title_hood((row['neighborhood'] or '').strip()) or None,
             'address': row['address'] or '',
             'price': round(price),
             'effective_price': round(price),
@@ -259,7 +269,7 @@ def export_deals():
             'auction_start': row['auction_start'],
             'auction_end': row['auction_end'],
             'url': f"https://sales.bcpea.org/properties/{row['id']}",
-            'matched_neighborhood': matched_hood,
+            'matched_neighborhood': _title_hood(matched_hood) if matched_hood else None,
             'partial_ownership': 'Дробна собственост' if is_partial else None,
             'score': 0  # Will calculate below
         }
