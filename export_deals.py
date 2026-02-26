@@ -65,97 +65,137 @@ TYPE_MAP = {
 }
 
 
-def get_market_median(city, size_sqm, address=None, db_neighborhood=None, size_tolerance=15):
+# Size band boundaries derived from auction property_type distributions.
+# Used to restrict market comparables to the same room-count tier.
+# Slightly wider than the raw avg to avoid dropping too many listings.
+ROOM_TYPE_SIZE_BANDS = {
+    'едностаен':   (15,  55),   # 1-bed
+    'двустаен':    (40,  90),   # 2-bed
+    'тристаен':    (65, 130),   # 3-bed
+    'четиристаен': (100, 200),  # 4-bed
+    'многостаен':  (100, 600),  # 4+ bed
+}
+
+def _room_type_band(property_type_bg: str):
+    """Return (min_sqm, max_sqm) size band for a Bulgarian property type string, or None."""
+    if not property_type_bg:
+        return None
+    pt = property_type_bg.lower()
+    for key, band in ROOM_TYPE_SIZE_BANDS.items():
+        if key in pt:
+            return band
+    return None
+
+
+def get_market_median(city, size_sqm, address=None, db_neighborhood=None,
+                      size_tolerance=10, property_type_bg=None):
     """Get market median from scraped data with neighborhood matching.
-    Returns (median, count, matched_hood, match_level) where match_level is 'hood', 'city_size', or 'city'.
+    
+    Matching priority:
+      1. Hood + size ±10sqm + room-type band  (tightest)
+      2. Hood + size ±10sqm                   (no room filter)
+      3. Hood + room-type band                (any size in neighborhood)
+      4. Hood + any size                      (neighborhood only)
+      5. City + size ±10sqm + room-type band  (city fallback, still typed)
+      6. City + size ±10sqm                   (city fallback)
+
+    Returns (median, count, matched_hood, match_level)
+    match_level: 'hood' | 'city_size' | 'city'
     """
     if not os.path.exists(MARKET_DB):
         return None, 0, None, None
-    
+
     market_conn = sqlite3.connect(MARKET_DB)
     cursor = market_conn.cursor()
-    
+
     city_clean = city.replace('гр. ', '').replace('с. ', '').strip() if city else ''
     size_min = size_sqm - size_tolerance
     size_max = size_sqm + size_tolerance
+    room_band = _room_type_band(property_type_bg)  # (min_sqm, max_sqm) or None
     
     # Use DB neighborhood (from geocoding) first, fallback to text extraction from address
     auction_hood = db_neighborhood or (extract_neighborhood(address) if address else None)
-    matched_neighborhood = None
-    
-    # Try city + neighborhood + size match (fuzzy)
-    # Strategy: try strict size first, then widen to all sizes in neighborhood.
-    # Neighborhood-level data at any size > city-wide data at matching size.
-    if auction_hood:
-        SIMILARITY_THRESHOLD = 0.7
-        
-        # Pass 1: neighborhood + size match (best: same area, same size)
-        cursor.execute("""
-            SELECT price_per_sqm, neighborhood FROM market_listings 
-            WHERE city = ? AND neighborhood IS NOT NULL AND size_sqm BETWEEN ? AND ?
-            AND price_per_sqm IS NOT NULL AND price_per_sqm > 200 AND price_per_sqm < 5000
-        """, (city_clean, size_min, size_max))
-        all_hood_results = cursor.fetchall()
 
-        matched_prices = []
-        for price_per_sqm, market_hood in all_hood_results:
-            sim = neighborhood_similarity(auction_hood, market_hood)
-            if sim >= SIMILARITY_THRESHOLD:
-                matched_prices.append(price_per_sqm)
+    SIMILARITY_THRESHOLD = 0.7
+    MIN_COMPS = 3
 
-        if len(matched_prices) >= 3:
-            prices = sorted(matched_prices)
-            median = prices[len(prices) // 2]
-            market_conn.close()
-            return median, len(matched_prices), auction_hood, 'hood'
-        
-        # Pass 2: neighborhood match, ANY size (still better than city-wide)
-        cursor.execute("""
-            SELECT price_per_sqm, neighborhood FROM market_listings 
+    def _fetch_hood(size_clause, size_params):
+        """Fetch all market listings for this city with a neighborhood, apply size filter."""
+        cursor.execute(f"""
+            SELECT price_per_sqm, neighborhood FROM market_listings
             WHERE city = ? AND neighborhood IS NOT NULL
             AND price_per_sqm IS NOT NULL AND price_per_sqm > 200 AND price_per_sqm < 5000
-        """, (city_clean,))
-        all_hood_any_size = cursor.fetchall()
+            {size_clause}
+        """, [city_clean] + size_params)
+        return cursor.fetchall()
 
-        matched_prices_wide = []
-        for price_per_sqm, market_hood in all_hood_any_size:
-            sim = neighborhood_similarity(auction_hood, market_hood)
-            if sim >= SIMILARITY_THRESHOLD:
-                matched_prices_wide.append(price_per_sqm)
+    def _match_hood(rows):
+        """Filter rows by neighborhood similarity, return matched prices."""
+        return [pps for pps, mhood in rows
+                if neighborhood_similarity(auction_hood, mhood) >= SIMILARITY_THRESHOLD]
 
-        if len(matched_prices_wide) >= 3:
-            prices = sorted(matched_prices_wide)
-            median = prices[len(prices) // 2]
+    def _median(prices):
+        s = sorted(prices)
+        return s[len(s) // 2]
+
+    if auction_hood:
+        # Pass 1: hood + size ±10sqm + room-type band (tightest — all three constraints)
+        if room_band:
+            band_min = max(size_min, room_band[0])
+            band_max = min(size_max, room_band[1])
+            rows = _fetch_hood("AND size_sqm BETWEEN ? AND ?", [band_min, band_max])
+            prices = _match_hood(rows)
+            if len(prices) >= MIN_COMPS:
+                market_conn.close()
+                return _median(prices), len(prices), auction_hood, 'hood'
+
+        # Pass 2: hood + size ±10sqm (no room filter)
+        rows = _fetch_hood("AND size_sqm BETWEEN ? AND ?", [size_min, size_max])
+        prices = _match_hood(rows)
+        if len(prices) >= MIN_COMPS:
             market_conn.close()
-            return median, len(matched_prices_wide), auction_hood, 'hood'
-    
-    # Fallback: city + size match (no neighborhood)
+            return _median(prices), len(prices), auction_hood, 'hood'
+
+        # Pass 3: hood + room-type band, any size in neighborhood
+        if room_band:
+            rows = _fetch_hood("AND size_sqm BETWEEN ? AND ?", list(room_band))
+            prices = _match_hood(rows)
+            if len(prices) >= MIN_COMPS:
+                market_conn.close()
+                return _median(prices), len(prices), auction_hood, 'hood'
+
+        # Pass 4: hood + any size (neighborhood signal is still better than city-wide)
+        rows = _fetch_hood("", [])
+        prices = _match_hood(rows)
+        if len(prices) >= MIN_COMPS:
+            market_conn.close()
+            return _median(prices), len(prices), auction_hood, 'hood'
+
+    # Pass 5: city + size ±10sqm + room-type band (city fallback, typed)
+    if room_band:
+        band_min = max(size_min, room_band[0])
+        band_max = min(size_max, room_band[1])
+        cursor.execute("""
+            SELECT price_per_sqm FROM market_listings
+            WHERE city = ? AND size_sqm BETWEEN ? AND ?
+            AND price_per_sqm IS NOT NULL AND price_per_sqm > 200 AND price_per_sqm < 5000
+        """, (city_clean, band_min, band_max))
+        results = [r[0] for r in cursor.fetchall()]
+        if len(results) >= MIN_COMPS:
+            market_conn.close()
+            return _median(results), len(results), None, 'city_size'
+
+    # Pass 6: city + size ±10sqm
     cursor.execute("""
-        SELECT price_per_sqm FROM market_listings 
+        SELECT price_per_sqm FROM market_listings
         WHERE city = ? AND size_sqm BETWEEN ? AND ?
         AND price_per_sqm IS NOT NULL AND price_per_sqm > 200 AND price_per_sqm < 5000
     """, (city_clean, size_min, size_max))
-    results = cursor.fetchall()
-    
-    if len(results) >= 3:
-        prices = sorted([r[0] for r in results])
-        median = prices[len(prices) // 2]
+    results = [r[0] for r in cursor.fetchall()]
+    if len(results) >= MIN_COMPS:
         market_conn.close()
-        return median, len(results), None, 'city_size'
-    
-    # Final fallback: city only (with outlier filtering)
-    cursor.execute("""
-        SELECT price_per_sqm FROM market_listings 
-        WHERE city = ? AND price_per_sqm IS NOT NULL AND price_per_sqm > 200 AND price_per_sqm < 5000
-    """, (city_clean,))
-    results = cursor.fetchall()
-    
-    if len(results) >= 3:
-        prices = sorted([r[0] for r in results])
-        median = prices[len(prices) // 2]
-        market_conn.close()
-        return median, len(results), None, 'city'
-    
+        return _median(results), len(results), None, 'city_size'
+
     market_conn.close()
     return None, 0, None, None
 
@@ -256,7 +296,8 @@ def export_deals():
         
         if is_apartment and not is_partial:
             market_median, sample_size, matched_hood, match_level = get_market_median(
-                city, size, row['address'], db_neighborhood=row.get('neighborhood')
+                city, size, row['address'], db_neighborhood=row.get('neighborhood'),
+                property_type_bg=row.get('property_type')
             )
             if market_median and sample_size >= 3:
                 market_avg = round(market_median)
