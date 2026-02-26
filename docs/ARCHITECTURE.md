@@ -76,13 +76,17 @@ text search (`/nedvizhimi-imoti/prodazhbi/q-{slug}/`):
 ### 4. Export Deals (`export_deals.py`)
 - **Input:** `auctions.db` + `market.db`
 - **Output:** `deals.json`
-- **Price comparison logic (in priority order):**
-  1. **Hood + size match** — neighborhood similarity ≥ 0.7, size ±15sqm (best)
-  2. **Hood match, any size** — neighborhood similarity ≥ 0.7, all sizes (still hood-level)
-  3. **City + size fallback** — no neighborhood match, size ±15sqm (labeled `city_size`)
-  4. **City-wide fallback** — no neighborhood, any size (labeled `city`, last resort)
-- **`comparables_level` field:** `hood` | `city_size` | `city` — shown in frontend UI
-- **Records:** ~500 deals
+- **Price comparison logic — 6-pass priority (rooms first, then size):**
+  1. **Hood + rooms + ±10sqm** — same neighborhood, same room type, similar size (tightest)
+  2. **Hood + ±10sqm** — same neighborhood, similar size, no room filter
+  3. **Hood + rooms** — same neighborhood, same room type, any size (handles 40sqm vs 70sqm 1-beds)
+  4. **Hood only** — same neighborhood, any size/rooms
+  5. **City + rooms + ±10sqm** — city fallback, room-typed
+  6. **City + ±10sqm** — city fallback, size only
+- **Room types** derived from Bulgarian `property_type` field (Двустаен=2-bed, etc.) — `rooms` DB field is sparse
+- **Size bands per room type:** 1-bed 15–55m², 2-bed 40–90m², 3-bed 65–130m², 4-bed+ 100–200m²
+- **`comparables_level` field:** `hood` | `city_size` — shown in frontend UI
+- **Records:** ~490 deals
 
 ## Database Schema
 
