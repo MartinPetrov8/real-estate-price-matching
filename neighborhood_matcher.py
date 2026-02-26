@@ -162,28 +162,37 @@ def extract_neighborhood(address):
                 return normalize_neighborhood(slug_hood)
 
     # Street → neighborhood lookup (for addresses with no ж.к./кв./район prefix)
-    # Maps well-known street name fragments to their Sofia/Varna/Plovdiv neighborhood
-    _street_hood_map = {
-        # Sofia
-        'патриарх евтимий': 'центъра',
-        'витошка': 'центъра',
-        'цар освободител': 'центъра',
-        'александър стамболийски': 'красно село',
-        'ивайло петров': 'люлин',
-        'светлоструй': 'красно село',
-        'роден кът': 'витоша',
-        # Varna
-        'паско желев': 'владислав варненчик',
-        'скопие': 'владислав варненчик',
-        'ростов': 'младост',
-        'д-р аршинкова': 'победа',
-        # Ruse
-        'рени': 'широк център',
-        'панайот волов': 'широк център',
-    }
-    for street_fragment, hood in _street_hood_map.items():
+    # City-scoped to avoid false matches (ул. Македония exists in many Bulgarian cities).
+    # Format: (street_fragment, neighborhood, [city_fragments_that_must_match])
+    # city_fragments=[] means any city (street is sufficiently unique)
+    _street_hood_map = [
+        # Sofia — unique enough, unscoped
+        ('патриарх евтимий',        'центъра',              []),
+        ('витошка',                 'центъра',              []),
+        ('цар освободител',         'центъра',              []),
+        ('александър стамболийски', 'красно село',          []),
+        ('ивайло петров',           'люлин',                []),
+        ('светлоструй',             'красно село',          []),
+        ('роден кът',               'витоша',               []),
+        # Varna — scoped to варна
+        ('паско желев',             'владислав варненчик',  ['варна']),
+        ('скопие',                  'владислав варненчик',  ['варна']),
+        ('ростов',                  'младост',              ['варна']),
+        ('д-р аршинкова',           'победа',               ['варна']),
+        ('роза',                    'цветен квартал',       ['варна']),
+        # Plovdiv — scoped to пловдив
+        ('стефан стамболов',        'южен',                 ['пловдив']),
+        ('македония',               'южен',                 ['пловдив']),
+        ('босилек',                 'изгрев',               ['пловдив']),
+        ('лотос',                   'изгрев',               ['пловдив']),
+        # Ruse — scoped to русе
+        ('рени',                    'широк център',         ['русе']),
+        ('панайот волов',           'широк център',         ['русе']),
+    ]
+    for street_fragment, hood, city_scope in _street_hood_map:
         if street_fragment in addr_lower:
-            return normalize_neighborhood(hood)
+            if not city_scope or any(c in addr_lower for c in city_scope):
+                return normalize_neighborhood(hood)
 
     return None
 
