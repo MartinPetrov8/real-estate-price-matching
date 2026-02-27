@@ -30,6 +30,14 @@ from urllib.parse import urljoin
 import requests
 from bs4 import BeautifulSoup
 
+import sys as _sys, os as _os
+_sys.path.insert(0, _os.path.join(_os.path.dirname(__file__), '..', '..'))
+try:
+    from security.scraper_sanitize import sanitize_text
+except ImportError:
+    def sanitize_text(text, field_name="field"):
+        return str(text) if text is not None else ""
+
 # ============================================================================
 # CONFIG
 # ============================================================================
@@ -271,7 +279,7 @@ def parse_imot_listing(session: requests.Session, url: str, city: str) -> Option
             rooms = 4
         
         return Listing(
-            neighborhood=None, city=city, size_sqm=size_sqm,
+            neighborhood=None, city=sanitize_text(city, "city"), size_sqm=size_sqm,
             price_eur=price_eur, price_per_sqm=price_per_sqm,
             rooms=rooms, source='imot.bg',
             scraped_at=datetime.utcnow().isoformat()

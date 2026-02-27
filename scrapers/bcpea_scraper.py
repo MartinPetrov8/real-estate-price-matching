@@ -24,6 +24,13 @@ import sys
 import socket
 import time
 
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..'))
+try:
+    from security.scraper_sanitize import sanitize_text
+except ImportError:
+    def sanitize_text(text, field_name="field"):
+        return str(text) if text is not None else ""
+
 BASE_URL = "https://sales.bcpea.org"
 DB_PATH = "data/auctions.db"
 
@@ -98,17 +105,17 @@ def parse_property_detail(html_content, prop_id):
     # The property type appears in the detail section, after the search form
     type_match = re.search(r'</ul>\s*</div>\s*<div class="title">([^<]+)</div>\s*<div class="date">', html_content, re.DOTALL)
     if type_match:
-        data['property_type'] = type_match.group(1).strip()
+        data['property_type'] = sanitize_text(type_match.group(1).strip(), "property_type")
     else:
         # Fallback: look for property type near "Публикувано"
         type_match = re.search(r'<div class="title">([^<]*(?:апартамент|къща|гараж|вила|парцел|земя|магазин|офис|ателие|склад|земеделска)[^<]*)</div>\s*<div class="(?:date|category)">', html_content, re.I)
         if type_match:
-            data['property_type'] = type_match.group(1).strip()
+            data['property_type'] = sanitize_text(type_match.group(1).strip(), "property_type")
     
     # City
     city_match = re.search(r'(гр\.\s*[А-Яа-я\s-]+|с\.\s*[А-Яа-я\s-]+)', html_content)
     if city_match:
-        data['city'] = city_match.group(1).strip().rstrip(',').rstrip('<')
+        data['city'] = sanitize_text(city_match.group(1).strip().rstrip(',').rstrip('<'), "city")
     
     # Address - extract from <div class="label">Адрес</div><div class="info">...</div> pattern
     addr_match = re.search(
@@ -119,7 +126,7 @@ def parse_property_detail(html_content, prop_id):
         addr_raw = re.sub(r'<[^>]+>', '', addr_match.group(1))  # strip inner tags
         addr_raw = html.unescape(addr_raw).strip()
         if re.search(r'[А-Яа-я]', addr_raw) and len(addr_raw) > 3:
-            data['address'] = addr_raw
+            data['address'] = sanitize_text(addr_raw, "address")
         else:
             data['address'] = None
     else:

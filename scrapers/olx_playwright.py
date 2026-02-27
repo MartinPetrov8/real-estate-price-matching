@@ -12,6 +12,13 @@ from datetime import datetime
 from dataclasses import dataclass
 from typing import Optional, List
 
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..'))
+try:
+    from security.scraper_sanitize import sanitize_text
+except ImportError:
+    def sanitize_text(text, field_name="field"):
+        return str(text) if text is not None else ""
+
 try:
     from playwright.sync_api import sync_playwright
 except ImportError:
@@ -100,7 +107,7 @@ def scrape_olx_city(page, city, url):
                 neighborhood = None
                 loc_match = re.search(r'гр\.\s*\S+,\s*([^-]+?)\s*-', text)
                 if loc_match:
-                    neighborhood = loc_match.group(1).strip()
+                    neighborhood = sanitize_text(loc_match.group(1).strip(), "neighborhood")
                 
                 # Rooms from title
                 rooms = None
