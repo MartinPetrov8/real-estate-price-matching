@@ -183,7 +183,7 @@
                     </div>
                     <div class="discount-badge">
                         <div class="discount-value">${discountPct >= 0 ? '-' : '+'}${Math.abs(Math.round(discountPct))}%</div>
-                        ${discountPct >= 0 ? `<div class="discount-amount">vs ${fmtSqm(marketPrice, sqm)}</div>` : ''}
+                        ${discountPct >= 0 ? `<div class="discount-amount">пазарна ${fmtSqm(marketPrice, sqm)}</div>` : ''}
                     </div>
                 </div>
             </div>
