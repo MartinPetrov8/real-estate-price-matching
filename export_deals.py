@@ -403,9 +403,14 @@ def main():
         for d in valid_deals[:5]:
             print(f"  {d['city']}: €{d['price']:,} (-{d['discount']:.0f}%)")
     
-    # Write JSON
+    # Write JSON — include metadata for UI trust signals
+    output = {
+        'generated_at': datetime.utcnow().strftime('%d.%m.%Y'),
+        'sources': ['imot.bg', 'olx.bg'],
+        'deals': deals,
+    }
     with open(OUTPUT_PATH, 'w', encoding='utf-8') as f:
-        json.dump(deals, f, ensure_ascii=False, indent=2)
+        json.dump(output, f, ensure_ascii=False, indent=2)
     
     print(f"\n✓ Exported {len(deals)} deals to {OUTPUT_PATH}")
     return deals

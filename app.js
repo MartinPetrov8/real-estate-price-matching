@@ -187,22 +187,22 @@
                 <div class="price-section">
                     <div class="price-block price-market">
                         <div class="price-block-label">Пазарна цена</div>
-                        <div class="price-block-value">${fmtPrice(marketPrice)}</div>
-                        <div class="price-block-sub">${fmtSqm(marketPrice, sqm)}</div>
+                        <div class="price-block-sqm">${fmtSqm(marketPrice, sqm)}</div>
+                        <div class="price-block-total">${fmtPrice(marketPrice)}</div>
                     </div>
                     <div class="price-arrow">→</div>
                     <div class="price-block price-auction">
                         <div class="price-block-label">Тръжна цена</div>
-                        <div class="price-block-value">${fmtPrice(auctionPrice)}</div>
-                        <div class="price-block-sub">${fmtSqm(auctionPrice, sqm)}</div>
+                        <div class="price-block-sqm">${fmtSqm(auctionPrice, sqm)}</div>
+                        <div class="price-block-total">${fmtPrice(auctionPrice)}</div>
                     </div>
                 </div>
                 ` : `
                 <div class="price-section">
                     <div class="price-block price-auction" style="flex:1">
                         <div class="price-block-label">Тръжна цена</div>
-                        <div class="price-block-value">${fmtPrice(auctionPrice)}</div>
-                        <div class="price-block-sub">${fmtSqm(auctionPrice, sqm)}</div>
+                        <div class="price-block-sqm">${fmtSqm(auctionPrice, sqm)}</div>
+                        <div class="price-block-total">${fmtPrice(auctionPrice)}</div>
                     </div>
                 </div>
                 <div style="background:var(--warning-light, #FFF8E1);padding:8px 12px;border-radius:var(--radius);margin-top:8px;font-size:13px;color:var(--warning, #F57C00);">
@@ -219,7 +219,7 @@
                     ${isHouse && plotSqm ? '<div class="info-item"><span class="info-icon">🌳</span><div class="info-content"><span class="info-label">Парцел</span><span class="info-value">'+plotSqm+' м²</span></div></div>' : ''}
                     <div class="info-item"><span class="info-icon">🏢</span><div class="info-content"><span class="info-label">Етаж</span><span class="info-value">${floor || 'N/A'}</span></div></div>
                     ${roomTypeDisplay ? '<div class="info-item"><span class="info-icon">🚪</span><div class="info-content"><span class="info-label">Тип</span><span class="info-value">'+roomTypeDisplay+'</span></div></div>' : ''}
-                    <div class="info-item"><span class="info-icon">📊</span><div class="info-content"><span class="info-label">Сравнения</span><span class="info-value">${comparables > 0 ? comparables + ' имота' + (comparablesLevel === 'hood' ? '' : comparablesLevel === 'city_size' ? ' (в ' + city + ')' : comparablesLevel === 'city' ? ' (в ' + city + ', без размер)' : '') : 'Няма данни'}</span></div></div>
+                    <div class="info-item"><span class="info-icon">📊</span><div class="info-content"><span class="info-label">Сравнения</span><span class="info-value">${comparables > 0 ? (comparables + ' имота' + (comparablesLevel === 'hood' ? '' : ' (в ' + city + ')') + (deal.market_avg ? ' · медиана ' + deal.market_avg.toLocaleString('bg-BG') + ' €/м²' : '')) : 'Няма данни'}</span></div></div>
                 </div>
                 <div class="location-section">
                     <span class="location-icon">📍</span>
@@ -325,6 +325,15 @@
             el.heroAvg.textContent = Math.round(avg) + '%';
             const best = allDeals.map(d => d.discount_pct !== undefined ? d.discount_pct : (d.discount || 0));
             el.heroBest.textContent = Math.round(Math.max(...best)) + '%';
+        }
+        // Update data freshness badge
+        const meta = window._dealsMetadata;
+        const badge = document.getElementById('data-freshness-badge');
+        if (badge && meta) {
+            const srcList = (meta.sources || ['imot.bg', 'olx.bg']).join(' + ');
+            const date = meta.generated_at || '';
+            badge.textContent = `Данни: ${srcList}${date ? ' · ' + date : ''}`;
+            badge.style.display = 'inline-block';
         }
     }
     
@@ -473,6 +482,11 @@ async function load() {
             if (!r.ok) throw new Error('HTTP '+r.status);
             const data = await r.json();
             allDeals = Array.isArray(data) ? data : (data.deals || []);
+            // Store metadata for data freshness badge
+            window._dealsMetadata = Array.isArray(data) ? null : {
+                generated_at: data.generated_at || null,
+                sources: data.sources || ['imot.bg', 'olx.bg'],
+            };
         } catch(e) {
             console.error('Failed to load deals:', e);
             allDeals = [];

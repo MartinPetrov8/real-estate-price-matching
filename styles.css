@@ -390,11 +390,16 @@ body {
     letter-spacing: 0.5px;
     margin-bottom: 4px;
 }
-.price-block-value { font-size: 20px; font-weight: 700; color: var(--gray-700); }
-.price-block-sub { font-size: 12px; color: var(--gray-500); margin-top: 2px; }
-.price-auction .price-block-value { color: var(--success); }
+/* Price hierarchy: €/м² is the hero metric, total price is secondary */
+.price-block-sqm  { font-size: 22px; font-weight: 700; color: var(--gray-700); line-height: 1.2; }
+.price-block-total { font-size: 13px; color: var(--gray-500); margin-top: 3px; }
+.price-auction .price-block-sqm  { color: var(--success); }
+.price-market  .price-block-sqm  { text-decoration: line-through; color: var(--gray-400); font-size: 18px; }
+.price-market  .price-block-total { text-decoration: line-through; color: var(--gray-400); }
 .price-arrow { color: var(--gray-400); font-size: 20px; }
-.price-market .price-block-value { text-decoration: line-through; color: var(--gray-500); font-size: 16px; }
+/* Legacy — keep for any remaining uses */
+.price-block-value { font-size: 20px; font-weight: 700; color: var(--gray-700); }
+.price-block-sub   { font-size: 12px; color: var(--gray-500); margin-top: 2px; }
 .property-info {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
