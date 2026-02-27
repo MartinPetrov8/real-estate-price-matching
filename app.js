@@ -209,10 +209,6 @@
                     ⚠️ Няма данни за пазарна цена
                 </div>
                 `}
-                <div class="deal-score">
-                    <div class="score-bar"><div class="score-fill ${r.level}" style="width:${r.score}%"></div></div>
-                    <span class="score-value">${r.stars}★</span>
-                </div>
                 <div class="property-info">
                     <div class="info-item"><div class="info-content"><span class="info-label">Площ</span><span class="info-value">${isHouse && buildingSqm ? buildingSqm+' м² (сграда)' : (sqm ? sqm+' м²' : 'N/A')}</span></div></div>
                     ${isHouse && plotSqm ? '<div class="info-item"><div class="info-content"><span class="info-label">Парцел</span><span class="info-value">'+plotSqm+' м²</span></div></div>' : ''}
