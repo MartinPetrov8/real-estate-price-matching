@@ -219,7 +219,7 @@
                     ${isHouse && plotSqm ? '<div class="info-item"><span class="info-icon">🌳</span><div class="info-content"><span class="info-label">Парцел</span><span class="info-value">'+plotSqm+' м²</span></div></div>' : ''}
                     <div class="info-item"><span class="info-icon">🏢</span><div class="info-content"><span class="info-label">Етаж</span><span class="info-value">${floor || 'N/A'}</span></div></div>
                     ${roomTypeDisplay ? '<div class="info-item"><span class="info-icon">🚪</span><div class="info-content"><span class="info-label">Тип</span><span class="info-value">'+roomTypeDisplay+'</span></div></div>' : ''}
-                    <div class="info-item"><span class="info-icon">📊</span><div class="info-content"><span class="info-label">Сравнения</span><span class="info-value">${comparables > 0 ? (comparables + ' имота' + (comparablesLevel === 'hood' ? '' : ' (в ' + city + ')') + (deal.market_avg ? ' · медиана ' + deal.market_avg.toLocaleString('bg-BG') + ' €/м²' : '')) : 'Няма данни'}</span></div></div>
+                    <div class="info-item"><span class="info-icon">📊</span><div class="info-content"><span class="info-label">Сравнения</span><span class="info-value">${comparables > 0 ? (comparables + ' имота' + (comparablesLevel === 'hood' ? '' : ' (в ' + city + ')')) : 'Няма данни'}</span></div></div>
                 </div>
                 <div class="location-section">
                     <span class="location-icon">📍</span>
