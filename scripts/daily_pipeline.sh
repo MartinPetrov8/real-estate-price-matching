@@ -24,6 +24,16 @@ GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 NC='\033[0m'
 
+# Python interpreter — uses project venv if available, falls back to
+# competitor-tracker venv (has all deps: requests, bs4, lxml, playwright)
+VENV_PYTHON="/home/node/.openclaw/workspace/projects/competitor-tracker/venv/bin/python3"
+if [ -x "$VENV_PYTHON" ]; then
+    PYTHON="$VENV_PYTHON"
+else
+    PYTHON="python3"
+    echo "WARNING: venv not found, using system python3 (may be missing deps)" >&2
+fi
+
 log() { echo -e "[$(date +'%H:%M:%S')] $1"; }
 error() { echo -e "${RED}[$(date +'%H:%M:%S')] ERROR: $1${NC}" >&2; }
 success() { echo -e "${GREEN}[$(date +'%H:%M:%S')] ✓ $1${NC}"; }
@@ -41,7 +51,7 @@ log ""
 
 # Step 1: Scrape auction data
 log "Step 1/4: Scraping auction data (bcpea_scraper.py)..."
-if python3 scrapers/bcpea_scraper.py --incremental; then
+if $PYTHON scrapers/bcpea_scraper.py --incremental; then
     success "Auction scraping complete"
 else
     EXIT_CODE=$?
@@ -52,7 +62,7 @@ fi
 # Step 1.5: Geocode neighborhoods for new auctions (best-effort, non-blocking)
 log ""
 log "Step 1.5/5: Geocoding new auction neighborhoods..."
-if python3 scripts/geocode_neighborhoods.py 2>&1 | tail -10; then
+if $PYTHON scripts/geocode_neighborhoods.py 2>&1 | tail -10; then
     success "Geocoding complete"
 else
     warning "Geocoding failed (non-critical, continuing)"
@@ -68,7 +78,7 @@ RESUME_FLAG=""
 while [ $ATTEMPT -le $MAX_RETRIES ]; do
     log "  Attempt $ATTEMPT/$MAX_RETRIES ${RESUME_FLAG:+(resuming)}"
     
-    python3 scrapers/market_scraper.py $RESUME_FLAG
+    $PYTHON scrapers/market_scraper.py $RESUME_FLAG
     SCRAPER_EXIT=$?
     
     if [ $SCRAPER_EXIT -eq 0 ]; then
@@ -96,7 +106,7 @@ fi
 # Step 3: Export deals
 log ""
 log "Step 3/5: Exporting deals (export_deals.py)..."
-if python3 export_deals.py; then
+if $PYTHON export_deals.py; then
     success "Export complete"
 else
     EXIT_CODE=$?
