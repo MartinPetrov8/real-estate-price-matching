@@ -168,7 +168,7 @@
                 <div class="card-badges">
                     ${isNewFlag ? '<span class="badge badge-new">НОВО</span>' : ''}
                     ${isUrgent ? '<span class="badge badge-urgent">ИЗТИЧАЩ</span>' : ''}
-                    <span class="badge badge-type">${icon} ${translatePropType(propertyType)}</span>${isPartialOwnership ? '<span class="badge badge-warning" title="Дробна собственост - цените не са съпоставими">⚠️ Дробна собственост</span>' : ''}
+                    <span class="badge badge-type">${translatePropType(propertyType)}</span>${isPartialOwnership ? '<span class="badge badge-warning" title="Дробна собственост - цените не са съпоставими">⚠ Дробна собственост</span>' : ''}
                 </div>
                 <div class="discount-badge">
                     <div class="discount-value">${discountPct >= 0 ? '-' : '+'}${Math.abs(Math.round(discountPct))}%</div>
@@ -209,38 +209,37 @@
                     ⚠️ Няма данни за пазарна цена
                 </div>
                 `}
-                <div class="deal-score" >
-                    <span class="score-label">Оценка:</span>
+                <div class="deal-score">
                     <div class="score-bar"><div class="score-fill ${r.level}" style="width:${r.score}%"></div></div>
                     <span class="score-value">${r.stars}★</span>
                 </div>
                 <div class="property-info">
-                    <div class="info-item"><span class="info-icon">📐</span><div class="info-content"><span class="info-label">Площ</span><span class="info-value">${isHouse && buildingSqm ? buildingSqm+' м² (сграда)' : (sqm ? sqm+' м²' : 'N/A')}</span></div></div>
-                    ${isHouse && plotSqm ? '<div class="info-item"><span class="info-icon">🌳</span><div class="info-content"><span class="info-label">Парцел</span><span class="info-value">'+plotSqm+' м²</span></div></div>' : ''}
-                    <div class="info-item"><span class="info-icon">🏢</span><div class="info-content"><span class="info-label">Етаж</span><span class="info-value">${floor || 'N/A'}</span></div></div>
-                    ${roomTypeDisplay ? '<div class="info-item"><span class="info-icon">🚪</span><div class="info-content"><span class="info-label">Тип</span><span class="info-value">'+roomTypeDisplay+'</span></div></div>' : ''}
-                    <div class="info-item"><span class="info-icon">📊</span><div class="info-content"><span class="info-label">Сравнения</span><span class="info-value">${comparables > 0 ? (comparables + ' имота' + (comparablesLevel === 'hood' ? '' : ' (в ' + city + ')')) : 'Няма данни'}</span></div></div>
+                    <div class="info-item"><div class="info-content"><span class="info-label">Площ</span><span class="info-value">${isHouse && buildingSqm ? buildingSqm+' м² (сграда)' : (sqm ? sqm+' м²' : 'N/A')}</span></div></div>
+                    ${isHouse && plotSqm ? '<div class="info-item"><div class="info-content"><span class="info-label">Парцел</span><span class="info-value">'+plotSqm+' м²</span></div></div>' : ''}
+                    <div class="info-item"><div class="info-content"><span class="info-label">Етаж</span><span class="info-value">${floor || 'N/A'}</span></div></div>
+                    ${roomTypeDisplay ? '<div class="info-item"><div class="info-content"><span class="info-label">Тип</span><span class="info-value">'+roomTypeDisplay+'</span></div></div>' : ''}
+                    <div class="info-item"><div class="info-content"><span class="info-label">Сравнения</span><span class="info-value">${comparables > 0 ? (comparables + ' имота' + (comparablesLevel === 'hood' ? '' : ' (в ' + city + ')')) : 'Няма данни'}</span></div></div>
                 </div>
                 <div class="location-section">
-                    <span class="location-icon">📍</span>
+                    <svg class="location-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>
                     <span class="location-text"><span class="location-city">${city}</span>${neighborhood && neighborhood !== 'Неизвестен' ? ', '+neighborhood : ''}</span>
                 </div>
                 <div class="countdown-section">
-                    <span class="countdown-icon">⏰</span>
+                    <svg class="countdown-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
                     <span class="countdown-text">Край на търга: <span class="countdown-time" id="${cid}"></span></span>
                 </div>
                 <div class="why-deal">
                     <button class="why-deal-toggle" onclick="toggleWhy('${bcpeaId}')">
-                        <span>💡 Защо тази сделка?</span><span id="tgl-${bcpeaId}">▼</span>
+                        <span>Защо тази сделка?</span><span id="tgl-${bcpeaId}" class="why-deal-chevron">▼</span>
                     </button>
                     <div class="why-deal-content" id="why-${bcpeaId}">
                         ${discountPct >= 0 ? 
-                            `<div class="why-deal-item"><span class="why-deal-icon">💰</span><span>Цената е с <strong>${Math.round(discountPct)}%</strong> под пазарната ниво</span></div>` :
-                            `<div class="why-deal-item"><span class="why-deal-icon">⚠️</span><span>Цената е с <strong>${Math.abs(Math.round(discountPct))}%</strong> над пазарната ниво</span></div>`
+                            `<div class="why-deal-item"><span>Цената е с <strong>${Math.round(discountPct)}%</strong> под пазарното ниво</span></div>` :
+                            `<div class="why-deal-item"><span>⚠ Цената е с <strong>${Math.abs(Math.round(discountPct))}%</strong> над пазарното ниво</span></div>`
                         }
-                        <div class="why-deal-item"><span class="why-deal-icon">📏</span><span>€/м²: <strong>${fmtSqm(auctionPrice, sqm)}</strong> при пазарни <strong>${fmtSqm(marketPrice, sqm)}</strong></span></div>
-                        ${deal.neighborhood_range ? `<div class="why-deal-item"><span class="why-deal-icon">🏘️</span><span>Ценови диапазон в района: ${escHtml(deal.neighborhood_range)}</span></div>` : ''}
-                        ${comparables > 0 ? `<div class="why-deal-item"><span class="why-deal-icon">🔍</span><span>Базирано на ${comparables} сравними обяви</span></div>` : '<div class="why-deal-item"><span class="why-deal-icon">⚠️</span><span>Няма достатъчно сравними обяви за надеждна оценка</span></div>'}
+                        <div class="why-deal-item"><span>€/м²: <strong>${fmtSqm(auctionPrice, sqm)}</strong> при пазарни <strong>${fmtSqm(marketPrice, sqm)}</strong></span></div>
+                        ${deal.neighborhood_range ? `<div class="why-deal-item"><span>Ценови диапазон в района: ${escHtml(deal.neighborhood_range)}</span></div>` : ''}
+                        ${comparables > 0 ? `<div class="why-deal-item"><span>Базирано на ${comparables} сравними обяви</span></div>` : '<div class="why-deal-item"><span>⚠ Няма достатъчно сравними обяви за надеждна оценка</span></div>'}
                     </div>
                 </div>
                 <div class="card-actions">
@@ -577,7 +576,7 @@ async function load() {
                 ` : ''}
             </div>
             <div style="background:var(--info-light);padding:20px;border-radius:var(--radius);margin-bottom:24px;">
-                <h4 style="font-size:14px;font-weight:600;margin-bottom:12px;">💡 Анализ на сделката</h4>
+                <h4 style="font-size:14px;font-weight:600;margin-bottom:12px;">Анализ на сделката</h4>
                 <ul style="list-style:none;padding:0;margin:0;font-size:14px;line-height:1.8;">
                     ${marketPrice ? (discountPct >= 0 ? 
                         `<li>✓ Цената е с <strong>${Math.round(discountPct)}%</strong> под пазарната ниво</li>
