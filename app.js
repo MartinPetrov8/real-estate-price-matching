@@ -202,20 +202,6 @@
                     <svg class="countdown-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
                     <span class="countdown-text">Край на търга: <span class="countdown-time" id="${cid}"></span></span>
                 </div>
-                <div class="why-deal">
-                    <button class="why-deal-toggle" onclick="toggleWhy('${bcpeaId}')">
-                        <span>Защо тази сделка?</span><span id="tgl-${bcpeaId}" class="why-deal-chevron">▼</span>
-                    </button>
-                    <div class="why-deal-content" id="why-${bcpeaId}">
-                        ${discountPct >= 0 ? 
-                            `<div class="why-deal-item"><span>Цената е с <strong>${Math.round(discountPct)}%</strong> под пазарното ниво</span></div>` :
-                            `<div class="why-deal-item"><span>⚠ Цената е с <strong>${Math.abs(Math.round(discountPct))}%</strong> над пазарното ниво</span></div>`
-                        }
-                        <div class="why-deal-item"><span>€/м²: <strong>${fmtSqm(auctionPrice, sqm)}</strong> при пазарни <strong>${fmtSqm(marketPrice, sqm)}</strong></span></div>
-                        ${deal.neighborhood_range ? `<div class="why-deal-item"><span>Ценови диапазон в района: ${escHtml(deal.neighborhood_range)}</span></div>` : ''}
-                        ${comparables > 0 ? `<div class="why-deal-item"><span>Базирано на ${comparables} сравними обяви</span></div>` : '<div class="why-deal-item"><span>⚠ Няма достатъчно сравними обяви за надеждна оценка</span></div>'}
-                    </div>
-                </div>
                 <div class="card-actions">
                     <a href="${url}" target="_blank" class="btn btn-primary">Виж търга →</a>
                     <button class="btn btn-secondary" onclick="showModal('${bcpeaId}')">Детайли</button>
