@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Контакт | ЧСИ Търгове</title>
+    <meta name="description" content="Свържете се с нас — въпроси за ЧСИ търгове, грешки в данните или предложения.">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://martinpetrov8.github.io/real-estate-price-matching/contact.html">
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        .contact-page {
+            min-height: calc(100vh - 140px);
+            padding: 60px 0;
+        }
+        .contact-wrap {
+            max-width: 560px;
+            margin: 0 auto;
+        }
+        .contact-heading {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--gray-700);
+            margin-bottom: 8px;
+        }
+        .contact-sub {
+            font-size: 15px;
+            color: var(--gray-500);
+            margin-bottom: 36px;
+            line-height: 1.6;
+        }
+        .contact-form {
+            background: white;
+            border: 1px solid var(--gray-200);
+            border-radius: var(--radius-lg);
+            padding: 32px;
+            box-shadow: var(--shadow-sm);
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--gray-600);
+            margin-bottom: 6px;
+        }
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px 14px;
+            border: 1px solid var(--gray-300);
+            border-radius: var(--radius);
+            font-family: var(--font-sans);
+            font-size: 14px;
+            color: var(--gray-700);
+            background: white;
+            transition: border-color 0.15s;
+            outline: none;
+        }
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px var(--primary-light);
+        }
+        .form-group textarea {
+            resize: vertical;
+            min-height: 120px;
+            line-height: 1.5;
+        }
+        .form-submit {
+            width: 100%;
+            padding: 12px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: var(--radius);
+            font-family: var(--font-sans);
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.15s;
+        }
+        .form-submit:hover { background: var(--primary-dark); }
+        .form-note {
+            font-size: 12px;
+            color: var(--gray-400);
+            margin-top: 12px;
+            text-align: center;
+        }
+        /* Success / error states */
+        .form-success {
+            display: none;
+            text-align: center;
+            padding: 32px;
+        }
+        .form-success-icon {
+            font-size: 40px;
+            margin-bottom: 12px;
+        }
+        .form-success h3 {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--gray-700);
+            margin-bottom: 8px;
+        }
+        .form-success p {
+            font-size: 14px;
+            color: var(--gray-500);
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <span class="logo-icon">🏛️</span>
+                    <div class="logo-text">
+                        <a href="index.html" style="text-decoration:none;color:inherit;"><h1>ЧСИ Търгове</h1></a>
+                        <span class="logo-tagline">Изгодни имоти от търгове</span>
+                    </div>
+                </div>
+                <nav class="header-nav">
+                    <a href="index.html" class="nav-link">Сделки</a>
+                    <a href="index.html#how-it-works" class="nav-link">Как работи</a>
+                    <a href="cities/" class="nav-link">Градове</a>
+                    <a href="blog/" class="nav-link">Блог</a>
+                    <a href="contact.html" class="nav-link" style="color:var(--primary);font-weight:600;">Контакт</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main class="contact-page">
+        <div class="container">
+            <div class="contact-wrap">
+                <h2 class="contact-heading">Свържете се с нас</h2>
+                <p class="contact-sub">Забелязали сте грешка в данните? Имате въпрос за конкретен търг? Или просто искате да се свържете — пишете ни.</p>
+
+                <div class="contact-form">
+                    <!-- TODO: Replace YOUR_FORM_ID with actual Formspree form ID after creating account at formspree.io -->
+                    <form id="contactForm" action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+                        <div class="form-group">
+                            <label for="email">Вашият имейл</label>
+                            <input type="email" id="email" name="email" placeholder="example@mail.com" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="subject">Тема</label>
+                            <select id="subject" name="subject">
+                                <option value="Грешка в данните">Грешка в данните</option>
+                                <option value="Въпрос за търг">Въпрос за търг</option>
+                                <option value="Предложение">Предложение</option>
+                                <option value="Друго">Друго</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="message">Съобщение</label>
+                            <textarea id="message" name="message" placeholder="Опишете въпроса или забележката си..." required></textarea>
+                        </div>
+                        <button type="submit" class="form-submit">Изпрати съобщение</button>
+                        <p class="form-note">Отговаряме в рамките на 1–2 работни дни.</p>
+                    </form>
+
+                    <div class="form-success" id="formSuccess">
+                        <div class="form-success-icon">✓</div>
+                        <h3>Съобщението е изпратено!</h3>
+                        <p>Ще се свържем с вас в рамките на 1–2 работни дни.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom">
+                <p>© 2026 ЧСИ Търгове · <a href="privacy.html" style="color:#64748b;">Поверителност</a> · <a href="contact.html" style="color:#64748b;">Контакт</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Show success state after Formspree redirect
+        const form = document.getElementById('contactForm');
+        form.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const data = new FormData(form);
+            try {
+                const res = await fetch(form.action, {
+                    method: 'POST',
+                    body: data,
+                    headers: { 'Accept': 'application/json' }
+                });
+                if (res.ok) {
+                    form.style.display = 'none';
+                    document.getElementById('formSuccess').style.display = 'block';
+                } else {
+                    alert('Грешка при изпращане. Моля, опитайте отново.');
+                }
+            } catch {
+                alert('Грешка при изпращане. Моля, опитайте отново.');
+            }
+        });
+    </script>
+</body>
+</html>
