@@ -137,15 +137,28 @@ def parse_property_detail(html_content, prop_id):
     if size_match:
         data['size_sqm'] = float(size_match.group(1).replace(',', '.'))
     
-    # Floor - extract from description/address only (not navigation/forms)
-    # Look for "ет.X" pattern in the info/description div
-    desc_section = re.search(r'<div class="info">(.*?)</div>', html_content, re.DOTALL)
-    if desc_section:
-        floor_match = re.search(r'(?:ет\.\s*|етаж\s+)(\d{1,2})(?!\d)', desc_section.group(1), re.I)
+    # Floor - try multiple patterns in priority order
+    floor_val = None
+
+    # Pattern 1: structured detail block "Етаж\n1" (property details section)
+    structured_match = re.search(r'Етаж\s*\n\s*(\d{1,2})\b', html_content, re.I)
+    if structured_match:
+        v = int(structured_match.group(1))
+        if 0 <= v <= 30:
+            floor_val = v
+
+    # Pattern 2: "ет. X" or "етаж X" in address/description text
+    if floor_val is None:
+        desc_section = re.search(r'<div class="info">(.*?)</div>', html_content, re.DOTALL)
+        search_text = desc_section.group(1) if desc_section else html_content
+        floor_match = re.search(r'(?:ет\.\s*|етаж\s+)(\d{1,2})(?!\d)', search_text, re.I)
         if floor_match:
-            floor_val = int(floor_match.group(1))
-            if 0 < floor_val <= 30:  # Sanity check
-                data['floor'] = floor_val
+            v = int(floor_match.group(1))
+            if 0 <= v <= 30:
+                floor_val = v
+
+    if floor_val is not None:
+        data['floor'] = floor_val
     # Rooms
     rooms_match = re.search(r'(\d+)\s*(?:-?стаен|стаи|стая)', html_content, re.I)
     if rooms_match:
