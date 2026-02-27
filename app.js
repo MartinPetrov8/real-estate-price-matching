@@ -16,7 +16,7 @@
         heroAvg: document.getElementById('heroAvgDiscount'),
         heroBest: document.getElementById('heroBestDeal'),
         city: document.getElementById('cityFilter'),
-        type: document.getElementById('typeFilter'),
+
         minPrice: document.getElementById('minPrice'),
         maxPrice: document.getElementById('maxPrice'),
         discount: document.getElementById('discountFilter'),
@@ -335,7 +335,6 @@
         };
         const f = [];
         if (el.city.value !== 'all') f.push({type:'city', label: el.city.value});
-        if (el.type.value !== 'all') f.push({type:'type', label:typeLabels[el.type.value] || el.type.value});
         if (el.minPrice.value) f.push({type:'minPrice', label:'От '+fmtPrice(parseInt(el.minPrice.value))});
         if (el.maxPrice.value) f.push({type:'maxPrice', label:'До '+fmtPrice(parseInt(el.maxPrice.value))});
         if (parseInt(el.discount.value) > 0) f.push({type:'discount', label:el.discount.value+'%+ отстъпка'});
@@ -349,7 +348,6 @@
     
     window.rmFilter = function(t) {
         if (t === 'city') el.city.value = 'all';
-        if (t === 'type') el.type.value = 'all';
         if (t === 'minPrice') el.minPrice.value = '';
         if (t === 'maxPrice') el.maxPrice.value = '';
         if (t === 'discount') el.discount.value = '0';
@@ -359,7 +357,7 @@
     function filter() {
         currentPage = 1; // Reset pagination on filter change
         updateURL(); // Save filter state to URL
-        const city = el.city.value, type = el.type.value;
+        const city = el.city.value;
         const minP = parseInt(el.minPrice.value) || 0, maxP = parseInt(el.maxPrice.value) || Infinity;
         const minD = parseInt(el.discount.value) || 0;
         const pill = document.querySelector('.pill-active')?.dataset.filter || 'all';
@@ -367,7 +365,6 @@
             const auctionPrice = d.auction_price || d.effective_price || d.price || 0;
             const discountPct = d.discount_pct !== undefined ? d.discount_pct : (d.discount || 0);
             if (city !== 'all' && d.city !== city) return false;
-            if (type !== 'all' && d.property_type?.toLowerCase() !== type.toLowerCase()) return false;
             if (auctionPrice < minP || auctionPrice > maxP) return false;
             if (discountPct < minD) return false;
             if (pill === 'new' && !isNew(d.auction_end)) return false;
@@ -401,7 +398,6 @@
     function updateURL() {
         const params = new URLSearchParams();
         if (el.city.value !== 'all') params.set('city', el.city.value);
-        if (el.type.value !== 'all') params.set('type', el.type.value);
         if (el.minPrice.value) params.set('min', el.minPrice.value);
         if (el.maxPrice.value) params.set('max', el.maxPrice.value);
         if (parseInt(el.discount.value) > 0) params.set('discount', el.discount.value);
@@ -414,7 +410,6 @@
     function loadFromURL() {
         const params = new URLSearchParams(window.location.search);
         if (params.get('city')) el.city.value = params.get('city');
-        if (params.get('type')) el.type.value = params.get('type');
         if (params.get('min')) el.minPrice.value = params.get('min');
         if (params.get('max')) el.maxPrice.value = params.get('max');
         if (params.get('discount')) el.discount.value = params.get('discount');
@@ -588,7 +583,7 @@ async function load() {
     
     function reset() {
         console.log("Reset called");
-        el.city.value = 'all'; el.type.value = 'all';
+        el.city.value = 'all';
         el.minPrice.value = ''; el.maxPrice.value = '';
         el.discount.value = '0'; el.sort.value = 'best';
         document.querySelectorAll('.pill').forEach(p => p.classList.remove('pill-active'));
@@ -610,7 +605,6 @@ async function load() {
     });
     
     el.city.addEventListener('change', filter);
-    el.type.addEventListener('change', filter);
     el.minPrice.addEventListener('input', debounce(filter, 300));
     el.maxPrice.addEventListener('input', debounce(filter, 300));
     el.discount.addEventListener('change', filter);
