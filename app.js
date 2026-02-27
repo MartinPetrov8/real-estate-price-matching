@@ -163,62 +163,40 @@
             </div>
         ` : '';
         
-        return `<article class="deal-card">
-            <div class="card-header deal-${r.level}">
-                <div class="card-badges">
-                    ${isNewFlag ? '<span class="badge badge-new">НОВО</span>' : ''}
-                    ${isUrgent ? '<span class="badge badge-urgent">ИЗТИЧАЩ</span>' : ''}
-                    <span class="badge badge-type">${translatePropType(propertyType)}</span>${isPartialOwnership ? '<span class="badge badge-warning" title="Дробна собственост - цените не са съпоставими">⚠ Дробна собственост</span>' : ''}
+        return `<article class="deal-card deal-${r.level}">
+            <div class="card-header">
+                <div class="card-header-top">
+                    <div class="card-location-header">
+                        <svg class="location-icon" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                        <span class="card-location-city">${city}</span>${neighborhood && neighborhood !== 'Неизвестен' ? `<span class="card-location-hood">, ${neighborhood}</span>` : ''}
+                    </div>
+                    <div class="card-badges">
+                        ${isNewFlag ? '<span class="badge badge-new">НОВО</span>' : ''}
+                        ${isUrgent ? '<span class="badge badge-urgent">ИЗТИЧАЩ</span>' : ''}
+                        <span class="badge badge-type">${translatePropType(propertyType)}</span>${isPartialOwnership ? '<span class="badge badge-warning" title="Дробна собственост - цените не са съпоставими">⚠ Дробна собственост</span>' : ''}
+                    </div>
                 </div>
-                <div class="discount-badge">
-                    <div class="discount-value">${discountPct >= 0 ? '-' : '+'}${Math.abs(Math.round(discountPct))}%</div>
-                    <div class="discount-label">${discountPct >= 0 ? 'ОТСТЪПКА' : 'НАД ПАЗАРНАТА'}</div>
-                    ${discountPct >= 0 ? `<div class="discount-amount">Спестявате ${fmtPrice(savingsEur)}</div>` : `<div class="discount-amount">Пазарна: ${fmtPrice(marketPrice)}</div>`}
-                </div>
-                <div class="price-comparison-bar">
-                    <div class="price-bar-track"><div class="price-bar-fill" style="width:${barW}%"></div></div>
-                    <div class="price-bar-labels"><span>Тръжна цена</span><span>Пазарна цена →</span></div>
+                <div class="card-price-row">
+                    <div class="card-price-main">
+                        <span class="card-price-value">${fmtPrice(auctionPrice)}</span>
+                        <span class="card-price-sqm">${fmtSqm(auctionPrice, sqm)}</span>
+                    </div>
+                    <div class="discount-badge">
+                        <div class="discount-value">${discountPct >= 0 ? '-' : '+'}${Math.abs(Math.round(discountPct))}%</div>
+                        ${discountPct >= 0 ? `<div class="discount-amount">vs ${fmtSqm(marketPrice, sqm)}</div>` : ''}
+                    </div>
                 </div>
             </div>
             <div class="card-body">
                 ${ownershipWarning}
                 ${dataWarning}
-                ${marketPrice ? `
-                <div class="price-section">
-                    <div class="price-block price-market">
-                        <div class="price-block-label">Пазарна цена</div>
-                        <div class="price-block-sqm">${fmtSqm(marketPrice, sqm)}</div>
-                        <div class="price-block-total">${fmtPrice(marketPrice)}</div>
-                    </div>
-                    <div class="price-arrow">→</div>
-                    <div class="price-block price-auction">
-                        <div class="price-block-label">Тръжна цена</div>
-                        <div class="price-block-sqm">${fmtSqm(auctionPrice, sqm)}</div>
-                        <div class="price-block-total">${fmtPrice(auctionPrice)}</div>
-                    </div>
-                </div>
-                ` : `
-                <div class="price-section">
-                    <div class="price-block price-auction" style="flex:1">
-                        <div class="price-block-label">Тръжна цена</div>
-                        <div class="price-block-sqm">${fmtSqm(auctionPrice, sqm)}</div>
-                        <div class="price-block-total">${fmtPrice(auctionPrice)}</div>
-                    </div>
-                </div>
-                <div style="background:var(--warning-light, #FFF8E1);padding:8px 12px;border-radius:var(--radius);margin-top:8px;font-size:13px;color:var(--warning, #F57C00);">
-                    ⚠️ Няма данни за пазарна цена
-                </div>
-                `}
+
                 <div class="property-info">
                     <div class="info-item"><div class="info-content"><span class="info-label">Площ</span><span class="info-value">${isHouse && buildingSqm ? buildingSqm+' м² (сграда)' : (sqm ? sqm+' м²' : 'N/A')}</span></div></div>
                     ${isHouse && plotSqm ? '<div class="info-item"><div class="info-content"><span class="info-label">Парцел</span><span class="info-value">'+plotSqm+' м²</span></div></div>' : ''}
                     <div class="info-item"><div class="info-content"><span class="info-label">Етаж</span><span class="info-value">${floor || 'N/A'}</span></div></div>
                     ${roomTypeDisplay ? '<div class="info-item"><div class="info-content"><span class="info-label">Тип</span><span class="info-value">'+roomTypeDisplay+'</span></div></div>' : ''}
                     <div class="info-item"><div class="info-content"><span class="info-label">Сравнения</span><span class="info-value">${comparables > 0 ? (comparables + ' имота' + (comparablesLevel === 'hood' ? '' : ' (в ' + city + ')')) : 'Няма данни'}</span></div></div>
-                </div>
-                <div class="location-section">
-                    <svg class="location-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>
-                    <span class="location-text"><span class="location-city">${city}</span>${neighborhood && neighborhood !== 'Неизвестен' ? ', '+neighborhood : ''}</span>
                 </div>
                 <div class="countdown-section">
                     <svg class="countdown-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>

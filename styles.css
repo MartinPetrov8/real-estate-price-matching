@@ -1,15 +1,15 @@
 :root {
-    --primary: #FF385C;
-    --primary-dark: #E31C5F;
-    --primary-light: #FFE8EC;
-    --success: #00A699;
-    --success-light: #E6F7F6;
-    --success-dark: #00877A;
-    --warning: #FFB400;
-    --danger: #FF5A5F;
-    --danger-light: #FFE8E9;
-    --info: #007A87;
-    --info-light: #E6F4F5;
+    --primary: #1a56db;
+    --primary-dark: #1342b4;
+    --primary-light: #e8f0fd;
+    --success: #16a34a;
+    --success-light: #dcfce7;
+    --success-dark: #15803d;
+    --warning: #d97706;
+    --danger: #dc2626;
+    --danger-light: #fee2e2;
+    --info: #0369a1;
+    --info-light: #e0f2fe;
     --gray-50: #F7F7F7;
     --gray-100: #F3F3F3;
     --gray-200: #EBEBEB;
@@ -311,19 +311,59 @@ body {
 .deal-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
 .card-header {
     position: relative;
-    padding: var(--space-lg);
-    background: linear-gradient(135deg, var(--success) 0%, var(--success-dark) 100%);
-    color: white;
+    padding: var(--space-md) var(--space-lg);
+    background: white;
+    color: var(--gray-700);
+    border-bottom: 1px solid var(--gray-200);
 }
-.card-header.deal-excellent { background: linear-gradient(135deg, #7C3AED 0%, #5B21B6 100%); }
-.card-header.deal-great { background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%); }
-.card-header.deal-good { background: linear-gradient(135deg, #0891B2 0%, #0E7490 100%); }
-.card-header.deal-fair { background: linear-gradient(135deg, var(--warning) 0%, #D97706 100%); }
+/* Deal quality: left border accent only */
+.deal-card { border-left: 4px solid var(--gray-300); }
+.deal-card.deal-excellent { border-left-color: #7C3AED; }
+.deal-card.deal-great  { border-left-color: var(--success); }
+.deal-card.deal-good   { border-left-color: var(--primary); }
+.deal-card.deal-fair   { border-left-color: var(--warning); }
+.deal-card.deal-low    { border-left-color: var(--gray-400); }
+.deal-card.deal-bad    { border-left-color: var(--danger); }
+/* New card header layout */
+.card-header-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--space-sm);
+    margin-bottom: var(--space-sm);
+}
+.card-location-header {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 13px;
+    color: var(--gray-600);
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+.card-location-header .location-icon { flex-shrink: 0; color: var(--gray-400); }
+.card-location-city { font-weight: 600; color: var(--gray-700); }
+.card-location-hood { color: var(--gray-500); }
+.card-price-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-sm);
+    margin-top: var(--space-xs);
+}
+.card-price-main { display: flex; align-items: baseline; gap: var(--space-sm); }
+.card-price-value { font-size: 22px; font-weight: 700; color: var(--gray-700); }
+.card-price-sqm { font-size: 13px; color: var(--gray-500); }
+
 .card-badges {
     display: flex;
     gap: var(--space-xs);
-    margin-bottom: var(--space-sm);
     flex-wrap: wrap;
+    justify-content: flex-end;
+    flex-shrink: 0;
 }
 .badge {
     display: inline-flex;
@@ -339,33 +379,32 @@ body {
 .badge-new { background: #FFD700; color: var(--gray-700); }
 .badge-urgent { background: var(--danger); color: white; }
 .badge-warning { background: #FFA500; color: white; font-size: 11px; }
-.badge-type { background: rgba(255,255,255,0.15); color: rgba(255,255,255,0.92); font-weight: 600; border: 1px solid rgba(255,255,255,0.25); }
-.discount-badge { text-align: center; }
-.discount-value { font-size: 48px; font-weight: 800; line-height: 1; text-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-.discount-label { font-size: 14px; font-weight: 600; opacity: 0.95; text-transform: uppercase; letter-spacing: 1px; }
-.discount-amount { font-size: 14px; margin-top: var(--space-xs); opacity: 0.9; }
-.price-comparison-bar { margin-top: var(--space-md); }
-.price-bar-track {
-    height: 8px;
-    background: rgba(255,255,255,0.3);
-    border-radius: var(--radius-full);
-    overflow: hidden;
-    position: relative;
-}
-.price-bar-fill {
-    height: 100%;
-    background: rgba(255,255,255,0.9);
-    border-radius: var(--radius-full);
-    transition: width 0.5s ease;
-}
-.price-bar-labels {
+.badge-type { background: var(--gray-100); color: var(--gray-600); font-weight: 600; border: 1px solid var(--gray-200); }
+/* Compact inline discount badge — replaces the old 48px hero number */
+.discount-badge {
     display: flex;
-    justify-content: space-between;
-    margin-top: var(--space-xs);
-    font-size: 12px;
-    font-weight: 600;
-    opacity: 0.9;
+    align-items: center;
+    gap: var(--space-sm);
+    flex-wrap: wrap;
 }
+.discount-value {
+    display: inline-block;
+    font-size: 22px;
+    font-weight: 700;
+    line-height: 1;
+    color: var(--success);
+    padding: 4px 10px;
+    background: var(--success-light);
+    border-radius: var(--radius);
+}
+.deal-card.deal-bad .discount-value,
+.deal-card.deal-low .discount-value  { color: var(--gray-600); background: var(--gray-100); }
+.deal-card.deal-fair .discount-value { color: var(--warning); background: #fef3c7; }
+.deal-card.deal-bad .discount-value  { color: var(--danger); background: var(--danger-light); }
+.discount-label { display: none; }
+.discount-amount { font-size: 13px; color: var(--gray-500); }
+/* Kill the price comparison bar */
+.price-comparison-bar { display: none; }
 .card-body {
     padding: var(--space-lg);
     flex: 1;
@@ -642,7 +681,7 @@ body {
     .container { padding: 0 var(--space-sm); }
     .hero { padding: var(--space-2xl) 0; }
     .hero-title { font-size: 24px; }
-    .discount-value { font-size: 36px; }
+    /* discount-value no longer needs mobile override */
     .card-actions { flex-direction: column; }
     .property-info { grid-template-columns: 1fr; }
 }
@@ -692,10 +731,7 @@ body {
     color: #B78103;
 }
 
-/* Bad deal styling */
-.card-header.deal-bad {
-    background: linear-gradient(135deg, var(--danger) 0%, #DC2626 100%);
-}
+/* Bad deal — left border handled above, no special header background needed */
 
 .score-fill.bad {
     background: linear-gradient(90deg, var(--danger), #FCA5A5);
