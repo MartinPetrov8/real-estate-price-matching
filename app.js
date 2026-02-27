@@ -36,14 +36,14 @@
         'garage': 'Гараж',
         'commercial': 'Търговски',
         'land': 'Земя',
-        'other': 'Друг',
+        'other': null,
         'апартамент': 'Апартамент',
         'къща': 'Къща',
         'гараж': 'Гараж',
         'магазин': 'Магазин',
         'земя': 'Земя'
     };
-    function translatePropType(t) { return propTypeBg[t?.toLowerCase()] || t || 'Имот'; }
+    function translatePropType(t) { const v = propTypeBg[t?.toLowerCase()]; return (v !== undefined ? v : t) || 'Имот'; }
     
     function fmtPrice(p) { return !p ? '€?' : '€' + Math.round(p).toLocaleString('bg-BG'); }
     function fmtSqm(p, s) { return !p || !s ? '€?/m²' : '€' + Math.round(p/s).toLocaleString('bg-BG') + '/m²'; }
@@ -343,11 +343,7 @@
                 const o = document.createElement('option'); o.value = c; o.textContent = c; el.city.appendChild(o);
             }
         });
-        // Add "Други" option for everything else
-        const otherCities = allCities.filter(c => !MAJOR_CITIES.includes(c));
-        if (otherCities.length > 0) {
-            const o = document.createElement('option'); o.value = '_other'; o.textContent = 'Други'; el.city.appendChild(o);
-        }
+        // Minor cities are not shown in dropdown — only major cities listed
         el.city.value = val;
     }
     
@@ -357,10 +353,10 @@
             'house': 'Къща',
             'garage': 'Гараж',
             'commercial': 'Търговски',
-            'other': 'Други'
+            'other': null
         };
         const f = [];
-        if (el.city.value !== 'all') f.push({type:'city', label: el.city.value === '_other' ? 'Други' : el.city.value});
+        if (el.city.value !== 'all') f.push({type:'city', label: el.city.value});
         if (el.type.value !== 'all') f.push({type:'type', label:typeLabels[el.type.value] || el.type.value});
         if (el.minPrice.value) f.push({type:'minPrice', label:'От '+fmtPrice(parseInt(el.minPrice.value))});
         if (el.maxPrice.value) f.push({type:'maxPrice', label:'До '+fmtPrice(parseInt(el.maxPrice.value))});
@@ -392,7 +388,7 @@
         filteredDeals = allDeals.filter(d => {
             const auctionPrice = d.auction_price || d.effective_price || d.price || 0;
             const discountPct = d.discount_pct !== undefined ? d.discount_pct : (d.discount || 0);
-            if (city === '_other') { if (['София','Варна','Пловдив','Бургас','Стара Загора','Русе'].includes(d.city)) return false; } else if (city !== 'all' && d.city !== city) return false;
+            if (city !== 'all' && d.city !== city) return false;
             if (type !== 'all' && d.property_type?.toLowerCase() !== type.toLowerCase()) return false;
             if (auctionPrice < minP || auctionPrice > maxP) return false;
             if (discountPct < minD) return false;
@@ -400,11 +396,6 @@
             if (pill === 'ending') { const days = daysUntil(d.auction_end); if (days === null || days > 7) return false; }
             if (pill === 'best' && discountPct < 40) return false;
             if (pill === 'sofia' && !(d.city && d.city.includes('София'))) return false;
-            // No comparison filter - deals without market data
-            if (pill === 'nocomparison') {
-                const comparables = d.comparables_count || d.market_sample_size || 0;
-                if (comparables > 0 && d.market_price) return false;
-            }
             return true;
         });
         const sort = el.sort.value;
