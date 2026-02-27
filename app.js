@@ -303,9 +303,13 @@
         const meta = window._dealsMetadata;
         const badge = document.getElementById('data-freshness-badge');
         if (badge && meta) {
-            const srcList = (meta.sources || ['imot.bg', 'olx.bg']).join(' + ');
-            const date = meta.generated_at || '';
-            badge.textContent = `Данни: ${srcList}${date ? ' · ' + date : ''}`;
+            const rawDate = meta.generated_at || '';
+            let fmtDate = rawDate;
+            if (rawDate) {
+                const d = new Date(rawDate.includes('.') ? rawDate.split('.').reverse().join('-') : rawDate);
+                if (!isNaN(d)) fmtDate = d.toLocaleDateString('bg-BG', {day:'numeric', month:'long', year:'numeric'});
+            }
+            badge.textContent = fmtDate || '';
             badge.style.display = 'inline-block';
         }
     }
