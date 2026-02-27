@@ -476,7 +476,20 @@ async function load() {
             const r = await fetch('deals.json');
             if (!r.ok) throw new Error('HTTP '+r.status);
             const data = await r.json();
-            allDeals = Array.isArray(data) ? data : (data.deals || []);
+            const raw = Array.isArray(data) ? data : (data.deals || []);
+            // Filter out junk cards: must have valid price, valid sqm, and market data
+            allDeals = raw.filter(d => {
+                const price = d.auction_price || d.effective_price || d.price || 0;
+                const sqm = d.sqm || 0;
+                const comparables = d.comparables_count || d.market_sample_size || 0;
+                const hasMarket = comparables > 0 && d.market_price;
+                const discount = d.discount_pct !== undefined ? d.discount_pct : (d.discount || 0);
+                // Drop: zero price, zero sqm, no market data, or negative/zero discount with no market data
+                if (price <= 0) return false;
+                if (sqm <= 0) return false;
+                if (!hasMarket) return false;
+                return true;
+            });
             // Store metadata for data freshness badge
             window._dealsMetadata = Array.isArray(data) ? null : {
                 generated_at: data.generated_at || null,
