@@ -335,7 +335,7 @@ body {
 .card-location-header {
     display: flex;
     align-items: center;
-    gap: 4px;
+    gap: 0;
     font-size: 13px;
     color: var(--gray-600);
     flex: 1;
@@ -344,7 +344,7 @@ body {
     white-space: nowrap;
     text-overflow: ellipsis;
 }
-.card-location-header .location-icon { flex-shrink: 0; color: var(--gray-400); }
+.card-location-header .location-icon { flex-shrink: 0; color: var(--gray-400); margin-right: 4px; }
 .card-location-city { font-weight: 600; color: var(--gray-700); }
 .card-location-hood { color: var(--gray-500); }
 .card-price-row {
