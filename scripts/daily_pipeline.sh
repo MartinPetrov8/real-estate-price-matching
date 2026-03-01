@@ -24,15 +24,9 @@ GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 NC='\033[0m'
 
-# Python interpreter — uses project venv if available, falls back to
-# competitor-tracker venv (has all deps: requests, bs4, lxml, playwright)
-VENV_PYTHON="/home/node/.openclaw/workspace/projects/competitor-tracker/venv/bin/python3"
-if [ -x "$VENV_PYTHON" ]; then
-    PYTHON="$VENV_PYTHON"
-else
-    PYTHON="python3"
-    echo "WARNING: venv not found, using system python3 (may be missing deps)" >&2
-fi
+# Python interpreter — system python3 has all deps (requests, bs4, lxml, certifi)
+# The old competitor-tracker venv is gone; system python works fine.
+PYTHON="python3"
 
 log() { echo -e "[$(date +'%H:%M:%S')] $1"; }
 error() { echo -e "${RED}[$(date +'%H:%M:%S')] ERROR: $1${NC}" >&2; }
@@ -50,12 +44,32 @@ log "Started at: $(date -u +"%Y-%m-%d %H:%M:%S UTC")"
 log ""
 
 # Step 1: Scrape auction data
-log "Step 1/4: Scraping auction data (bcpea_scraper.py)..."
-if $PYTHON scrapers/bcpea_scraper.py --incremental; then
-    success "Auction scraping complete"
-else
-    EXIT_CODE=$?
-    error "Auction scraper failed with exit code $EXIT_CODE"
+log "Step 1/5: Scraping auction data (bcpea_scraper.py)..."
+BCPEA_ATTEMPT=1
+BCPEA_MAX_RETRIES=3
+BCPEA_EXIT=1
+
+while [ $BCPEA_ATTEMPT -le $BCPEA_MAX_RETRIES ]; do
+    log "  Attempt $BCPEA_ATTEMPT/$BCPEA_MAX_RETRIES"
+    
+    if $PYTHON scrapers/bcpea_scraper.py --incremental; then
+        BCPEA_EXIT=0
+        success "Auction scraping complete"
+        break
+    else
+        BCPEA_EXIT=$?
+        warning "Auction scraper failed (attempt $BCPEA_ATTEMPT, exit $BCPEA_EXIT)"
+        if [ $BCPEA_ATTEMPT -lt $BCPEA_MAX_RETRIES ]; then
+            WAIT_SECS=$((30 * BCPEA_ATTEMPT))
+            log "  Waiting ${WAIT_SECS}s before retry..."
+            sleep $WAIT_SECS
+        fi
+        BCPEA_ATTEMPT=$((BCPEA_ATTEMPT + 1))
+    fi
+done
+
+if [ $BCPEA_EXIT -ne 0 ]; then
+    error "Auction scraper failed after $BCPEA_MAX_RETRIES attempts (last exit: $BCPEA_EXIT)"
     exit 1
 fi
 
