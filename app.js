@@ -347,6 +347,15 @@
     function filter() {
         currentPage = 1; // Reset pagination on filter change
         updateURL(); // Save filter state to URL
+        var activePill = document.querySelector('.pill-active');
+        if (typeof trackEvent === 'function') {
+            trackEvent('filter_applied', {
+                city: el.city.value || 'all',
+                min_discount: parseInt(el.discount.value || '0', 10),
+                sort_by: el.sort.value || 'best',
+                pill: activePill ? activePill.dataset.filter : 'all'
+            });
+        }
         const city = el.city.value;
         const minP = parseInt(el.minPrice.value) || 0, maxP = parseInt(el.maxPrice.value) || Infinity;
         const minD = parseInt(el.discount.value) || 0;
@@ -467,6 +476,7 @@ async function load() {
     };
     
     window.showModal = function(id) {
+        if (typeof trackEvent === 'function') trackEvent('deal_modal_open', { deal_id: String(id) });
         const d = allDeals.find(x => (x.bcpea_id || x.id) === id);
         if (!d) return;
         

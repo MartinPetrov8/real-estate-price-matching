@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; connect-src 'self' https://web-production-36c65.up.railway.app; img-src 'self' data:;">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; connect-src 'self' https://web-production-36c65.up.railway.app https://www.google-analytics.com https://www.googletagmanager.com; img-src 'self' data: https://www.google-analytics.com;">
     <title>ЧСИ Търгове | Имоти от Частни Съдебни Изпълнители под Пазарна Цена</title>
     <meta name="description" content="Търгове от КЧСИ и частни съдебни изпълнители - имоти под пазарна цена. Публична продан на апартаменти, къщи, парцели в София, Пловдив, Варна. Сравнение на тръжни и пазарни цени.">
     <meta name="keywords" content="КЧСИ търгове, частен съдебен изпълнител, частни съдебни изпълнители, публична продан, принудителни търгове, имоти на търг, апартаменти София, къщи Пловдив, парцели Варна, изгодни имоти България">
@@ -143,7 +143,7 @@
                     <a href="#how-it-works" class="nav-link">Как работи</a>
                     <a href="cities/" class="nav-link">Градове</a>
                     <a href="blog/" class="nav-link">Блог</a>
-                    <a href="#" onclick="openSubscribeModal(); return false;" class="nav-link subscribe-link">Известия</a>
+                    <a href="#" onclick="openSubscribeModal(); return false;" class="nav-link subscribe-link">Известия <span class="coming-soon-badge">Очаквайте скоро</span></a>
                     <a href="contact.html" class="nav-link">Контакт</a>
                 </nav>
             </div>
@@ -463,6 +463,7 @@
         </div>
     </footer>
 
+    <script src="analytics.js"></script>
     <script src="app.js"></script>
 <!-- Back to Top -->
     <button id="backToTop" class="back-to-top" aria-label="Към началото">

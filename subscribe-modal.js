@@ -11,8 +11,8 @@ function createSubscribeModal() {
         <div style="background:#fff;border-radius:16px;padding:32px;max-width:480px;width:90%;max-height:90vh;overflow-y:auto;position:relative;">
             <button onclick="closeSubscribeModal()" style="position:absolute;top:16px;right:16px;background:none;border:none;font-size:24px;cursor:pointer;color:#6b7280;">&times;</button>
             
-            <h2 style="margin:0 0 8px 0;font-size:24px;">🔔 Получавай известия</h2>
-            <p style="color:#6b7280;margin:0 0 24px 0;">Ще те уведомим когато се появят нови изгодни оферти.</p>
+            <h2 style="margin:0 0 8px 0;font-size:24px;">🔔 Получавай известия <span class="coming-soon-badge-inline">Очаквайте скоро</span></h2>
+            <p style="color:#6b7280;margin:0 0 24px 0;">Запиши се за ранен достъп — ще те уведомим когато пуснем известията.</p>
             
             <form id="subscribeForm" onsubmit="handleSubscribe(event)">
                 <div style="margin-bottom:20px;">
@@ -58,7 +58,7 @@ function createSubscribeModal() {
                 </div>
                 
                 <button type="submit" id="subscribeBtn" style="width:100%;padding:14px;background:#2563eb;color:#fff;border:none;border-radius:8px;font-size:16px;font-weight:500;cursor:pointer;">
-                    Абонирай се
+                    Запиши ме за ранен достъп
                 </button>
                 
                 <p id="subscribeMsg" style="margin:16px 0 0 0;text-align:center;display:none;"></p>
@@ -71,6 +71,7 @@ function createSubscribeModal() {
 }
 
 function openSubscribeModal() {
+    if (typeof trackEvent === 'function') trackEvent('subscribe_modal_open');
     document.getElementById('subscribeModal').style.display = 'flex';
 }
 
@@ -91,6 +92,7 @@ async function handleSubscribe(e) {
     btn.disabled = true;
     btn.textContent = 'Изпращане...';
     
+    if (typeof trackEvent === 'function') trackEvent('subscribe_attempt', { cities_count: cities.length, min_discount: parseInt(discount, 10) });
     try {
         const resp = await fetch(`${ALERT_API_URL}/subscribe`, {
             method: 'POST',
