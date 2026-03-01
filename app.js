@@ -571,11 +571,18 @@ async function load() {
             </div>
         </div>`;
         el.modal.classList.remove('hidden');
+        el.modal.setAttribute('role', 'dialog');
+        el.modal.setAttribute('aria-modal', 'true');
+        el.modal.setAttribute('aria-label', 'Детайли за имот');
         document.body.style.overflow = 'hidden';
+        // Focus trap: focus first interactive element
+        var firstBtn = el.modal.querySelector('a, button');
+        if (firstBtn) firstBtn.focus();
     };
     
     window.closeModal = function() {
         el.modal.classList.add('hidden');
+        el.modal.removeAttribute('aria-modal');
         document.body.style.overflow = '';
     };
     
