@@ -11,7 +11,7 @@
 
     // ==================== CONFIG ====================
     // TODO: Replace with your GA4 Measurement ID
-    var GA_ID = 'G-XXXXXXXXXX';
+    var GA_ID = 'G-S261CKYNRT';
     // ================================================
 
     // Skip if placeholder ID not replaced
