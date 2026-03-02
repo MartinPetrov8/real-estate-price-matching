@@ -296,7 +296,7 @@
                 const d = new Date(rawDate.includes('.') ? rawDate.split('.').reverse().join('-') : rawDate);
                 if (!isNaN(d)) fmtDate = d.toLocaleDateString('bg-BG', {day:'numeric', month:'long', year:'numeric'});
             }
-            badge.textContent = 'Данни от: ' + (fmtDate || '');
+            badge.textContent = 'Последно обновяване на списък с имоти: ' + (fmtDate || '');
             badge.style.display = 'block';
         }
     }
