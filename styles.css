@@ -1227,20 +1227,24 @@ body:has(#cookieConsent) .back-to-top { bottom: 90px; }
 
 /* Coming Soon Badge */
 .coming-soon-badge {
-    margin-left: 6px;
     display: inline-flex;
     align-items: center;
-    padding: 2px 8px;
+    padding: 2px 6px;
     border-radius: 9999px;
-    font-size: 10px;
+    font-size: 9px;
     font-weight: 700;
     letter-spacing: 0.2px;
     text-transform: uppercase;
     background: #FEF3C7;
     color: #92400E;
     border: 1px solid #FCD34D;
-    vertical-align: middle;
     white-space: nowrap;
+}
+.coming-soon-above {
+    display: block;
+    margin-bottom: 2px;
+    text-align: center;
+    font-size: 8px;
 }
 .coming-soon-badge-inline {
     margin-left: 8px;

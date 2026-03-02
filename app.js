@@ -274,7 +274,8 @@
     }
     
     function updateHero() {
-        el.heroTotal.textContent = allDeals.length;
+        // Show total auctions from raw data (not just filtered), use metadata count if available
+        el.heroTotal.textContent = window._totalRawDeals || allDeals.length;
         if (allDeals.length > 0) {
             // Only count positive discounts for average
             const discounts = allDeals
@@ -440,6 +441,7 @@ async function load() {
             if (!r.ok) throw new Error('HTTP '+r.status);
             const data = await r.json();
             const raw = Array.isArray(data) ? data : (data.deals || []);
+            window._totalRawDeals = raw.length;
             // Filter out junk cards: must have valid price, valid sqm, and market data
             allDeals = raw.filter(d => {
                 const price = d.auction_price || d.effective_price || d.price || 0;

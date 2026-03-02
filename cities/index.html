@@ -7,7 +7,7 @@
     <meta name="description" content="Намерете имоти на принудителна продажба в София, Варна, Бургас, Пловдив и други градове. Актуална информация за КЧСИ търгове в цяла България.">
     <link rel="icon" type="image/svg+xml" href="../logo.svg">
     <link rel="canonical" href="https://izgodenimot.bg/cities/">
-    <link rel="stylesheet" href="../styles.min.css?v=202603022030">
+    <link rel="stylesheet" href="../styles.min.css?v=202603022040">
     <style>
         .cities-header { padding: 60px 0 40px; background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); text-align: center; }
         .cities-title { font-size: 2.5rem; color: #fff; }
@@ -87,7 +87,8 @@
     <script>
         fetch('../deals.json')
             .then(r => r.json())
-            .then(deals => {
+            .then(data => {
+                const deals = data.deals || data;
                 const cities = {sofia: 'София', varna: 'Варна', plovdiv: 'Пловдив', burgas: 'Бургас', ruse: 'Русе', 'stara-zagora': 'Стара Загора'};
                 for (const [key, name] of Object.entries(cities)) {
                     const count = deals.filter(d => d.city === name).length;

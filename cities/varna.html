@@ -13,7 +13,7 @@
     <meta property="og:title" content="Имоти на търг във Варна | КЧСИ Сделки">
     <meta property="og:description" content="Намерете изгодни морски имоти на принудителна продажба във Варна">
     
-    <link rel="stylesheet" href="../styles.min.css?v=202603022030">
+    <link rel="stylesheet" href="../styles.min.css?v=202603022040">
     <style>
         .city-header { padding: 60px 0 40px; background: linear-gradient(135deg, #0891b2 0%, #164e63 100%); text-align: center; }
         .city-title { font-size: 2.5rem; color: #fff; margin-bottom: 0.5rem; }
@@ -95,7 +95,7 @@
     <script>
         fetch('../deals.json')
             .then(r => r.json())
-            .then(deals => {
+            .then(raw => { var deals = raw.deals || raw; return deals; }).then(deals => {
                 const city = deals.filter(d => d.city === 'Варна');
                 document.getElementById('totalDeals').textContent = city.length;
                 const withDiscount = city.filter(d => d.discount > 0);
