@@ -48,8 +48,8 @@ app = Flask(__name__)
 
 ALLOWED_ORIGINS = [
     "https://martinpetrov8.github.io",
-    "https://kchsi-sdelki.bg",
-    "https://www.kchsi-sdelki.bg",
+    "https://izgodenimot.bg",
+    "https://www.izgodenimot.bg",
 ]
 if os.getenv("FLASK_ENV") == "development":
     ALLOWED_ORIGINS.append("http://localhost:3000")
@@ -59,7 +59,7 @@ CORS(app, origins=ALLOWED_ORIGINS)
 # Config
 SENDER_EMAIL = os.getenv("SENDER_EMAIL", "onboarding@resend.dev")
 SENDER_NAME = os.getenv("SENDER_NAME", "Изгоден Имот")
-SITE_URL = os.getenv("SITE_URL", "https://kchsi-sdelki.bg")
+SITE_URL = os.getenv("SITE_URL", "https://izgodenimot.bg")
 API_URL = os.getenv("RAILWAY_PUBLIC_DOMAIN", os.getenv("API_URL", ""))
 
 app.config['MAX_CONTENT_LENGTH'] = 1024
@@ -272,7 +272,7 @@ def not_found(e):
 # Helpers
 # ============================================================
 
-ALLOWED_REDIRECT_HOSTS = {'martinpetrov8.github.io', 'kchsi-sdelki.bg', 'www.kchsi-sdelki.bg'}
+ALLOWED_REDIRECT_HOSTS = {'martinpetrov8.github.io', 'izgodenimot.bg', 'www.izgodenimot.bg'}
 
 def safe_redirect(url):
     parsed = urlparse(url)

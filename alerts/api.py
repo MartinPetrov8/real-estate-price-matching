@@ -43,18 +43,18 @@ def check_rate_limit():
 DB_PATH = os.getenv("SUBSCRIBERS_DB", "data/subscribers.db")
 SENDER_EMAIL = os.getenv("SENDER_EMAIL", "onboarding@resend.dev")
 SENDER_NAME = os.getenv("SENDER_NAME", "Изгоден Имот")
-SITE_URL = os.getenv("SITE_URL", "https://kchsi-sdelki.bg")
+SITE_URL = os.getenv("SITE_URL", "https://izgodenimot.bg")
 API_URL = os.getenv("RAILWAY_PUBLIC_DOMAIN", os.getenv("API_URL", ""))
 
 # Redirect safety — only allow known hosts
 from urllib.parse import urlparse
-ALLOWED_REDIRECT_HOSTS = {'martinpetrov8.github.io', 'kchsi-sdelki.bg'}
+ALLOWED_REDIRECT_HOSTS = {'martinpetrov8.github.io', 'izgodenimot.bg'}
 
 def safe_redirect(url):
     """Only redirect to allowed hosts."""
     parsed = urlparse(url)
     if parsed.hostname not in ALLOWED_REDIRECT_HOSTS:
-        return redirect("https://kchsi-sdelki.bg")
+        return redirect("https://izgodenimot.bg")
     return redirect(url)
 
 def init_db():

@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://kchsi-sdelki.bg/sitemap.xml
+Sitemap: https://izgodenimot.bg/sitemap.xml
