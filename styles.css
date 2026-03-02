@@ -444,8 +444,10 @@ body {
 .discount-badge {
     display: flex;
     align-items: center;
-    gap: var(--space-sm);
-    flex-wrap: wrap;
+    gap: var(--space-xs);
+    flex-wrap: nowrap;
+    flex-shrink: 0;
+    white-space: nowrap;
 }
 .discount-value {
     display: inline-block;

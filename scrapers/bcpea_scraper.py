@@ -157,6 +157,33 @@ def parse_property_detail(html_content, prop_id):
             if 0 <= v <= 30:
                 floor_val = v
 
+    # Pattern 3: "на X /...) етаж" in full description (Bulgarian ordinal style)
+    if floor_val is None:
+        floor_match = re.search(r'на\s+(\d{1,2})\s*[/\(].*?етаж', html_content, re.I)
+        if floor_match:
+            v = int(floor_match.group(1))
+            if 0 <= v <= 30:
+                floor_val = v
+
+    # Pattern 4: "X-ия етаж" or "X-ти етаж" or "X-ен етаж"
+    if floor_val is None:
+        floor_match = re.search(r'(\d{1,2})\s*[-–]?\s*(?:ия|ти|ен|ри|ви)\s*етаж', html_content, re.I)
+        if floor_match:
+            v = int(floor_match.group(1))
+            if 0 <= v <= 30:
+                floor_val = v
+
+    # Pattern 5: ", ет. X," in any info div (address lines)
+    if floor_val is None:
+        all_info = re.findall(r'<div class="info">(.*?)</div>', html_content, re.DOTALL)
+        for info_block in all_info:
+            m = re.search(r'ет\.\s*(\d{1,2})(?!\d)', info_block, re.I)
+            if m:
+                v = int(m.group(1))
+                if 0 <= v <= 30:
+                    floor_val = v
+                    break
+
     if floor_val is not None:
         data['floor'] = floor_val
     # Rooms

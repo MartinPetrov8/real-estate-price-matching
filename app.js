@@ -631,6 +631,7 @@ async function load() {
     el.sort.addEventListener('change', filter);
     document.getElementById('resetFilters')?.addEventListener('click', reset);
     document.getElementById('emptyResetFilters')?.addEventListener('click', reset);
+    if (el.loadMore) el.loadMore.addEventListener('click', loadMore);
     document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
     
     load();
