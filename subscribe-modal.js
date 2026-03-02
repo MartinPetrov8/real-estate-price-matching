@@ -93,33 +93,42 @@ async function handleSubscribe(e) {
     btn.textContent = 'Изпращане...';
     
     if (typeof trackEvent === 'function') trackEvent('subscribe_attempt', { cities_count: cities.length, min_discount: parseInt(discount, 10) });
-    try {
-        const resp = await fetch(`${ALERT_API_URL}/subscribe`, {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({email, cities, min_discount: parseInt(discount)})
-        });
-        
-        const data = await resp.json();
-        
-        if (resp.ok) {
-            msg.style.color = '#166534';
-            msg.textContent = data.message || 'Успешно! Провери имейла си.';
-            msg.style.display = 'block';
-            document.getElementById('subscribeForm').reset();
-        } else {
+    
+    const payload = JSON.stringify({email, cities, min_discount: parseInt(discount)});
+    const fetchOpts = { method: 'POST', headers: {'Content-Type': 'application/json'}, body: payload };
+    
+    async function trySubscribe(attempt) {
+        try {
+            const resp = await fetch(`${ALERT_API_URL}/subscribe`, fetchOpts);
+            const data = await resp.json();
+            
+            if (resp.ok) {
+                msg.style.color = '#166534';
+                msg.textContent = data.message || 'Успешно! Провери имейла си.';
+                msg.style.display = 'block';
+                document.getElementById('subscribeForm').reset();
+                if (typeof trackEvent === 'function') trackEvent('subscribe_success');
+            } else {
+                msg.style.color = '#dc2626';
+                msg.textContent = data.error || 'Възникна грешка';
+                msg.style.display = 'block';
+            }
+        } catch (err) {
+            if (attempt < 2) {
+                btn.textContent = 'Опитваме пак...';
+                await new Promise(r => setTimeout(r, 2000));
+                return trySubscribe(attempt + 1);
+            }
             msg.style.color = '#dc2626';
-            msg.textContent = data.error || 'Възникна грешка';
+            msg.textContent = 'Грешка при свързване. Опитайте по-късно.';
             msg.style.display = 'block';
         }
-    } catch (err) {
-        msg.style.color = '#dc2626';
-        msg.textContent = 'Грешка при свързване със сървъра';
-        msg.style.display = 'block';
     }
     
+    await trySubscribe(1);
+    
     btn.disabled = false;
-    btn.textContent = 'Абонирай се';
+    btn.textContent = 'Запиши ме за ранен достъп';
 }
 
 // Initialize on page load

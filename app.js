@@ -194,9 +194,9 @@
                 <div class="property-info">
                     <div class="info-item"><div class="info-content"><span class="info-label">Площ</span><span class="info-value">${isHouse && buildingSqm ? buildingSqm+' м² (сграда)' : (sqm ? sqm+' м²' : 'N/A')}</span></div></div>
                     ${isHouse && plotSqm ? '<div class="info-item"><div class="info-content"><span class="info-label">Парцел</span><span class="info-value">'+plotSqm+' м²</span></div></div>' : ''}
-                    <div class="info-item"><div class="info-content"><span class="info-label">Етаж</span><span class="info-value">${floor || 'N/A'}</span></div></div>
+                    ${floor && !isHouse && propertyType !== 'гараж' && propertyType !== 'земя' ? '<div class="info-item"><div class="info-content"><span class="info-label">Етаж</span><span class="info-value">'+floor+'</span></div></div>' : ''}
                     ${roomTypeDisplay ? '<div class="info-item"><div class="info-content"><span class="info-label">Тип</span><span class="info-value">'+roomTypeDisplay+'</span></div></div>' : ''}
-                    <div class="info-item"><div class="info-content"><span class="info-label">Сравнения</span><span class="info-value">${comparables > 0 ? (comparables + ' имота' + (comparablesLevel === 'hood' ? '' : ' (в ' + city + ')')) : 'Няма данни'}</span></div></div>
+                    ${comparables > 0 ? '<div class="info-item"><div class="info-content"><span class="info-label">Сравнения</span><span class="info-value">' + comparables + ' имота' + (comparablesLevel === 'hood' ? '' : ' (в ' + city + ')') + '</span></div></div>' : ''}
                 </div>
                 <div class="countdown-section">
                     <svg class="countdown-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>

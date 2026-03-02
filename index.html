@@ -122,7 +122,7 @@
     }
     </script>
     
-    <link rel="stylesheet" href="styles.min.css?v=202603011707">
+    <link rel="stylesheet" href="styles.min.css?v=202603020818">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -138,7 +138,12 @@
                         <span class="logo-tagline">Изгодни имоти от търгове</span>
                     </div>
                 </div>
-                <nav class="header-nav">
+                <button class="hamburger" id="hamburgerBtn" aria-label="Меню" aria-expanded="false" onclick="document.getElementById('mainNav').classList.toggle('nav-open');this.classList.toggle('is-active');this.setAttribute('aria-expanded',this.classList.contains('is-active'))">
+                    <span class="hamburger-line"></span>
+                    <span class="hamburger-line"></span>
+                    <span class="hamburger-line"></span>
+                </button>
+                <nav class="header-nav" id="mainNav">
                     <a href="#deals" class="nav-link">Сделки</a>
                     <a href="#how-it-works" class="nav-link">Как работи</a>
                     <a href="cities/" class="nav-link">Градове</a>
@@ -219,9 +224,9 @@
                         <div class="filter-group filter-range">
                             <label>Цена (EUR)</label>
                             <div class="range-inputs">
-                                <input type="number" id="minPrice" aria-label="Минимална цена" placeholder="От" min="0">
+                                <input type="number" id="minPrice" aria-label="Минимална цена" placeholder="€ От" min="0" step="1000">
                                 <span>-</span>
-                                <input type="number" id="maxPrice" aria-label="Максимална цена" placeholder="До" min="0">
+                                <input type="number" id="maxPrice" aria-label="Максимална цена" placeholder="€ Без лимит" min="0" step="1000">
                             </div>
                         </div>
                         <div class="filter-group">
@@ -259,8 +264,14 @@
             </div>
 
             <div id="loadingState" class="loading-state">
-                <div class="spinner"></div>
-                <p>Зареждаме най-добрите сделки...</p>
+                <div class="deals-grid" style="width:100%">
+                    <div class="skeleton-card"><div class="skeleton skeleton-title"></div><div class="skeleton skeleton-text"></div><div class="skeleton skeleton-text short"></div></div>
+                    <div class="skeleton-card"><div class="skeleton skeleton-title"></div><div class="skeleton skeleton-text"></div><div class="skeleton skeleton-text short"></div></div>
+                    <div class="skeleton-card"><div class="skeleton skeleton-title"></div><div class="skeleton skeleton-text"></div><div class="skeleton skeleton-text short"></div></div>
+                    <div class="skeleton-card"><div class="skeleton skeleton-title"></div><div class="skeleton skeleton-text"></div><div class="skeleton skeleton-text short"></div></div>
+                    <div class="skeleton-card"><div class="skeleton skeleton-title"></div><div class="skeleton skeleton-text"></div><div class="skeleton skeleton-text short"></div></div>
+                    <div class="skeleton-card"><div class="skeleton skeleton-title"></div><div class="skeleton skeleton-text"></div><div class="skeleton skeleton-text short"></div></div>
+                </div>
             </div>
 
             <div id="errorState" class="error-state hidden">
@@ -323,7 +334,7 @@
             </div>
             <div class="methodology-note">
                 <span class="methodology-icon">📍</span>
-                <span>Пазарната цена се изчислява от активни обяви в <strong>същия квартал</strong> (когато има достатъчно данни) или в целия град като резервен вариант. Изполваме медианна цена на кв.м от imot.bg и OLX на база минимум 3 сравними имота.</span>
+                <span>Пазарната цена се изчислява от активни обяви в <strong>същия квартал</strong> (когато има достатъчно данни) или в целия град като резервен вариант. Използваме медианна цена на кв.м от imot.bg и OLX на база минимум 3 сравними имота.</span>
             </div>
         </div>
     </section>
@@ -421,7 +432,6 @@
                         Но винаги правете собствено проучване - проверете състоянието на имота, тежести, и местоположението лично.
                     </div>
                 </div>
-            </div>
                 <div class="faq-item">
                     <div class="faq-question">Какво е частен съдебен изпълнител (ЧСИ)?</div>
                     <div class="faq-answer">Частният съдебен изпълнител е лице с юридическо образование, овластено от държавата да извършва принудително изпълнение. ЧСИ провеждат <strong>публични продани</strong> на имоти за събиране на вземания по изпълнителни дела. Всички ЧСИ са членове на <strong>Камарата на частните съдебни изпълнители (КЧСИ)</strong>.</div>
@@ -434,6 +444,7 @@
                     <div class="faq-question">Как да намеря всички активни търгове на недвижими имоти?</div>
                     <div class="faq-answer">Официалните обявления се публикуват в <strong>Регистъра на публичните продажби</strong> към КЧСИ. Нашият сайт автоматично събира тези обявления и ги сравнява с пазарни цени, за да ви покаже кои <strong>принудителни търгове</strong> предлагат истински изгодни сделки.</div>
                 </div>
+            </div>
 
             <div class="faq-more">
                 <a href="blog/chesti-vaprosi.html" class="btn btn-outline">Вижте всички въпроси →</a>
@@ -463,12 +474,12 @@
         </div>
     </footer>
 
-    <script src="analytics.min.js?v=202603011707"></script>
-    <script src="app.min.js?v=202603011707"></script>
+    <script src="analytics.min.js?v=202603020818"></script>
+    <script src="app.min.js?v=202603020818"></script>
 <!-- Back to Top -->
     <button id="backToTop" class="back-to-top" aria-label="Към началото">
         <span>↑</span>
     </button>
-<script src="subscribe-modal.min.js?v=202603011707"></script>
+<script src="subscribe-modal.min.js?v=202603020818"></script>
 </body>
 </html>

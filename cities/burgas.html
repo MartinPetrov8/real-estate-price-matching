@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Имоти на търг в Бургас | Принудителни продажби КЧСИ Бургас 2026</title>
+    <meta name="description" content="Имоти на принудителна продажба в Бургас. Апартаменти, къщи и гаражи от КЧСИ търгове в Бургас с до 50% отстъпка от пазарна цена.">
+    <meta name="keywords" content="имоти на търг бургас, КЧСИ бургас, принудителна продажба бургас, публична продан бургас">
+    <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+    <link rel="canonical" href="https://martinpetrov8.github.io/real-estate-price-matching/cities/burgas.html">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Имоти на търг в Бургас | КЧСИ Сделки">
+    <meta property="og:description" content="Изгодни имоти на принудителна продажба в Бургас">
+    <script type="application/ld+json">
+    {"@context":"https://schema.org","@type":"ItemList","name":"Имоти на търг в Бургас","description":"Списък с имоти на принудителна продажба в Бургас","itemListElement":[]}
+    </script>
+    <link rel="stylesheet" href="../styles.min.css?v=202603020818">
+    <style>
+        .city-header{padding:60px 0 40px;background:linear-gradient(135deg,#1a1a2e 0%,#16213e 100%);text-align:center}
+        .city-title{font-size:2.5rem;color:#fff;margin-bottom:.5rem}
+        .city-subtitle{color:#a0aec0;font-size:1.1rem}
+        .city-stats{display:flex;justify-content:center;gap:3rem;margin-top:2rem}
+        .city-stat{text-align:center}
+        .city-stat-value{font-size:2rem;color:#667eea;font-weight:700}
+        .city-stat-label{color:#a0aec0;font-size:.9rem}
+        .city-content{max-width:900px;margin:0 auto;padding:2rem 1rem}
+        .city-content h2{color:#1a1a2e;margin:2rem 0 1rem}
+        .city-content p{color:#475569;line-height:1.8}
+    </style>
+</head>
+<body>
+    <header class="header"><div class="container"><div class="header-content">
+        <a href="../" class="logo" style="text-decoration:none"><span class="logo-icon">🏛️</span><div class="logo-text"><span class="logo-name">КЧСИ Сделки</span><span class="logo-tagline">Изгодни имоти от търгове</span></div></a>
+        <nav class="header-nav"><a href="../" class="nav-link">Всички сделки</a><a href="../blog/" class="nav-link">Блог</a></nav>
+    </div></div></header>
+    <section class="city-header"><div class="container">
+        <h1 class="city-title">🏙️ Имоти на търг в Бургас</h1>
+        <p class="city-subtitle">Принудителни продажби от КЧСИ в Бургас и Бургаска област</p>
+        <div class="city-stats">
+            <div class="city-stat"><div class="city-stat-value" id="totalDeals">-</div><div class="city-stat-label">Активни търгове</div></div>
+            <div class="city-stat"><div class="city-stat-value" id="avgDiscount">-</div><div class="city-stat-label">Средна отстъпка</div></div>
+        </div>
+    </div></section>
+    <main class="city-content">
+        <h2>Защо да търсите имот на търг в Бургас?</h2>
+        <p>Бургас е най-големият град по Черноморието с активен имотен пазар. Близостта до морски курорти и летището прави имотите тук привлекателни за живеене и отдаване под наем.</p>
+        <h2>Популярни квартали за търгове</h2>
+        <p>Най-често срещаните райони с имоти на търг в Бургас са: Меден рудник, Славейков, Изгрев, Зорница и Сарафово.</p>
+        <h2>Актуални сделки в Бургас</h2>
+        <p style="text-align:center;padding:2rem"><a href="../?city=Бургас" style="background:#667eea;color:white;padding:1rem 2rem;border-radius:8px;text-decoration:none;font-weight:600">Виж всички имоти в Бургас →</a></p>
+        <h2>Пазарни цени в Бургас</h2>
+        <p>Средна цена: <strong>€1692/м²</strong> (OLX + imot.bg)</p>
+        <p style="font-size:.9rem;color:#64748b">* Данните се обновяват ежедневно</p>
+    </main>
+    <footer class="footer"><div class="container"><p>© 2026 КЧСИ Сделки. <a href="../privacy.html" style="color:#64748b">Поверителност</a></p></div></footer>
+    <script>
+        fetch("../deals.json").then(r=>r.json()).then(deals=>{
+            var c=deals.filter(d=>d.city&&d.city.includes("Бургас"));
+            document.getElementById("totalDeals").textContent=c.length;
+            var w=c.filter(d=>(d.discount_pct||d.discount||0)>0);
+            if(w.length>0){var a=w.reduce((s,d)=>s+(d.discount_pct||d.discount||0),0)/w.length;document.getElementById("avgDiscount").textContent=Math.round(a)+"%"}
+        });
+    </script>
+    <script src="../analytics.min.js?v=202603020818"></script>
+</body>
+</html>
