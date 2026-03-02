@@ -144,10 +144,10 @@
         const isUrgent = days !== null && days <= 5 && days >= 0;
         const icon = propIcon(propertyType);
         const cid = 'cd-'+bcpeaId;
-        const barW = Math.max(10, Math.min(90, (auctionPrice/marketPrice)*100));
+        const barW = marketPrice ? Math.max(10, Math.min(90, (auctionPrice/marketPrice)*100)) : 50;
         
         // Data reliability warnings
-        const hasDataIssues = comparables === 0 || discountPct < 0;
+        const hasDataIssues = hasReliableMarketData && discountPct < 0;
         const dataWarning = hasDataIssues ? `
             <div class="data-warning">
                 <span class="warning-icon">⚠️</span>
@@ -181,10 +181,10 @@
                         <span class="card-price-value">${fmtPrice(auctionPrice)}</span>
                         <span class="card-price-sqm">${fmtSqm(auctionPrice, sqm)}</span>
                     </div>
-                    <div class="discount-badge">
+                    ${hasReliableMarketData ? `<div class="discount-badge">
                         <div class="discount-value">${discountPct >= 0 ? '-' : '+'}${Math.abs(Math.round(discountPct))}%</div>
                         ${discountPct >= 0 ? `<div class="discount-amount">пазарна ${fmtSqm(marketPrice, sqm)}</div>` : ''}
-                    </div>
+                    </div>` : '<div class="discount-badge no-market"><div class="discount-value" style="background:#f1f5f9;color:#64748b;font-size:11px;">Без оценка</div></div>'}
                 </div>
             </div>
             <div class="card-body">
@@ -364,12 +364,14 @@
         filteredDeals = allDeals.filter(d => {
             const auctionPrice = d.auction_price || d.effective_price || d.price || 0;
             const discountPct = d.discount_pct !== undefined ? d.discount_pct : (d.discount || 0);
+            const hasMarket = (d.comparables_count || 0) > 0 && d.market_price;
             if (city !== 'all' && d.city !== city) return false;
             if (auctionPrice < minP || auctionPrice > maxP) return false;
-            if (discountPct < minD) return false;
+            if (minD > 0 && hasMarket && discountPct < minD) return false;
+            if (minD > 0 && !hasMarket) return false; // hide no-data deals when discount filter is active
             if (pill === 'new' && !isNew(d.auction_end)) return false;
             if (pill === 'ending') { const days = daysUntil(d.auction_end); if (days === null || days > 7) return false; }
-            if (pill === 'best' && discountPct < 40) return false;
+            if (pill === 'best' && (!hasMarket || discountPct < 40)) return false;
             if (pill === 'sofia' && !(d.city && d.city.includes('София'))) return false;
             return true;
         });
@@ -442,18 +444,26 @@ async function load() {
             const data = await r.json();
             const raw = Array.isArray(data) ? data : (data.deals || []);
             window._totalRawDeals = raw.length;
-            // Filter out junk cards: must have valid price, valid sqm, and market data
+            // Keep all deals with valid price and sqm; sort market-data deals first
             allDeals = raw.filter(d => {
                 const price = d.auction_price || d.effective_price || d.price || 0;
                 const sqm = d.sqm || 0;
-                const comparables = d.comparables_count || d.market_sample_size || 0;
-                const hasMarket = comparables > 0 && d.market_price;
-                const discount = d.discount_pct !== undefined ? d.discount_pct : (d.discount || 0);
-                // Drop: zero price, zero sqm, no market data, or negative/zero discount with no market data
                 if (price <= 0) return false;
                 if (sqm <= 0) return false;
-                if (!hasMarket) return false;
                 return true;
+            });
+            // Sort: deals with market comparison first (by discount), then the rest by price
+            allDeals.sort((a, b) => {
+                const aHas = (a.comparables_count || 0) > 0 && a.market_price;
+                const bHas = (b.comparables_count || 0) > 0 && b.market_price;
+                if (aHas && !bHas) return -1;
+                if (!aHas && bHas) return 1;
+                if (aHas && bHas) {
+                    const aDisc = a.discount_pct !== undefined ? a.discount_pct : (a.discount || 0);
+                    const bDisc = b.discount_pct !== undefined ? b.discount_pct : (b.discount || 0);
+                    return bDisc - aDisc;
+                }
+                return (a.price || 0) - (b.price || 0);
             });
             // Store metadata for data freshness badge
             window._dealsMetadata = Array.isArray(data) ? null : {
