@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://martinpetrov8.github.io/real-estate-price-matching/sitemap.xml
+Sitemap: https://kchsi-sdelki.bg/sitemap.xml

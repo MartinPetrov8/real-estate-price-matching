@@ -30,7 +30,7 @@ DEALS_PATH = "deals.json"
 SUBSCRIBERS_DB = "data/subscribers.db"
 SENDER_EMAIL = os.getenv("SENDER_EMAIL", "onboarding@resend.dev")
 SENDER_NAME = os.getenv("SENDER_NAME", "Изгоден Имот")
-SITE_URL = "https://martinpetrov8.github.io/real-estate-price-matching"
+SITE_URL = "https://kchsi-sdelki.bg"
 
 def log(msg):
     print(f"[{datetime.now().strftime('%H:%M:%S')}] {msg}")
