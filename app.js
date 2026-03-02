@@ -288,7 +288,7 @@
         }
         // Update data freshness badge
         const meta = window._dealsMetadata;
-        const badge = document.getElementById('data-freshness-badge');
+        var badge = document.getElementById('data-freshness-footer') || document.getElementById('data-freshness-badge');
         if (badge && meta) {
             const rawDate = meta.generated_at || '';
             let fmtDate = rawDate;
@@ -296,8 +296,8 @@
                 const d = new Date(rawDate.includes('.') ? rawDate.split('.').reverse().join('-') : rawDate);
                 if (!isNaN(d)) fmtDate = d.toLocaleDateString('bg-BG', {day:'numeric', month:'long', year:'numeric'});
             }
-            badge.textContent = fmtDate || '';
-            badge.style.display = 'inline-block';
+            badge.textContent = 'Данни от: ' + (fmtDate || '');
+            badge.style.display = 'block';
         }
     }
     
