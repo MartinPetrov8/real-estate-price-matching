@@ -1246,10 +1246,8 @@ body:has(#cookieConsent) .back-to-top { bottom: 90px; }
     padding: 1px 6px;
 }
 .subscribe-link {
-    display: flex;
-    flex-direction: column;
+    display: inline-flex;
     align-items: center;
-    line-height: 1.2;
 }
 .coming-soon-badge-inline {
     margin-left: 8px;
