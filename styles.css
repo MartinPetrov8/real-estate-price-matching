@@ -63,7 +63,7 @@ body {
     gap: var(--space-md);
 }
 .logo { display: flex; align-items: center; gap: var(--space-sm); }
-.logo-icon { font-size: 28px; }
+.logo-icon { width: 28px; height: 28px; flex-shrink: 0; }
 .logo-text h1 {
     font-size: 20px;
     font-weight: 700;
@@ -107,6 +107,7 @@ body {
 
 @media (max-width: 768px) {
     .hamburger { display: flex; }
+    .header-content { position: relative; padding: 10px 0; }
     .header-nav {
         display: none;
         position: absolute;
@@ -119,6 +120,7 @@ body {
         border-bottom: 1px solid var(--gray-200);
         box-shadow: var(--shadow-md);
         gap: 0;
+        z-index: 100;
     }
     .header-nav.nav-open { display: flex; }
     .header-nav .nav-link {
@@ -127,7 +129,16 @@ body {
         font-size: 16px;
     }
     .header-nav .nav-link:last-child { border-bottom: none; }
-    .header-content { position: relative; }
+    .hero { padding: var(--space-xl) 0; }
+    .hero-title { font-size: 24px; }
+    .hero-subtitle { font-size: 15px; }
+    .hero-stats { padding: var(--space-md); gap: var(--space-md); }
+    .hero-stat-value { font-size: 24px; }
+    .filters-section { margin-top: var(--space-md); }
+    .filter-pills { gap: 6px; padding-bottom: var(--space-md); margin-bottom: var(--space-md); }
+    .pill { padding: 8px 12px; font-size: 13px; }
+    .card-price-value { font-size: 20px; }
+    .discount-value { font-size: 18px; }
 }
 .hero {
     background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);

@@ -557,6 +557,7 @@ async function load() {
                         `<li>⚠ Цената е с <strong>${Math.abs(Math.round(discountPct))}%</strong> над пазарната ниво</li>
                          <li>⚠ Тръжната цена е с <strong>${fmtPrice(auctionPrice - marketPrice)}</strong> по-висока от пазарната</li>`
                     ) : '<li>⚠ Няма достатъчно данни за пазарна оценка</li>'}
+                    ${d.market_min_sqm && d.market_max_sqm ? `<li>📊 Пазарен диапазон: <strong>€${d.market_min_sqm}/м²</strong> – <strong>€${d.market_max_sqm}/м²</strong> (медиана €${d.market_avg}/м²)</li>` : ''}
                     ${d.neighborhood_range ? `<li>✓ Ценови диапазон в района: ${escHtml(d.neighborhood_range)}</li>` : ''}
                     ${comparables > 0 ? `<li>✓ Базирано на ${comparables} сравними обяви${modalComparablesLevel === 'hood' ? ' в квартала' : modalComparablesLevel === 'city_size' ? ' в ' + city + ' (подобен размер)' : modalComparablesLevel === 'city' ? ' в ' + city + ' (целия град — без квартал)' : ''}</li>` : '<li>⚠ Няма достатъчно сравними обяви за надеждна оценка</li>'}
                 </ul>

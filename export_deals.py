@@ -138,6 +138,11 @@ def get_market_median(city, size_sqm, address=None, db_neighborhood=None,
         s = sorted(prices)
         return s[len(s) // 2]
 
+    def _stats(prices):
+        """Return (median, min, max) for a price list."""
+        s = sorted(prices)
+        return s[len(s) // 2], s[0], s[-1]
+
     if auction_hood:
         # Pass 1: hood + size ±10sqm + room-type band (tightest — all three constraints)
         if room_band:
@@ -294,6 +299,9 @@ def export_deals():
         matched_hood = None
         match_level = None
         
+        market_min_sqm = None
+        market_max_sqm = None
+        
         if is_apartment and not is_partial:
             market_median, sample_size, matched_hood, match_level = get_market_median(
                 city, size, row['address'], db_neighborhood=row.get('neighborhood'),
@@ -305,6 +313,23 @@ def export_deals():
                 discount = round(((market_median - price_per_sqm) / market_median) * 100, 1)
                 if discount < 0:
                     discount = None  # Negative = overpriced, don't show unreliable discount
+                # Get min/max from same comparables (quick re-query)
+                try:
+                    _mconn = sqlite3.connect(MARKET_DB)
+                    _mc = _mconn.cursor()
+                    city_c = city.replace('гр. ', '').replace('с. ', '').strip()
+                    _mc.execute("""
+                        SELECT MIN(price_per_sqm), MAX(price_per_sqm) FROM market_listings
+                        WHERE city = ? AND price_per_sqm IS NOT NULL AND price_per_sqm > 200 AND price_per_sqm < 5000
+                        AND size_sqm BETWEEN ? AND ?
+                    """, (city_c, size - 10, size + 10))
+                    _r = _mc.fetchone()
+                    if _r and _r[0]:
+                        market_min_sqm = round(_r[0])
+                        market_max_sqm = round(_r[1])
+                    _mconn.close()
+                except Exception:
+                    pass
             elif market_median:
                 # Not enough comparables for reliable discount
                 market_avg = round(market_median)
@@ -325,6 +350,8 @@ def export_deals():
             'savings_eur': round((market_avg * size) - price) if market_avg and size and price else None,
             'comparables_count': sample_size if market_avg else 0,
             'comparables_level': match_level,  # 'hood', 'city_size', 'city', or None
+            'market_min_sqm': market_min_sqm,
+            'market_max_sqm': market_max_sqm,
             'discount': discount if not is_partial else None,
             'property_type': frontend_type,
             'floor': row.get('floor'),
