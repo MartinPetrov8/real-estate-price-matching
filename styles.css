@@ -668,24 +668,21 @@ body {
     margin-bottom: var(--space-2xl);
 }
 .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-xl); }
-.step { text-align: center; position: relative; }
+.step { text-align: center; }
 .step-number {
-    position: absolute;
-    top: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 32px;
-    height: 32px;
+    width: 36px;
+    height: 36px;
     background: var(--primary);
     color: white;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 14px;
+    font-size: 15px;
     font-weight: 700;
+    margin: 0 auto var(--space-sm);
 }
-.step-icon { font-size: 48px; margin-bottom: var(--space-md); margin-top: var(--space-lg); }
+.step-icon { font-size: 48px; margin-bottom: var(--space-md); }
 .step h3 { font-size: 18px; font-weight: 600; color: var(--gray-700); margin-bottom: var(--space-xs); }
 .step p { font-size: 14px; color: var(--gray-500); }
 .footer {
