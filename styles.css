@@ -1240,11 +1240,18 @@ body:has(#cookieConsent) .back-to-top { bottom: 90px; }
     border: 1px solid #FCD34D;
     white-space: nowrap;
 }
-.coming-soon-above {
+.coming-soon-below {
     display: block;
-    margin-bottom: 2px;
+    margin-top: 1px;
     text-align: center;
     font-size: 8px;
+    padding: 1px 6px;
+}
+.subscribe-link {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    line-height: 1.2;
 }
 .coming-soon-badge-inline {
     margin-left: 8px;
