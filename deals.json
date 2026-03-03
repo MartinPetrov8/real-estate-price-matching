@@ -60,6 +60,33 @@
       "score": 5
     },
     {
+      "id": "86474",
+      "city": "София",
+      "neighborhood": "Оборище",
+      "address": "гр. София, бул.”Княз Александър Дондуков” №47",
+      "price": 172640,
+      "effective_price": 172640,
+      "sqm": 99.5,
+      "price_per_sqm": 1735,
+      "market_avg": 3000,
+      "market_price": 298590,
+      "savings_eur": 125950,
+      "comparables_count": 52,
+      "comparables_level": "hood",
+      "market_min_sqm": 900,
+      "market_max_sqm": 4706,
+      "discount": 42.2,
+      "property_type": "apartment",
+      "floor": 5,
+      "property_type_bg": "Тристаен апартамент",
+      "auction_start": null,
+      "auction_end": "02.04.2026",
+      "url": "https://sales.bcpea.org/properties/86474",
+      "matched_neighborhood": "Оборище",
+      "partial_ownership": null,
+      "score": 5
+    },
+    {
       "id": "86407",
       "city": "Варна",
       "neighborhood": null,
@@ -168,36 +195,9 @@
       "score": 4
     },
     {
-      "id": "86474",
-      "city": "София",
-      "neighborhood": null,
-      "address": "гр. София, бул.”Княз Александър Дондуков” №47",
-      "price": 172640,
-      "effective_price": 172640,
-      "sqm": 99.5,
-      "price_per_sqm": 1735,
-      "market_avg": 2389,
-      "market_price": 237777,
-      "savings_eur": 65137,
-      "comparables_count": 411,
-      "comparables_level": "city_size",
-      "market_min_sqm": 900,
-      "market_max_sqm": 4706,
-      "discount": 27.4,
-      "property_type": "apartment",
-      "floor": 5,
-      "property_type_bg": "Тристаен апартамент",
-      "auction_start": null,
-      "auction_end": "02.04.2026",
-      "url": "https://sales.bcpea.org/properties/86474",
-      "matched_neighborhood": null,
-      "partial_ownership": null,
-      "score": 3
-    },
-    {
       "id": "84674",
       "city": "Варна",
-      "neighborhood": null,
+      "neighborhood": "Младост",
       "address": "ж.к. Младост II м.р., бл. 148",
       "price": 86241,
       "effective_price": 86241,
@@ -224,7 +224,7 @@
     {
       "id": "86216",
       "city": "Варна",
-      "neighborhood": null,
+      "neighborhood": "Трошево",
       "address": "ж.к. Трошево, бл. 77",
       "price": 54880,
       "effective_price": 54880,
@@ -278,7 +278,7 @@
     {
       "id": "86364",
       "city": "Русе",
-      "neighborhood": null,
+      "neighborhood": "Изток",
       "address": "гр. Русе, общ. Русе, обл. Русе, кв. Изток, ул. „Рига“ № 2, вх. 2, ет. 3, ап. Г",
       "price": 85376,
       "effective_price": 85376,
@@ -305,7 +305,7 @@
     {
       "id": "86019",
       "city": "Русе",
-      "neighborhood": null,
+      "neighborhood": "Широк Център",
       "address": "гр. Русе, общ. Русе, обл. Русе, ул. Панайот Волов № 11, ет. 1, ап. 1",
       "price": 206019,
       "effective_price": 206019,
@@ -332,7 +332,7 @@
     {
       "id": "86260",
       "city": "Тръстеник",
-      "neighborhood": null,
+      "neighborhood": "Две Печалби",
       "address": "ИД 1201/2023г. - с. Тръстеник, общ. Иваново, местност ДВЕ ПЕЧАЛБИ",
       "price": 72,
       "effective_price": 72,
@@ -791,7 +791,7 @@
     {
       "id": "86265",
       "city": "Дряновец",
-      "neighborhood": null,
+      "neighborhood": "Кортарла",
       "address": "ИД 179/2018г - с. Дряновец, местност КОРТАРЛА",
       "price": 256,
       "effective_price": 256,
@@ -1736,7 +1736,7 @@
     {
       "id": "86362",
       "city": "Капитан Димитриево",
-      "neighborhood": null,
+      "neighborhood": "Растето",
       "address": "Местност „Растето“",
       "price": 3888,
       "effective_price": 3888,
@@ -2276,7 +2276,7 @@
     {
       "id": "86182",
       "city": "Стоилово",
-      "neighborhood": null,
+      "neighborhood": "Пирянет",
       "address": "местност ПИРЯНЕТ",
       "price": 6632,
       "effective_price": 6632,
@@ -2330,7 +2330,7 @@
     {
       "id": "86105",
       "city": "Лом",
-      "neighborhood": null,
+      "neighborhood": "Младеново",
       "address": "гр. Лом, кв. Младеново, ул. Явор 18",
       "price": 6704,
       "effective_price": 6704,
@@ -2438,7 +2438,7 @@
     {
       "id": "86215",
       "city": "Пещерско",
-      "neighborhood": null,
+      "neighborhood": "Узун Парче",
       "address": "местност УЗУН ПАРЧЕ",
       "price": 7571,
       "effective_price": 7571,
@@ -3032,7 +3032,7 @@
     {
       "id": "86181",
       "city": "Визица",
-      "neighborhood": null,
+      "neighborhood": "Каламарево",
       "address": "местност КАЛАМАРЕВО",
       "price": 15976,
       "effective_price": 15976,
@@ -3572,7 +3572,7 @@
     {
       "id": "86149",
       "city": "Варна",
-      "neighborhood": null,
+      "neighborhood": "Владислав Варненчик",
       "address": "жк. Владислав Варненчик 259",
       "price": 25244,
       "effective_price": 25244,
@@ -4031,7 +4031,7 @@
     {
       "id": "86108",
       "city": "Медковец",
-      "neighborhood": null,
+      "neighborhood": "Бреста",
       "address": "местност Бреста",
       "price": 31274,
       "effective_price": 31274,
@@ -4139,7 +4139,7 @@
     {
       "id": "86020",
       "city": "Русе",
-      "neighborhood": null,
+      "neighborhood": "Широк Център",
       "address": "гр. Русе, общ. Русе, обл. Русе, ул. Панайот Волов № 11, ет. 1, гараж 2",
       "price": 32902,
       "effective_price": 32902,
@@ -4652,7 +4652,7 @@
     {
       "id": "86477",
       "city": "Асеновград",
-      "neighborhood": null,
+      "neighborhood": "Запад",
       "address": "гр. Асеновград, ж.к. Запад, ул. Георги Ковачев №9, ет. 6, ап. 32",
       "price": 43680,
       "effective_price": 43680,
@@ -5084,7 +5084,7 @@
     {
       "id": "86405",
       "city": "Ямбол",
-      "neighborhood": null,
+      "neighborhood": "Хале",
       "address": "ЖИЛИЩЕ, АПАРТАМЕНТ № 81, находящ се в гр. Ямбол, ж.к. „Хале” бл.9, вх.Г, ет.6,",
       "price": 56733,
       "effective_price": 56733,
@@ -6056,7 +6056,7 @@
     {
       "id": "86489",
       "city": "Първомай",
-      "neighborhood": null,
+      "neighborhood": "Оджовица-Чалията",
       "address": "общ. Петрич, местност \"Оджовица - Чалията\"",
       "price": 118767,
       "effective_price": 118767,
@@ -6218,7 +6218,7 @@
     {
       "id": "86366",
       "city": "Русе",
-      "neighborhood": null,
+      "neighborhood": "Възраждане",
       "address": "гр. Русе, общ. Русе, обл. Русе, кв. Възраждане, ул. „Янтра“ № 12, ет. 0",
       "price": 139069,
       "effective_price": 139069,
@@ -6380,7 +6380,7 @@
     {
       "id": "86048",
       "city": "Благоевград",
-      "neighborhood": null,
+      "neighborhood": "Южна Промишлена Зона",
       "address": "Промишлена зона",
       "price": 171765,
       "effective_price": 171765,
@@ -6542,7 +6542,7 @@
     {
       "id": "86424",
       "city": "Варна",
-      "neighborhood": null,
+      "neighborhood": "Възраждане",
       "address": "ВАРНА ЖК ВЪЗРАЖДАНЕ, УЛ. ИВАН ЯНЕВ, № 1",
       "price": 224375,
       "effective_price": 224375,
@@ -6974,7 +6974,7 @@
     {
       "id": "86524",
       "city": "Старосел",
-      "neighborhood": null,
+      "neighborhood": "Драганчов Дол",
       "address": "с. Старосел, местност Драганчов Дол, общ.Хисаря, обл. Пловдив",
       "price": 387073,
       "effective_price": 387073,
@@ -7217,7 +7217,7 @@
     {
       "id": "86047",
       "city": "Благоевград",
-      "neighborhood": null,
+      "neighborhood": "Южна Промишлена Зона",
       "address": "Промишлена зона",
       "price": 713855,
       "effective_price": 713855,
@@ -7244,7 +7244,7 @@
     {
       "id": "86016",
       "city": "Троян",
-      "neighborhood": null,
+      "neighborhood": "Сеновоза",
       "address": "местност \"Сеновоза\"",
       "price": 727805,
       "effective_price": 727805,
@@ -7271,7 +7271,7 @@
     {
       "id": "86423",
       "city": "Варна",
-      "neighborhood": null,
+      "neighborhood": "Възраждане",
       "address": "ВАРНА ЖК ВЪЗРАЖДАНЕ, УЛ. ИВАН ЯНЕВ, № 1",
       "price": 790167,
       "effective_price": 790167,
@@ -7298,7 +7298,7 @@
     {
       "id": "86178",
       "city": "Кърджали",
-      "neighborhood": null,
+      "neighborhood": "Център",
       "address": "бул.България №2 Б",
       "price": 2038380,
       "effective_price": 2038380,
@@ -7325,7 +7325,7 @@
     {
       "id": "86465",
       "city": "Тополи",
-      "neighborhood": null,
+      "neighborhood": "Одесос",
       "address": "гр. Варна, район „Одесос“, ул. „Д-р Людвиг Заменхоф“ № 1, ет.2",
       "price": 2259853,
       "effective_price": 2259853,
@@ -7406,7 +7406,7 @@
     {
       "id": "86217",
       "city": "София",
-      "neighborhood": null,
+      "neighborhood": "Красно Село",
       "address": "София, Столична община – Район “Красно село”, бул.”Ген. Михаил Д. Скобелев” №55",
       "price": 4756978,
       "effective_price": 4756978,
