@@ -82,6 +82,27 @@ def main():
         else:
             log("✅ Export complete")
     
+    # Step 4b: Data coverage validation
+    if not args.market_only and success:
+        log("\n🔍 Step 4b: Validating data coverage...")
+        try:
+            import json
+            with open('deals.json', 'r', encoding='utf-8') as f:
+                data = json.load(f)
+            deals = data.get('deals', [])
+            total = len(deals)
+            with_market = len([d for d in deals if d.get('market_avg')])
+            coverage_pct = (with_market / total * 100) if total > 0 else 0
+            log(f"  Total deals: {total}")
+            log(f"  With market data: {with_market} ({coverage_pct:.1f}%)")
+            if coverage_pct < 20:
+                log(f"  ⚠️ COVERAGE ALERT: Only {coverage_pct:.1f}% of deals have market data (threshold: 20%)")
+                log(f"  ⚠️ {total - with_market} deals will be hidden from users without market comparison")
+            else:
+                log(f"  ✅ Coverage OK ({coverage_pct:.1f}% ≥ 20%)")
+        except Exception as e:
+            log(f"  ⚠️ Coverage check failed: {e}")
+    
     # Step 5: Git push
     if not args.no_push and not args.market_only and success:
         log("\n🚀 Step 5: Pushing to GitHub...")
