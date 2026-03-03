@@ -63,7 +63,7 @@ body {
     gap: var(--space-md);
 }
 .logo { display: flex; align-items: center; gap: var(--space-sm); }
-.logo-icon { width: 64px; height: 64px; flex-shrink: 0; object-fit: contain; }
+.logo-icon { width: 77px; height: 77px; flex-shrink: 0; object-fit: contain; }
 .logo-text h1 {
     font-size: 20px;
     font-weight: 700;
