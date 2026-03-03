@@ -156,7 +156,7 @@
         const ownershipWarning = partialOwnership ? `
             <div class="ownership-warning">
                 <span class="warning-icon">⚠</span>
-                <span class="warning-text">Частна собственост - проверете дела</span>
+                <span class="warning-text">Недостатъчни имоти за сравнение</span>
             </div>
         ` : '';
         
@@ -527,8 +527,8 @@ async function load() {
         // Warning messages
         const ownershipHtml = partialOwnership ? `
             <div style="background:var(--warning-light, #FFF8E1);padding:12px 16px;border-radius:var(--radius);margin-bottom:16px;border-left:4px solid var(--warning);">
-                <strong>⚠️ Частна собственост</strong><br>
-                <span style="font-size:13px;">Този имот е с частна собственост. Моля, проверете размера на дела преди участие в търга.</span>
+                <strong>⚠️ Недостатъчни имоти за сравнение</strong><br>
+                <span style="font-size:13px;">Няма достатъчно сравними обяви в района за надеждна пазарна оценка.</span>
             </div>
         ` : '';
         
