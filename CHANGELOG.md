@@ -1,5 +1,44 @@
 # Changelog
 
+## 2026-03-03 - Neighborhood Accuracy + UI/UX Overhaul
+
+### Data Pipeline Fixes
+- **BCPEA Район extraction** (`scrapers/bcpea_scraper.py`): Scraper now extracts the structured "Район" field from BCPEA property pages (e.g. "Овча купел", "Оборище"). Previously only extracted address text, missing the district entirely.
+- **Neighborhood in DB inserts** (`scrapers/bcpea_scraper.py`): Added `neighborhood` column to both full-scan and incremental-scan INSERT statements.
+- **Street lookup scoping** (`neighborhood_matcher.py`): All 6 Sofia street→neighborhood mappings now scoped to `['софия']`. Previously unscoped `[]` caused cross-city contamination (e.g. ул. Стамболийски in Кула → "красно село").
+- **Street map fix** (`neighborhood_matcher.py`): `ул. Роден кът` corrected from `витоша` → `овча купел`.
+- **Sofia neighborhood clusters** (`neighborhood_matcher.py`): Added 6 geographic clusters (център, южен, запад, изток, север, среден център) for fallback comparisons. Similarity score 0.75 for same-cluster neighborhoods.
+- **Cross-city misclassifications**: Fixed 3 properties (Силистра, Кула, с. Екзарх Йосиф) incorrectly tagged with Sofia neighborhoods.
+- **Full neighborhood sweep**: Audited all 543 active auctions against BCPEA structured data — 0 mismatches after fixes.
+
+### Frontend / UI
+- **Logo scroll-to-top** (`index.html`, `app.js`): Clicking logo scrolls to top (mobile UX).
+- **Tagline fix**: "Изгодни имоти от търгове" → "Изгодни имоти под пазарна цена" (removed "търгове" redundancy with site name).
+- **Hero reword** (`index.html`): "Имоти от Частни Съдебни Изпълнители" → "Намерете имоти под пазарна цена" (benefit-first, no repetition).
+- **Brand unification**: Replaced "КЧСИ Сделки" → "ЧСИ Търгове" across all 14 HTML files (cities, blog, contact, privacy, 404).
+- **Logo enlarged**: 56px → 67px (HTML) / 64px → 77px (CSS), ~20% larger.
+- **Warning text fix** (`app.js`): "Частна собственост - проверете дела" → "Недостатъчни имоти за сравнение" (partial ownership properties now correctly explain why there's no market comparison).
+- **Pin emoji removed** from cities page title.
+
+### UI/UX Polish (from professional review)
+- **Hero stats placeholder**: Show "—" instead of "0" before JavaScript loads.
+- **Color consistency**: Replaced all hardcoded `#667eea` and `#1a1a2e` with CSS variables (`var(--primary)`, `var(--gray-700)`) across blog/FAQ/cookie sections.
+- **Price vs discount hierarchy**: Price bumped to 26px/800 weight, discount badge reduced to 16px — clear visual hierarchy.
+- **Collapsible FAQ**: FAQ items now toggle open/closed with +/− indicator. First item open by default.
+- **Mobile hero stats**: Stats stay in horizontal row on mobile (no longer stack vertically pushing content below fold).
+- **Data freshness indicator**: "Данни от: [дата]" shown next to results count.
+
+### Performance
+- **`defer` on scripts** (`index.html`): All 3 script tags now use `defer` attribute.
+- **Mobile touch targets** (`styles.css`): Filter pills, selects, modal close button all ≥44px on mobile.
+- **Keyboard navigation**: Filter pills and logo now support Enter/Space key activation.
+- **Single global countdown**: Replaced 100+ per-card `setInterval` with one global timer updating all `[data-end]` elements.
+- **Fluid typography**: Hero title uses `clamp(24px, 4vw + 12px, 42px)` instead of fixed breakpoints.
+- **Twitter image meta**: Added missing `twitter:image` meta tag.
+
+### Typo Fixes
+- "пазарната ниво" → "пазарното ниво" (gender agreement, 4 occurrences in app.js + app.min.js)
+
 ## 2026-02-17 - Production Hardening (P0 + P1 Fixes)
 
 ### P0 - Critical Fixes

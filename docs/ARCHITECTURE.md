@@ -40,6 +40,7 @@
 - **Output:** `data/auctions.db`
 - **Frequency:** Daily at 9:00 AM Sofia time
 - **Records:** ~1,400 active auctions
+- **Neighborhood extraction:** Reads structured "Район" field from BCPEA HTML (added 2026-03-03). Falls back to address text extraction via `neighborhood_matcher.py` if Район field absent.
 
 ### 2. Market Scraper (`scrapers/market_scraper.py`)
 - **Sources:**
@@ -143,6 +144,8 @@ Three functions:
 4. Street → neighborhood lookup table (city-scoped)
 
 ### Street lookup coverage
+All street lookups are **city-scoped** (as of 2026-03-03) to prevent cross-city contamination.
+
 | Street              | City    | Neighborhood          |
 |--------------------|---------|-----------------------|
 | ул. Роза            | Варна   | Цветен квартал        |
@@ -154,18 +157,30 @@ Three functions:
 | бул. Ал. Стамболийски| София  | Красно Село           |
 | ул. Ивайло Петров   | София   | Люлин                 |
 | ул. Светлоструй     | София   | Красно Село           |
+| ул. Роден кът       | София   | Овча Купел            |
 
-## Neighborhood Coverage (as of 2026-02-26)
+### Neighborhood Clusters (added 2026-03-03)
+Adjacent neighborhoods with similar price levels. Used for fallback comparisons when exact neighborhood has thin comps. Cluster match scores 0.75 (above 0.7 threshold).
 
-| City    | Apartments | Hood-level | City fallback | No data (partial) |
-|---------|-----------|------------|---------------|-------------------|
-| София   | 13        | 9 (69%)    | 1             | 3                 |
-| Пловдив | 4         | 2 (50%)    | 1             | 1                 |
-| Варна   | 9         | 5 (55%)    | 0             | 4                 |
+| Cluster            | Neighborhoods                                                      |
+|--------------------|--------------------------------------------------------------------|
+| софия_център       | център, оборище, яворов, изток, изгрев, лозенец, докторски паметник|
+| софия_южен         | витоша, бояна, драгалевци, симеоново, кръстова вада, гоце делчев, борово, манастирски ливади, бъкстон |
+| софия_запад        | люлин, красно село, хиподрума, овча купел, банишора, илинден       |
+| софия_изток        | младост, дружба, мусагеница, дървеница, студентски                 |
+| софия_север        | надежда, подуяне, хаджи димитър, сухата река, военна рампа         |
+| софия_ср_център    | гео милев, слатина, редута, разсадника                             |
 
-Remaining city fallbacks:
-- **ЖП Блокове-Гара Илиянци (Sofia)** — very niche area, no market data on OLX or imot.bg
-- **Изгрев (Plovdiv)** — OLX supplement added; will resolve on next daily run
+## Neighborhood Coverage (as of 2026-03-03)
+
+| City    | Active | With Hood | Coverage |
+|---------|--------|-----------|----------|
+| София   | 26     | 26        | 100%     |
+| Пловдив | 9      | 9         | 100%     |
+| Варна   | 27     | 6         | 22%      |
+| Overall | 543    | 132       | 24%      |
+
+Note: Most non-Sofia/Plovdiv properties lack BCPEA "Район" field. Coverage for villages relies on text extraction + Nominatim geocoding.
 
 ## Cities Covered
 
