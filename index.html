@@ -123,7 +123,7 @@
     }
     </script>
     
-    <link rel="stylesheet" href="styles.min.css?v=202603030830">
+    <link rel="stylesheet" href="styles.min.css?v=202603032000">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -163,17 +163,17 @@
                 <p class="hero-subtitle">Сравняваме тръжни цени от ЧСИ с реални пазарни обяви в София, Пловдив, Варна и цяла България</p>
                 <div class="hero-stats" id="heroStats">
                     <div class="hero-stat">
-                        <span class="hero-stat-value" id="heroTotalDeals">0</span>
+                        <span class="hero-stat-value" id="heroTotalDeals">—</span>
                         <span class="hero-stat-label">Активни търгове</span>
                     </div>
                     <div class="hero-stat-divider"></div>
                     <div class="hero-stat">
-                        <span class="hero-stat-value" id="heroAvgDiscount">0%</span>
+                        <span class="hero-stat-value" id="heroAvgDiscount">—</span>
                         <span class="hero-stat-label">Средна отстъпка</span>
                     </div>
                     <div class="hero-stat-divider"></div>
                     <div class="hero-stat">
-                        <span class="hero-stat-value" id="heroBestDeal">0%</span>
+                        <span class="hero-stat-value" id="heroBestDeal">—</span>
                         <span class="hero-stat-label">Най-добра сделка</span>
                     </div>
                 </div>
@@ -257,7 +257,7 @@
             </div>
 
             <div class="results-header">
-                <h3 class="results-title">Намерени сделки <span class="results-count" id="resultsCount">0</span></h3>
+                <h3 class="results-title">Намерени сделки <span class="results-count" id="resultsCount">0</span><span id="dataFreshness" style="font-size:13px;color:var(--gray-500);margin-left:8px;"></span></h3>
                 <button class="btn-reset" id="resetFilters">Изчисти филтрите</button>
             </div>
             <div class="listing-disclaimer">
@@ -383,7 +383,7 @@
         <div class="container">
             <h2 class="section-title">Често задавани въпроси</h2>
             <div class="faq-list">
-                <div class="faq-item">
+                <div class="faq-item open">
                     <div class="faq-question">Какъв депозит е необходим за участие в търг?</div>
                     <div class="faq-answer">Задатъкът е <strong>10% от началната цена</strong> на имота. Внася се по банкова сметка на ЧСИ преди крайния срок за наддаване.</div>
                 </div>
@@ -464,12 +464,19 @@
         </div>
     </footer>
 
-    <script defer src="analytics.min.js?v=202603030830"></script>
-    <script defer src="app.min.js?v=202603030830"></script>
+    <script defer src="analytics.min.js?v=202603032000"></script>
+    <script defer src="app.min.js?v=202603032000"></script>
 <!-- Back to Top -->
     <button id="backToTop" class="back-to-top" aria-label="Към началото">
         <span>↑</span>
     </button>
-<script defer src="subscribe-modal.min.js?v=202603030830"></script>
+<script defer src="subscribe-modal.min.js?v=202603032000"></script>
+<script>
+document.querySelectorAll('.faq-question').forEach(function(q){
+    q.addEventListener('click',function(){
+        this.parentElement.classList.toggle('open');
+    });
+});
+</script>
 </body>
 </html>

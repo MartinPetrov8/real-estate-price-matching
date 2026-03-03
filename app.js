@@ -222,6 +222,14 @@
         el.grid.classList.remove('hidden');
         el.count.textContent = '(' + deals.length + ')';
         
+        // Data freshness
+        const freshnessEl = document.getElementById('dataFreshness');
+        if (freshnessEl) {
+            const now = new Date();
+            const todayStr = now.toLocaleDateString('bg-BG', {day: 'numeric', month: 'long', year: 'numeric'});
+            freshnessEl.textContent = '· Данни от: ' + todayStr;
+        }
+        
         // Paginate: show only up to currentPage * DEALS_PER_PAGE
         const toShow = deals.slice(0, currentPage * DEALS_PER_PAGE);
         displayedDeals = toShow.length;
