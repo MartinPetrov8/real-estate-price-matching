@@ -130,13 +130,14 @@ body {
     }
     .header-nav .nav-link:last-child { border-bottom: none; }
     .hero { padding: var(--space-xl) 0; }
-    .hero-title { font-size: 24px; }
     .hero-subtitle { font-size: 15px; }
     .hero-stats { padding: var(--space-md); gap: var(--space-md); }
     .hero-stat-value { font-size: 24px; }
     .filters-section { margin-top: var(--space-md); }
     .filter-pills { gap: 6px; padding-bottom: var(--space-md); margin-bottom: var(--space-md); }
-    .pill { padding: 8px 12px; font-size: 13px; }
+    .pill { padding: 12px 20px; min-height: 44px; }
+    select, input[type="number"] { min-height: 44px; }
+    .modal-close { width: 44px; height: 44px; font-size: 24px; }
     .card-price-value { font-size: 20px; }
     .discount-value { font-size: 18px; }
 }
@@ -147,7 +148,7 @@ body {
     text-align: center;
 }
 .hero-title {
-    font-size: 36px;
+    font-size: clamp(24px, 4vw + 12px, 42px);
     font-weight: 800;
     margin-bottom: var(--space-md);
     line-height: 1.2;
@@ -724,7 +725,6 @@ body {
     .footer-content { grid-template-columns: 1fr; gap: var(--space-xl); }
 }
 @media (max-width: 768px) {
-    .hero-title { font-size: 28px; }
     .hero-subtitle { font-size: 16px; }
     .hero-stats { flex-direction: column; gap: var(--space-md); padding: var(--space-md); }
     .hero-stat-divider { width: 60px; height: 1px; }
@@ -739,7 +739,6 @@ body {
 @media (max-width: 480px) {
     .container { padding: 0 var(--space-sm); }
     .hero { padding: var(--space-2xl) 0; }
-    .hero-title { font-size: 24px; }
     /* discount-value no longer needs mobile override */
     .card-actions { flex-direction: column; }
     .property-info { grid-template-columns: 1fr; }

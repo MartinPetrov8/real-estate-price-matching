@@ -1,6 +1,7 @@
 (function() {
     'use strict';
-    let allDeals = [], filteredDeals = [], countdownIntervals = [];
+    let allDeals = [], filteredDeals = [];
+    let countdownGlobalInterval = null;
     const DEALS_PER_PAGE = 12;
     // XSS protection: escape HTML in user-controlled data
     const escHtml = (s) => s ? String(s).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])) : '';
@@ -94,20 +95,16 @@
         return types[t?.toLowerCase()] || '🏢';
     }
     
-    function startCountdown(id, endDate) {
-        const el = document.getElementById(id);
-        if (!el || !endDate) return;
-        const end = parseDate(endDate);
-        if (!end) { el.textContent = 'Неизвестна'; return; }
-        function upd() {
+    function updateAllCountdowns() {
+        document.querySelectorAll('.countdown-time[data-end]').forEach(el => {
+            const end = parseDate(el.dataset.end);
+            if (!end) { el.textContent = 'Неизвестна'; return; }
             const diff = end - new Date();
             if (diff <= 0) { el.textContent = 'Приключи'; return; }
             const d = Math.floor(diff/86400000), h = Math.floor((diff%86400000)/3600000), m = Math.floor((diff%3600000)/60000);
             el.textContent = d > 0 ? d+'д '+h+'ч' : h > 0 ? h+'ч '+m+'м' : m+' мин';
             if (d < 3) el.closest('.countdown-section')?.classList.add('countdown-urgent');
-        }
-        upd();
-        countdownIntervals.push(setInterval(upd, 60000));
+        });
     }
     
     function createCard(deal) {
@@ -200,7 +197,7 @@
                 </div>
                 <div class="countdown-section">
                     <svg class="countdown-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-                    <span class="countdown-text">Край на търга: <span class="countdown-time" id="${cid}"></span></span>
+                    <span class="countdown-text">Край на търга: <span class="countdown-time" id="${cid}" data-end="${auctionEnd}"></span></span>
                 </div>
                 <div class="card-actions">
                     <a href="${url}" target="_blank" class="btn btn-primary">Виж търга →</a>
@@ -211,8 +208,7 @@
     }
     
     function render(deals, append = false) {
-        countdownIntervals.forEach(clearInterval);
-        countdownIntervals = [];
+        if (countdownGlobalInterval) { clearInterval(countdownGlobalInterval); countdownGlobalInterval = null; }
         
         if (deals.length === 0) {
             el.grid.classList.add('hidden');
@@ -249,7 +245,8 @@
             el.grid.innerHTML = toShow.map(createCard).join('');
         }
         
-        toShow.forEach(d => startCountdown('cd-'+(d.bcpea_id || d.id), d.auction_end));
+        updateAllCountdowns();
+        countdownGlobalInterval = setInterval(updateAllCountdowns, 60000);
         
         // Show/hide load more button
         if (el.loadMore) {
@@ -433,6 +430,21 @@
         });
     }
 
+    // Logo click → scroll to top
+    const siteLogo = document.getElementById('siteLogo');
+    if (siteLogo) {
+        siteLogo.setAttribute('tabindex', '0');
+        siteLogo.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+        siteLogo.addEventListener('keypress', e => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        });
+    }
+
 async function load() {
         el.loading.classList.remove('hidden');
         el.error.classList.add('hidden');
@@ -564,9 +576,9 @@ async function load() {
                 <h4 style="font-size:14px;font-weight:600;margin-bottom:12px;">Анализ на сделката</h4>
                 <ul style="list-style:none;padding:0;margin:0;font-size:14px;line-height:1.8;">
                     ${marketPrice ? (discountPct >= 0 ? 
-                        `<li>✓ Цената е с <strong>${Math.round(discountPct)}%</strong> под пазарната ниво</li>
+                        `<li>✓ Цената е с <strong>${Math.round(discountPct)}%</strong> под пазарното ниво</li>
                          <li>✓ Спестявате <strong>${fmtPrice(savingsEur)}</strong> спрямо пазарната цена</li>` :
-                        `<li>⚠ Цената е с <strong>${Math.abs(Math.round(discountPct))}%</strong> над пазарната ниво</li>
+                        `<li>⚠ Цената е с <strong>${Math.abs(Math.round(discountPct))}%</strong> над пазарното ниво</li>
                          <li>⚠ Тръжната цена е с <strong>${fmtPrice(auctionPrice - marketPrice)}</strong> по-висока от пазарната</li>`
                     ) : '<li>⚠ Няма достатъчно данни за пазарна оценка</li>'}
                     ${d.market_min_sqm && d.market_max_sqm ? `<li>📊 Пазарен диапазон: <strong>€${d.market_min_sqm}/м²</strong> – <strong>€${d.market_max_sqm}/м²</strong> (медиана €${d.market_avg}/м²)</li>` : ''}
@@ -617,10 +629,19 @@ async function load() {
     }
     
     document.querySelectorAll('.pill').forEach(p => {
+        p.setAttribute('tabindex', '0');
         p.addEventListener('click', () => {
             document.querySelectorAll('.pill').forEach(x => x.classList.remove('pill-active'));
             p.classList.add('pill-active');
             filter();
+        });
+        p.addEventListener('keypress', e => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                document.querySelectorAll('.pill').forEach(x => x.classList.remove('pill-active'));
+                p.classList.add('pill-active');
+                filter();
+            }
         });
     });
     
