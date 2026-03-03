@@ -173,7 +173,7 @@ def extract_neighborhood(address):
         ('александър стамболийски', 'красно село',          []),
         ('ивайло петров',           'люлин',                []),
         ('светлоструй',             'красно село',          []),
-        ('роден кът',               'витоша',               []),
+        ('роден кът',               'овча купел',           []),
         # Varna — scoped to варна
         ('паско желев',             'владислав варненчик',  ['варна']),
         ('скопие',                  'владислав варненчик',  ['варна']),
@@ -197,6 +197,19 @@ def extract_neighborhood(address):
     return None
 
 
+# Neighborhood clusters — groups of adjacent neighborhoods with similar price levels.
+# When exact neighborhood match has too few comps, we fall back to cluster comps.
+# Similarity within a cluster scores 0.75 (above the 0.7 threshold used in export_deals.py).
+NEIGHBORHOOD_CLUSTERS = {
+    'софия_център': {'център', 'оборище', 'яворов', 'изток', 'изгрев', 'лозенец', 'докторски паметник'},
+    'софия_южен': {'витоша', 'бояна', 'драгалевци', 'симеоново', 'кръстова вада', 'гоце делчев', 'борово', 'манастирски ливади', 'бъкстон'},
+    'софия_запад': {'люлин', 'красно село', 'хиподрума', 'овча купел', 'банишора', 'илинден'},
+    'софия_изток': {'младост', 'дружба', 'мусагеница', 'дървеница', 'студентски'},
+    'софия_север': {'надежда', 'подуяне', 'хаджи димитър', 'сухата река', 'военна рампа'},
+    'софия_ср_център': {'гео милев', 'слатина', 'редута', 'разсадника'},
+}
+
+
 def neighborhood_similarity(hood1, hood2):
     """
     Calculate similarity score between two neighborhoods (0.0 to 1.0).
@@ -204,6 +217,7 @@ def neighborhood_similarity(hood1, hood2):
     Returns:
         1.0: Exact match after normalization
         0.8: Same base neighborhood (e.g., Люлин 1 vs Люлин 7)
+        0.75: Same cluster (e.g., Оборище vs Център)
         0.5: Partial match
         0.0: No match
     """
@@ -229,6 +243,11 @@ def neighborhood_similarity(hood1, hood2):
         if (norm1 == canonical or norm1 in aliases) and \
            (norm2 == canonical or norm2 in aliases):
             return 0.9
+    
+    # Check neighborhood clusters (adjacent areas with similar pricing)
+    for cluster_name, members in NEIGHBORHOOD_CLUSTERS.items():
+        if norm1 in members and norm2 in members:
+            return 0.75
     
     # Levenshtein-like similarity for close matches
     # (simplified - just check prefix matching)

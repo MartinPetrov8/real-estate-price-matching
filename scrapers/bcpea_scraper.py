@@ -117,6 +117,17 @@ def parse_property_detail(html_content, prop_id):
     if city_match:
         data['city'] = sanitize_text(city_match.group(1).strip().rstrip(',').rstrip('<'), "city")
     
+    # District/Район - structured field from BCPEA (e.g. "Район" → "Овча купел")
+    district_match = re.search(
+        r'<div[^>]*class="label"[^>]*>\s*Район\s*</div>\s*<div[^>]*class="info"[^>]*>(.*?)</div>',
+        html_content, re.DOTALL | re.IGNORECASE
+    )
+    if district_match:
+        district_raw = re.sub(r'<[^>]+>', '', district_match.group(1))
+        district_raw = html.unescape(district_raw).strip()
+        if re.search(r'[А-Яа-я]', district_raw) and len(district_raw) > 2:
+            data['neighborhood'] = sanitize_text(district_raw.lower(), "neighborhood")
+
     # Address - extract from <div class="label">Адрес</div><div class="info">...</div> pattern
     addr_match = re.search(
         r'<div[^>]*class="label"[^>]*>\s*Адрес\s*</div>\s*<div[^>]*class="info"[^>]*>(.*?)</div>',
@@ -302,12 +313,12 @@ def run_full_scan():
                     with _db_lock:
                         cursor.execute("""
                             INSERT INTO auctions 
-                            (id, url, price_eur, city, address, property_type, size_sqm, rooms, floor,
+                            (id, url, price_eur, city, neighborhood, address, property_type, size_sqm, rooms, floor,
                              is_partial_ownership, is_expired, auction_end, scraped_at, first_seen_at, last_updated_at)
-                            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                         """, (
                             data['id'], data.get('url'), data.get('price_eur'), data.get('city'),
-                            data.get('address'), data.get('property_type'), data.get('size_sqm'),
+                            data.get('neighborhood'), data.get('address'), data.get('property_type'), data.get('size_sqm'),
                             data.get('rooms'), data.get('floor'), int(data.get('is_partial_ownership', False)),
                             int(data.get('is_expired', False)), data.get('auction_end'), now, now, now
                         ))
@@ -372,12 +383,12 @@ def run_incremental_scan():
                     with _db_lock:
                         cursor.execute("""
                             INSERT INTO auctions 
-                            (id, url, price_eur, city, address, property_type, size_sqm, rooms, floor,
+                            (id, url, price_eur, city, neighborhood, address, property_type, size_sqm, rooms, floor,
                              is_partial_ownership, is_expired, auction_end, scraped_at, first_seen_at, last_updated_at)
-                            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                         """, (
                             data['id'], data.get('url'), data.get('price_eur'), data.get('city'),
-                            data.get('address'), data.get('property_type'), data.get('size_sqm'),
+                            data.get('neighborhood'), data.get('address'), data.get('property_type'), data.get('size_sqm'),
                             data.get('rooms'), data.get('floor'), int(data.get('is_partial_ownership', False)), 0,
                             data.get('auction_end'), now, now, now
                         ))
