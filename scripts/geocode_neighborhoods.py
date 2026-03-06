@@ -97,14 +97,24 @@ def nominatim_geocode(address: str, city: str) -> str | None:
     return None
 
 
-def extract_from_address(address: str) -> str | None:
-    """Try to extract neighborhood from raw address text."""
+def extract_from_address(address: str, city: str = '') -> str | None:
+    """Try to extract neighborhood from raw address text.
+    
+    If city is provided separately (e.g. 'гр. Варна'), we prepend it
+    so city-scoped street→neighborhood rules can match.
+    """
     if not address:
         return None
+    # First try address alone (handles ж.к./кв. prefixes)
     result = extract_neighborhood(address)
-    # Filter out garbage results (single chars, numbers)
     if result and len(result) > 2 and not result.isdigit():
         return result
+    # Then try with city prepended (needed for city-scoped street lookups)
+    if city:
+        combined = f"{city}, {address}"
+        result = extract_neighborhood(combined)
+        if result and len(result) > 2 and not result.isdigit():
+            return result
     return None
 
 
@@ -151,7 +161,7 @@ def main():
         method = None
 
         # Step 1: Try text extraction (fast, no network)
-        neighborhood = extract_from_address(address)
+        neighborhood = extract_from_address(address, city)
         if neighborhood:
             method = 'text'
             stats['text_match'] += 1

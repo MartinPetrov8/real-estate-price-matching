@@ -114,7 +114,12 @@ def get_market_median(city, size_sqm, address=None, db_neighborhood=None,
     room_band = _room_type_band(property_type_bg)  # (min_sqm, max_sqm) or None
     
     # Use DB neighborhood (from geocoding) first, fallback to text extraction from address
-    auction_hood = db_neighborhood or (extract_neighborhood(address) if address else None)
+    # Prepend city for city-scoped street→neighborhood rules (e.g. flower streets → Цветен квартал in Varna)
+    auction_hood = db_neighborhood or (
+        extract_neighborhood(f"{city}, {address}") if address and city
+        else extract_neighborhood(address) if address
+        else None
+    )
 
     SIMILARITY_THRESHOLD = 0.7
     MIN_COMPS = 3
