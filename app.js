@@ -148,7 +148,7 @@
         const dataWarning = hasDataIssues ? `
             <div class="data-warning">
                 <span class="warning-icon">⚠️</span>
-                <span class="warning-text">${comparables === 0 ? 'Няма достатъчно данни за сравнение' : 'Тръжната цена е по-висока от пазарната'}</span>
+                <span class="warning-text">${comparables === 0 ? 'Няма достатъчно данни за сравнение' : 'Тръжната цена е по-висока от офертната'}</span>
             </div>
         ` : '';
         
@@ -180,7 +180,7 @@
                     </div>
                     ${hasReliableMarketData ? `<div class="discount-badge">
                         <div class="discount-value">${discountPct >= 0 ? '-' : '+'}${Math.abs(Math.round(discountPct))}%</div>
-                        ${discountPct >= 0 ? `<div class="discount-amount">пазарна ${fmtSqm(marketPrice, sqm)}</div>` : ''}
+                        ${discountPct >= 0 ? `<div class="discount-amount">офертна ${fmtSqm(marketPrice, sqm)}</div>` : ''}
                     </div>` : '<div class="discount-badge no-market"><div class="discount-value" style="background:#f1f5f9;color:#64748b;font-size:11px;">Без оценка</div></div>'}
                 </div>
             </div>
@@ -536,7 +536,7 @@ async function load() {
         const ownershipHtml = partialOwnership ? `
             <div style="background:var(--warning-light, #FFF8E1);padding:12px 16px;border-radius:var(--radius);margin-bottom:16px;border-left:4px solid var(--warning);">
                 <strong>⚠️ Недостатъчни имоти за сравнение</strong><br>
-                <span style="font-size:13px;">Няма достатъчно сравними обяви в района за надеждна пазарна оценка.</span>
+                <span style="font-size:13px;">Няма достатъчно сравними обяви в района за надеждна оценка.</span>
             </div>
         ` : '';
         
@@ -550,7 +550,7 @@ async function load() {
         const negativeWarningHtml = discountPct < 0 ? `
             <div style="background:var(--danger-light);padding:12px 16px;border-radius:var(--radius);margin-bottom:16px;border-left:4px solid var(--danger);">
                 <strong>⚠️ Внимание</strong><br>
-                <span style="font-size:13px;">Тръжната цена е по-висока от оценката на пазарната цена. Това може да не е изгодна сделка.</span>
+                <span style="font-size:13px;">Тръжната цена е по-висока от средната офертна цена. Това може да не е изгодна сделка.</span>
             </div>
         ` : '';
         
@@ -585,10 +585,10 @@ async function load() {
                 <ul style="list-style:none;padding:0;margin:0;font-size:14px;line-height:1.8;">
                     ${marketPrice ? (discountPct >= 0 ? 
                         `<li>✓ Цената е с <strong>${Math.round(discountPct)}%</strong> под пазарното ниво</li>
-                         <li>✓ Спестявате <strong>${fmtPrice(savingsEur)}</strong> спрямо пазарната цена</li>` :
+                         <li>✓ Спестявате <strong>${fmtPrice(savingsEur)}</strong> спрямо офертната цена</li>` :
                         `<li>⚠ Цената е с <strong>${Math.abs(Math.round(discountPct))}%</strong> над пазарното ниво</li>
-                         <li>⚠ Тръжната цена е с <strong>${fmtPrice(auctionPrice - marketPrice)}</strong> по-висока от пазарната</li>`
-                    ) : '<li>⚠ Няма достатъчно данни за пазарна оценка</li>'}
+                         <li>⚠ Тръжната цена е с <strong>${fmtPrice(auctionPrice - marketPrice)}</strong> по-висока от офертната</li>`
+                    ) : '<li>⚠ Няма достатъчно данни за оценка</li>'}
                     ${d.market_min_sqm && d.market_max_sqm ? `<li>📊 Пазарен диапазон: <strong>€${d.market_min_sqm}/м²</strong> – <strong>€${d.market_max_sqm}/м²</strong> (медиана €${d.market_avg}/м²)</li>` : ''}
                     ${d.neighborhood_range ? `<li>✓ Ценови диапазон в района: ${escHtml(d.neighborhood_range)}</li>` : ''}
                     ${comparables > 0 ? `<li>✓ Базирано на ${comparables} сравними обяви${modalComparablesLevel === 'hood' ? ' в квартала' : modalComparablesLevel === 'city_size' ? ' в ' + city + ' (подобен размер)' : modalComparablesLevel === 'city' ? ' в ' + city + ' (целия град — без квартал)' : ''}</li>` : '<li>⚠ Няма достатъчно сравними обяви за надеждна оценка</li>'}
