@@ -8,6 +8,7 @@
 # - If market scraper interrupted (exit 2): auto-retry with --resume
 # - Max 3 attempts before giving up
 # - Only exports and pushes when ALL steps succeed
+# - On any failure: sends Telegram alert to Martin
 #
 # Exit codes:
 #   0 = success
@@ -37,11 +38,73 @@ cd "$(dirname "$0")/.."
 
 MAX_RETRIES=3
 
+# ──────────────────────────────────────────────────────────
+# ALERT: Send Telegram notification on pipeline failure
+# ──────────────────────────────────────────────────────────
+send_failure_alert() {
+    local STEP="$1"
+    local REASON="$2"
+    local LOG_SNIPPET="$3"
+    local TIMESTAMP
+    TIMESTAMP=$(date -u +"%Y-%m-%d %H:%M UTC")
+
+    local MSG
+    MSG="🚨 КЧСИ pipeline FAILED
+
+Step: ${STEP}
+Reason: ${REASON}
+Time: ${TIMESTAMP}
+
+Log:
+\`\`\`
+${LOG_SNIPPET}
+\`\`\`
+
+Last successful push: $(git log --oneline -1 2>/dev/null || echo 'unknown')
+Action needed: Check logs at data/logs/market_$(date +%Y-%m-%d).log"
+
+    # Send via OpenClaw Telegram
+    curl -s -X POST "http://localhost:18789/api/message/send" \
+        -H "Content-Type: application/json" \
+        -d "{\"channel\":\"telegram\",\"target\":\"6814975455\",\"message\":$(echo "$MSG" | python3 -c 'import json,sys; print(json.dumps(sys.stdin.read()))')}" \
+        2>/dev/null || true
+
+    log "Alert sent to Telegram"
+}
+
+# ──────────────────────────────────────────────────────────
+# NETWORK CHECK: Wait up to 5min for DNS to come back
+# ──────────────────────────────────────────────────────────
+wait_for_network() {
+    local MAX_WAIT=300
+    local ELAPSED=0
+    local INTERVAL=15
+
+    log "Checking network connectivity..."
+    while ! host www.olx.bg >/dev/null 2>&1 && ! curl -s --max-time 5 https://www.google.com >/dev/null 2>&1; do
+        if [ $ELAPSED -ge $MAX_WAIT ]; then
+            error "Network unavailable after ${MAX_WAIT}s — aborting"
+            return 1
+        fi
+        warning "No network (DNS failure), waiting ${INTERVAL}s... (${ELAPSED}s elapsed)"
+        sleep $INTERVAL
+        ELAPSED=$((ELAPSED + INTERVAL))
+    done
+    success "Network OK"
+    return 0
+}
+
 log "=========================================="
 log "КЧСИ DAILY PIPELINE - RESILIENT"
 log "=========================================="
 log "Started at: $(date -u +"%Y-%m-%d %H:%M:%S UTC")"
 log ""
+
+# Pre-flight: ensure network is up before doing anything
+if ! wait_for_network; then
+    send_failure_alert "Pre-flight network check" "DNS resolution failure — network unavailable at startup" "host www.olx.bg: NXDOMAIN / Name resolution failed"
+    exit 1
+fi
 
 # Step 1: Scrape auction data
 log "Step 1/5: Scraping auction data (bcpea_scraper.py)..."
@@ -70,6 +133,8 @@ done
 
 if [ $BCPEA_EXIT -ne 0 ]; then
     error "Auction scraper failed after $BCPEA_MAX_RETRIES attempts (last exit: $BCPEA_EXIT)"
+    LOG_SNIPPET=$(tail -20 data/logs/market_$(date +%Y-%m-%d).log 2>/dev/null || echo "No log available")
+    send_failure_alert "Step 1 — bcpea_scraper.py" "Failed after ${BCPEA_MAX_RETRIES} attempts (exit ${BCPEA_EXIT})" "$LOG_SNIPPET"
     exit 1
 fi
 
@@ -82,7 +147,7 @@ else
     warning "Geocoding failed (non-critical, continuing)"
 fi
 
-# Step 2: Scrape market prices (with resume support)
+# Step 2: Scrape market prices (with resume support + mid-run network recovery)
 log ""
 log "Step 2/5: Scraping market prices (market_scraper.py)..."
 
@@ -99,21 +164,33 @@ while [ $ATTEMPT -le $MAX_RETRIES ]; do
         success "Market scraping complete"
         break
     elif [ $SCRAPER_EXIT -eq 2 ]; then
-        # Interrupted but checkpoint saved — retry with --resume
-        warning "Market scraper interrupted (attempt $ATTEMPT), will resume..."
-        RESUME_FLAG="--resume"
-        ATTEMPT=$((ATTEMPT + 1))
-        sleep 2
+        # Interrupted (SIGTERM or network) but checkpoint saved — check network then resume
+        warning "Market scraper interrupted (attempt $ATTEMPT), checking network before resume..."
+        if wait_for_network; then
+            RESUME_FLAG="--resume"
+            ATTEMPT=$((ATTEMPT + 1))
+            log "  Network OK — resuming in 10s..."
+            sleep 10
+        else
+            error "Network did not recover — aborting market scraper"
+            LOG_SNIPPET=$(tail -20 data/logs/market_$(date +%Y-%m-%d).log 2>/dev/null || echo "No log available")
+            send_failure_alert "Step 2 — market_scraper.py" "Network failure (DNS) — could not resume after ${ATTEMPT} attempts" "$LOG_SNIPPET"
+            exit 1
+        fi
     else
         # Exit code 1 = hard failure (data issue)
         error "Market scraper failed with exit code $SCRAPER_EXIT"
         error "Check logs in data/logs/market_*.log"
+        LOG_SNIPPET=$(tail -20 data/logs/market_$(date +%Y-%m-%d).log 2>/dev/null || echo "No log available")
+        send_failure_alert "Step 2 — market_scraper.py" "Hard failure (exit ${SCRAPER_EXIT})" "$LOG_SNIPPET"
         exit 1
     fi
 done
 
 if [ $SCRAPER_EXIT -ne 0 ]; then
     error "Market scraper failed after $MAX_RETRIES attempts"
+    LOG_SNIPPET=$(tail -20 data/logs/market_$(date +%Y-%m-%d).log 2>/dev/null || echo "No log available")
+    send_failure_alert "Step 2 — market_scraper.py" "Max retries (${MAX_RETRIES}) exhausted" "$LOG_SNIPPET"
     exit 4
 fi
 
@@ -125,6 +202,7 @@ if $PYTHON export_deals.py; then
 else
     EXIT_CODE=$?
     error "Export failed with exit code $EXIT_CODE"
+    send_failure_alert "Step 3 — export_deals.py" "Export failed (exit ${EXIT_CODE})" "Check export_deals.py output"
     exit 2
 fi
 
@@ -141,6 +219,7 @@ if ! git diff --quiet || ! git diff --cached --quiet; then
     else
         EXIT_CODE=$?
         warning "Git push failed with exit code $EXIT_CODE"
+        send_failure_alert "Step 4 — git push" "Push to GitHub failed (exit ${EXIT_CODE})" "Check git credentials / network"
         exit 3
     fi
 else
