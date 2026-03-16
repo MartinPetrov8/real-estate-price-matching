@@ -49,27 +49,32 @@ send_failure_alert() {
     TIMESTAMP=$(date -u +"%Y-%m-%d %H:%M UTC")
 
     local MSG
-    MSG="🚨 КЧСИ pipeline FAILED
+    MSG="🚨 <b>КЧСИ pipeline FAILED</b>
 
 Step: ${STEP}
 Reason: ${REASON}
 Time: ${TIMESTAMP}
 
 Log:
-\`\`\`
 ${LOG_SNIPPET}
-\`\`\`
 
-Last successful push: $(git log --oneline -1 2>/dev/null || echo 'unknown')
-Action needed: Check logs at data/logs/market_$(date +%Y-%m-%d).log"
+Last push: $(git log --oneline -1 2>/dev/null || echo 'unknown')
+Fix: Check data/logs/market_$(date +%Y-%m-%d).log"
 
-    # Send via OpenClaw Telegram
-    curl -s -X POST "http://localhost:18789/api/message/send" \
-        -H "Content-Type: application/json" \
-        -d "{\"channel\":\"telegram\",\"target\":\"6814975455\",\"message\":$(echo "$MSG" | python3 -c 'import json,sys; print(json.dumps(sys.stdin.read()))')}" \
-        2>/dev/null || true
+    # Send via Telegram Bot API (same pattern as docker-monitor.sh)
+    local BOT_TOKEN
+    BOT_TOKEN="$(jq -r '.channels.telegram.botToken' ~/.clawdbot/moltbot.json 2>/dev/null)"
+    local CHAT_ID="6814975455"
 
-    log "Alert sent to Telegram"
+    if [ -n "$BOT_TOKEN" ] && [ "$BOT_TOKEN" != "null" ]; then
+        curl -s "https://api.telegram.org/bot${BOT_TOKEN}/sendMessage" \
+            -d "chat_id=${CHAT_ID}" \
+            --data-urlencode "text=${MSG}" \
+            -d "parse_mode=HTML" > /dev/null 2>&1 || true
+        log "Alert sent to Telegram"
+    else
+        log "Warning: Could not load bot token for alert"
+    fi
 }
 
 # ──────────────────────────────────────────────────────────
