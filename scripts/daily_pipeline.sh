@@ -36,7 +36,8 @@ warning() { echo -e "${YELLOW}[$(date +'%H:%M:%S')] ⚠ $1${NC}"; }
 
 cd "$(dirname "$0")/.."
 
-MAX_RETRIES=3
+MAX_RETRIES=3          # Hard failures (data issues) — give up after 3
+MAX_NET_WAIT=1800      # Network outage tolerance: wait up to 30min for connectivity
 
 # ──────────────────────────────────────────────────────────
 # ALERT: Send Telegram notification on pipeline failure
@@ -78,20 +79,21 @@ Fix: Check data/logs/market_$(date +%Y-%m-%d).log"
 }
 
 # ──────────────────────────────────────────────────────────
-# NETWORK CHECK: Wait up to 5min for DNS to come back
+# NETWORK CHECK: Wait up to MAX_WAIT seconds for connectivity
+# Default: 30 min (enough for a gateway restart + container up)
 # ──────────────────────────────────────────────────────────
 wait_for_network() {
-    local MAX_WAIT=300
+    local MAX_WAIT="${1:-1800}"
     local ELAPSED=0
     local INTERVAL=15
 
     log "Checking network connectivity..."
-    while ! host www.olx.bg >/dev/null 2>&1 && ! curl -s --max-time 5 https://www.google.com >/dev/null 2>&1; do
+    while ! curl -s --max-time 5 https://www.google.com >/dev/null 2>&1; do
         if [ $ELAPSED -ge $MAX_WAIT ]; then
             error "Network unavailable after ${MAX_WAIT}s — aborting"
             return 1
         fi
-        warning "No network (DNS failure), waiting ${INTERVAL}s... (${ELAPSED}s elapsed)"
+        warning "No network, waiting ${INTERVAL}s... (${ELAPSED}/${MAX_WAIT}s elapsed)"
         sleep $INTERVAL
         ELAPSED=$((ELAPSED + INTERVAL))
     done
@@ -152,15 +154,19 @@ else
     warning "Geocoding failed (non-critical, continuing)"
 fi
 
-# Step 2: Scrape market prices (with resume support + mid-run network recovery)
+# Step 2: Scrape market prices
+# - Exit 0: success
+# - Exit 2: interrupted (SIGTERM/network) — checkpoint saved, always resume after network back
+#           Network interrupts do NOT count against MAX_RETRIES
+# - Exit 1: hard data failure — counts against MAX_RETRIES, give up after 3
 log ""
 log "Step 2/5: Scraping market prices (market_scraper.py)..."
 
-ATTEMPT=1
+HARD_FAILURES=0
 RESUME_FLAG=""
 
-while [ $ATTEMPT -le $MAX_RETRIES ]; do
-    log "  Attempt $ATTEMPT/$MAX_RETRIES ${RESUME_FLAG:+(resuming)}"
+while true; do
+    log "  Running market_scraper.py ${RESUME_FLAG:+(resuming from checkpoint)}"
     
     $PYTHON scrapers/market_scraper.py $RESUME_FLAG
     SCRAPER_EXIT=$?
@@ -168,36 +174,34 @@ while [ $ATTEMPT -le $MAX_RETRIES ]; do
     if [ $SCRAPER_EXIT -eq 0 ]; then
         success "Market scraping complete"
         break
+
     elif [ $SCRAPER_EXIT -eq 2 ]; then
-        # Interrupted (SIGTERM or network) but checkpoint saved — check network then resume
-        warning "Market scraper interrupted (attempt $ATTEMPT), checking network before resume..."
-        if wait_for_network; then
+        # Interrupted (SIGTERM, network drop) — checkpoint saved, just wait for network and resume
+        warning "Market scraper interrupted — waiting for network to recover..."
+        if wait_for_network "$MAX_NET_WAIT"; then
             RESUME_FLAG="--resume"
-            ATTEMPT=$((ATTEMPT + 1))
-            log "  Network OK — resuming in 10s..."
+            log "  Network back — resuming in 10s..."
             sleep 10
+            # Do NOT increment HARD_FAILURES — this was a transient interruption
         else
-            error "Network did not recover — aborting market scraper"
             LOG_SNIPPET=$(tail -20 data/logs/market_$(date +%Y-%m-%d).log 2>/dev/null || echo "No log available")
-            send_failure_alert "Step 2 — market_scraper.py" "Network failure (DNS) — could not resume after ${ATTEMPT} attempts" "$LOG_SNIPPET"
+            send_failure_alert "Step 2 - market_scraper.py" "Network did not recover within ${MAX_NET_WAIT}s" "$LOG_SNIPPET"
             exit 1
         fi
+
     else
-        # Exit code 1 = hard failure (data issue)
-        error "Market scraper failed with exit code $SCRAPER_EXIT"
-        error "Check logs in data/logs/market_*.log"
-        LOG_SNIPPET=$(tail -20 data/logs/market_$(date +%Y-%m-%d).log 2>/dev/null || echo "No log available")
-        send_failure_alert "Step 2 — market_scraper.py" "Hard failure (exit ${SCRAPER_EXIT})" "$LOG_SNIPPET"
-        exit 1
+        # Exit 1: hard data failure — count against budget
+        HARD_FAILURES=$((HARD_FAILURES + 1))
+        error "Market scraper hard failure (exit $SCRAPER_EXIT, attempt $HARD_FAILURES/$MAX_RETRIES)"
+        if [ $HARD_FAILURES -ge $MAX_RETRIES ]; then
+            LOG_SNIPPET=$(tail -20 data/logs/market_$(date +%Y-%m-%d).log 2>/dev/null || echo "No log available")
+            send_failure_alert "Step 2 - market_scraper.py" "Hard failure after ${MAX_RETRIES} attempts (exit ${SCRAPER_EXIT})" "$LOG_SNIPPET"
+            exit 1
+        fi
+        log "  Retrying in 60s..."
+        sleep 60
     fi
 done
-
-if [ $SCRAPER_EXIT -ne 0 ]; then
-    error "Market scraper failed after $MAX_RETRIES attempts"
-    LOG_SNIPPET=$(tail -20 data/logs/market_$(date +%Y-%m-%d).log 2>/dev/null || echo "No log available")
-    send_failure_alert "Step 2 — market_scraper.py" "Max retries (${MAX_RETRIES}) exhausted" "$LOG_SNIPPET"
-    exit 4
-fi
 
 # Step 3: Export deals
 log ""
