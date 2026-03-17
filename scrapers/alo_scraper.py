@@ -15,6 +15,14 @@ from typing import Optional, List
 import requests
 from bs4 import BeautifulSoup
 
+# Injection hardening (REG-037 / security scan 2026-02-26)
+import sys as _sys, os as _os
+_sys.path.insert(0, _os.path.join(_os.path.dirname(__file__), '..', '..', 'scripts'))
+try:
+    from sanitize_text import sanitize_text
+except ImportError:
+    def sanitize_text(t, **kw): return (t or "").strip()
+
 DB_PATH = "data/market.db"
 
 CITIES = {

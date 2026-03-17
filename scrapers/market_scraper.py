@@ -29,6 +29,14 @@ from typing import Optional, List, Dict, Tuple
 import requests
 from bs4 import BeautifulSoup
 
+# Injection hardening (REG-037 / security scan 2026-02-26)
+import sys as _sys, os as _os
+_sys.path.insert(0, _os.path.join(_os.path.dirname(__file__), '..', '..', 'scripts'))
+try:
+    from sanitize_text import sanitize_text
+except ImportError:
+    def sanitize_text(t, **kw): return (t or "").strip()  # fallback no-op
+
 # Neighborhood extraction (from project root)
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..'))
 try:
