@@ -221,6 +221,14 @@ fi
 # Step 4: Git push
 log ""
 log "Step 4/5: Pushing to GitHub..."
+
+# Verify git is functional first (catches safe.directory / ownership issues)
+if ! git status >/dev/null 2>&1; then
+    error "git status failed — likely ownership/safe.directory issue"
+    send_failure_alert "Step 4 — git status" "git cannot operate on repo (ownership mismatch?)" "$(git status 2>&1 | head -5)"
+    exit 3
+fi
+
 if ! git diff --quiet || ! git diff --cached --quiet; then
     DATE_STR=$(date -u +"%Y-%m-%d")
     git add -A
@@ -237,6 +245,18 @@ if ! git diff --quiet || ! git diff --cached --quiet; then
 else
     log "No changes to commit"
 fi
+
+# Step 4.5: Verify the push actually landed
+log ""
+log "Step 4.5: Verifying git push landed..."
+LAST_COMMIT_DATE=$(git log --format='%cd' --date=format:'%Y-%m-%d' -1 origin/main 2>/dev/null)
+TODAY=$(date -u +"%Y-%m-%d")
+if [ "$LAST_COMMIT_DATE" != "$TODAY" ]; then
+    warning "Latest commit on origin/main is from $LAST_COMMIT_DATE, not today ($TODAY)"
+    send_failure_alert "Step 4.5 — push verification" "Push may not have landed. Latest commit: $LAST_COMMIT_DATE" "Expected today: $TODAY"
+    exit 3
+fi
+success "Push verified — latest commit is from today"
 
 log ""
 log "=========================================="
