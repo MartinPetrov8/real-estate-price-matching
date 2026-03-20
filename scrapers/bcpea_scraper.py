@@ -409,9 +409,23 @@ def run_incremental_scan():
                             data.get('auction_end'), now, now, now
                         ))
     
-    # Mark expired
+    # Mark expired — both by website removal AND by passed auction_end date
     for pid in expired_ids:
         cursor.execute("UPDATE auctions SET is_expired = 1, last_updated_at = ? WHERE id = ?", (now, pid))
+    
+    # Also expire any auctions whose auction_end date has passed
+    date_expired = 0
+    cursor.execute("SELECT id, auction_end FROM auctions WHERE is_expired = 0 AND auction_end IS NOT NULL")
+    for row in cursor.fetchall():
+        try:
+            end_date = datetime.strptime(row[1], '%d.%m.%Y')
+            if end_date < datetime.now():
+                cursor.execute("UPDATE auctions SET is_expired = 1, last_updated_at = ? WHERE id = ?", (now, row[0]))
+                date_expired += 1
+        except (ValueError, TypeError):
+            pass
+    if date_expired:
+        log(f"Expired by date: {date_expired}")
     
     conn.commit()
     

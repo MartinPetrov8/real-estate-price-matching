@@ -40,7 +40,11 @@ def load_deals() -> List[Dict]:
     if not os.path.exists(DEALS_PATH):
         return []
     with open(DEALS_PATH, 'r', encoding='utf-8') as f:
-        return json.load(f)
+        data = json.load(f)
+    # Support both {deals: [...]} and flat array formats
+    if isinstance(data, dict):
+        return data.get('deals', [])
+    return data
 
 def get_verified_subscribers(conn) -> List[Dict]:
     """Get all verified subscribers."""
@@ -75,8 +79,8 @@ def filter_deals_for_subscriber(deals: List[Dict], sub: Dict) -> List[Dict]:
         if sub['cities'] and city not in sub['cities']:
             continue
         
-        # Check discount
-        discount = deal.get('discount_pct', 0)
+        # Check discount (export_deals.py uses 'discount', legacy used 'discount_pct')
+        discount = deal.get('discount') or deal.get('discount_pct') or 0
         if discount < sub['min_discount']:
             continue
         
@@ -89,12 +93,12 @@ def generate_email_html(deals: List[Dict], unsubscribe_url: str) -> str:
     
     deals_html = ""
     for deal in deals:
-        discount = deal.get('discount_pct', 0)
-        price = deal.get('price_eur', 0)
-        market_price = deal.get('market_median_eur', 0)
+        discount = deal.get('discount') or deal.get('discount_pct') or 0
+        price = deal.get('price') or deal.get('price_eur') or 0
+        market_price = deal.get('market_price') or deal.get('market_median_eur') or 0
         city = deal.get('city', 'Неизвестен')
         neighborhood = deal.get('neighborhood', '')
-        size = deal.get('size_sqm', 0)
+        size = deal.get('sqm') or deal.get('size_sqm') or 0
         url = deal.get('url', '#')
         auction_end = deal.get('auction_end', 'Неизвестна')
         
