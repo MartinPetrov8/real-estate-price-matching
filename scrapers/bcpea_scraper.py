@@ -316,6 +316,14 @@ def run_full_scan():
                             (id, url, price_eur, city, neighborhood, address, property_type, size_sqm, rooms, floor,
                              is_partial_ownership, is_expired, auction_end, scraped_at, first_seen_at, last_updated_at)
                             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                            ON CONFLICT(id) DO UPDATE SET
+                                url=excluded.url, price_eur=excluded.price_eur, city=excluded.city,
+                                neighborhood=excluded.neighborhood, address=excluded.address,
+                                property_type=excluded.property_type, size_sqm=excluded.size_sqm,
+                                rooms=excluded.rooms, floor=excluded.floor,
+                                is_partial_ownership=excluded.is_partial_ownership,
+                                is_expired=excluded.is_expired, auction_end=excluded.auction_end,
+                                scraped_at=excluded.scraped_at, last_updated_at=excluded.last_updated_at
                         """, (
                             data['id'], data.get('url'), data.get('price_eur'), data.get('city'),
                             data.get('neighborhood'), data.get('address'), data.get('property_type'), data.get('size_sqm'),
@@ -386,6 +394,14 @@ def run_incremental_scan():
                             (id, url, price_eur, city, neighborhood, address, property_type, size_sqm, rooms, floor,
                              is_partial_ownership, is_expired, auction_end, scraped_at, first_seen_at, last_updated_at)
                             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                            ON CONFLICT(id) DO UPDATE SET
+                                url=excluded.url, price_eur=excluded.price_eur, city=excluded.city,
+                                neighborhood=excluded.neighborhood, address=excluded.address,
+                                property_type=excluded.property_type, size_sqm=excluded.size_sqm,
+                                rooms=excluded.rooms, floor=excluded.floor,
+                                is_partial_ownership=excluded.is_partial_ownership,
+                                is_expired=excluded.is_expired, auction_end=excluded.auction_end,
+                                scraped_at=excluded.scraped_at, last_updated_at=excluded.last_updated_at
                         """, (
                             data['id'], data.get('url'), data.get('price_eur'), data.get('city'),
                             data.get('neighborhood'), data.get('address'), data.get('property_type'), data.get('size_sqm'),
