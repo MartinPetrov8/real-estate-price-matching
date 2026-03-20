@@ -401,6 +401,22 @@ def export_deals():
     
     conn.close()
     
+    # Deduplicate: same address + price + size + type + floor = same property listed twice by court
+    seen = set()
+    unique_deals = []
+    dupes_removed = 0
+    for d in deals:
+        fingerprint = (d.get('address',''), d.get('price',0), d.get('sqm',0), 
+                       d.get('property_type_bg',''), d.get('floor'))
+        if fingerprint in seen:
+            dupes_removed += 1
+            continue
+        seen.add(fingerprint)
+        unique_deals.append(d)
+    if dupes_removed:
+        print(f"Deduplicated: removed {dupes_removed} duplicate cards")
+    deals = unique_deals
+    
     # Sort: apartments with discounts first, then others by price
     deals.sort(key=lambda d: (
         0 if d['discount'] and d['discount'] > 0 else 1,
