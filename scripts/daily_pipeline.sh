@@ -36,6 +36,9 @@ warning() { echo -e "${YELLOW}[$(date +'%H:%M:%S')] ⚠ $1${NC}"; }
 
 cd "$(dirname "$0")/.."
 
+# Ensure git works regardless of which user runs the cron
+git config --global --add safe.directory "$(pwd)" 2>/dev/null || true
+
 MAX_RETRIES=3          # Hard failures (data issues) — give up after 3
 MAX_NET_WAIT=1800      # Network outage tolerance: wait up to 30min for connectivity
 
