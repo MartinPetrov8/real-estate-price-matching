@@ -34,6 +34,28 @@ def run_cmd(cmd, cwd=None, env=None):
             print(f"  {line}")
     return True
 
+def check_deps():
+    """Validate critical Python dependencies before pipeline starts."""
+    missing = []
+    dep_checks = [
+        ("requests", "requests"),
+        ("playwright", "playwright.sync_api"),
+        ("bs4", "bs4"),
+        ("sqlite3", "sqlite3"),
+    ]
+    for name, module in dep_checks:
+        try:
+            __import__(module)
+        except ImportError:
+            missing.append(name)
+    if missing:
+        log(f"❌ DEPENDENCY CHECK FAILED — missing: {', '.join(missing)}")
+        log("   Run: /home/node/.openclaw/workspace/scripts/ensure-tools.sh")
+        log("   Then re-run the pipeline.")
+        sys.exit(2)
+    log("✅ Dependency check passed (requests, playwright, bs4, sqlite3)")
+
+
 def main():
     parser = argparse.ArgumentParser(description='Run the real estate data pipeline')
     parser.add_argument('--no-push', action='store_true', help='Skip git push')
@@ -42,6 +64,9 @@ def main():
     args = parser.parse_args()
     
     os.chdir(os.path.dirname(os.path.abspath(__file__)))
+    
+    # Pre-flight: verify all critical deps are present
+    check_deps()
     
     log("=" * 60)
     log("REAL ESTATE PRICE MATCHING - DAILY PIPELINE")

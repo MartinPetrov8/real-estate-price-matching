@@ -25,8 +25,10 @@ GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 NC='\033[0m'
 
-# Python interpreter — system python3 has all deps (requests, bs4, lxml, certifi)
-# The old competitor-tracker venv is gone; system python works fine.
+# Python interpreter with workspace-local packages (installed by ensure-tools.sh)
+# ensure-tools.sh installs to /home/node/.openclaw/workspace/.local via pip --break-system-packages
+# Set PYTHONPATH so python3 can find them regardless of pip install target
+export PYTHONPATH="/home/node/.openclaw/workspace/.local/lib/python3.11/site-packages:${PYTHONPATH:-}"
 PYTHON="python3"
 
 log() { echo -e "[$(date +'%H:%M:%S')] $1"; }
@@ -114,6 +116,41 @@ log ""
 if ! wait_for_network; then
     send_failure_alert "Pre-flight network check" "DNS resolution failure — network unavailable at startup" "host www.olx.bg: NXDOMAIN / Name resolution failed"
     exit 1
+fi
+
+# Pre-flight: validate critical Python dependencies
+log "Pre-flight: checking Python dependencies..."
+DEP_CHECK_OUTPUT=$($PYTHON -c "
+import sys
+missing = []
+for pkg, mod in [('requests','requests'), ('bs4','bs4'), ('sqlite3','sqlite3'), ('lxml','lxml')]:
+    try:
+        __import__(mod)
+    except ImportError:
+        missing.append(pkg)
+if missing:
+    print('MISSING: ' + ', '.join(missing))
+    sys.exit(2)
+else:
+    print('OK')
+" 2>&1)
+DEP_CHECK_EXIT=$?
+if [ $DEP_CHECK_EXIT -ne 0 ]; then
+    error "Dependency check FAILED: ${DEP_CHECK_OUTPUT}"
+    log "Attempting to auto-restore deps via ensure-tools.sh..."
+    if bash /home/node/.openclaw/workspace/scripts/ensure-tools.sh 2>&1 | tail -5; then
+        log "ensure-tools.sh completed — retrying dep check..."
+        if ! $PYTHON -c "import requests, bs4, lxml" 2>/dev/null; then
+            send_failure_alert "Pre-flight dep check" "Missing: ${DEP_CHECK_OUTPUT}. ensure-tools.sh ran but deps still missing." "Run ensure-tools.sh manually"
+            exit 1
+        fi
+        success "Deps restored OK"
+    else
+        send_failure_alert "Pre-flight dep check" "Missing: ${DEP_CHECK_OUTPUT}. ensure-tools.sh also failed." "Manual intervention needed"
+        exit 1
+    fi
+else
+    success "Dependency check passed (${DEP_CHECK_OUTPUT})"
 fi
 
 # Step 1: Scrape auction data
