@@ -1,5 +1,24 @@
 # Changelog
 
+## 2026-03-26 - Pipeline Resilience + Dependency Fix
+
+### Bug Fixes
+- **ensure-tools.sh pip path hardcoded** (`scripts/ensure-tools.sh`): `pip_install()` was hardcoded to `/home/node/.local/bin/pip` which does not exist in the container. This caused silent failures on every container restart — `bs4`, `lxml`, `requests`, `anthropic` were never actually installed. Fixed to auto-detect the correct pip binary (`pip` → `pip3` → `python3 -m pip`).
+- **PYTHONPATH unbound variable** (`scripts/ensure-tools.sh`): `export PYTHONPATH=...:$PYTHONPATH` crashed with `unbound variable` when PYTHONPATH was not already set. Fixed to `${PYTHONPATH:-}`.
+- **Missing dep: bs4 + lxml** (2026-03-25 outage): Both packages were missing after a container restart. Pipeline pre-flight correctly detected and blocked the run, but ensure-tools.sh auto-restore silently failed due to the above pip path bug. Mar 25 pipeline did not run. Fixed by patching ensure-tools.sh.
+
+### Resilience Improvements
+- **market_scraper.py `fetch_page()` timeout**: Changed from single `timeout=30` to split `timeout=(connect=15, read=45)` tuple. This prevents indefinite hangs when slow sites (imot.bg, OLX on smaller cities like Стара Загора/Русе) accept the TCP connection but delay sending response bytes. Old single timeout only guarded against connection failures, not slow reads. New split timeout gives 45s read window (generous for slow sites) while capping total per-attempt to 60s.
+- **Timeout logging**: Added explicit `requests.exceptions.Timeout` catch with log message showing connect/read values, distinct from generic `RequestException`. Easier to diagnose future network issues.
+- **Backoff on timeout**: Exponential backoff (2^attempt seconds) now applies to timeouts too — gives slow external sites recovery time between retries.
+
+### Root Cause Analysis
+| Date | Issue | Impact | Fix |
+|------|-------|--------|-----|
+| 2026-03-25 | bs4/lxml missing after restart | ❌ Pipeline skipped entirely | ensure-tools.sh pip path fixed |
+| 2026-03-26 | market_scraper hung on Стара Загора | ❌ Pipeline killed, no data update | fetch_page() read timeout added |
+| Both | ensure-tools.sh pip path wrong | Silent dep install failures | Auto-detect pip binary |
+
 ## 2026-03-03 - Neighborhood Accuracy + UI/UX Overhaul
 
 ### Data Pipeline Fixes

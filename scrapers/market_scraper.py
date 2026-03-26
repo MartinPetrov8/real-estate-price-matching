@@ -315,12 +315,26 @@ def create_session() -> requests.Session:
     session.headers.update(headers)
     return session
 
-def fetch_page(session: requests.Session, url: str, encoding: str = 'utf-8', retries: int = 3) -> Optional[str]:
+def fetch_page(session: requests.Session, url: str, encoding: str = 'utf-8', retries: int = 3,
+               connect_timeout: int = 15, read_timeout: int = 45) -> Optional[str]:
+    """
+    Fetch a page with per-attempt connect+read timeouts and exponential backoff.
+    
+    connect_timeout: seconds to wait for TCP handshake (default 15s)
+    read_timeout: seconds to wait for response bytes (default 45s) — generous for slow sites
+    Total max per attempt: 60s. With 3 retries + backoff: max ~3.5 min per URL.
+    
+    Resilience notes (2026-03-26):
+    - Use (connect, read) tuple instead of single timeout to prevent indefinite hangs
+      on slow sites like imot.bg/OLX Стара Загора during off-peak hours
+    - Exponential backoff (2^attempt) gives slow sites time to recover between retries
+    - Caller gets None on failure; city is skipped, checkpoint records error but continues
+    """
     for attempt in range(retries):
         if SHUTDOWN_REQUESTED:
             return None
         try:
-            resp = session.get(url, timeout=30)
+            resp = session.get(url, timeout=(connect_timeout, read_timeout))
             resp.raise_for_status()
             if encoding == 'windows-1251':
                 resp.encoding = 'windows-1251'
@@ -330,6 +344,9 @@ def fetch_page(session: requests.Session, url: str, encoding: str = 'utf-8', ret
                 logging.debug(f"404: {url[:60]}...")
                 return None
             logging.warning(f"HTTP {e.response.status_code} for {url[:60]}, retry {attempt+1}/{retries}")
+            time.sleep(2 ** attempt)
+        except requests.exceptions.Timeout:
+            logging.warning(f"Timeout (connect={connect_timeout}s, read={read_timeout}s) for {url[:60]}, retry {attempt+1}/{retries}")
             time.sleep(2 ** attempt)
         except requests.exceptions.RequestException as e:
             logging.warning(f"Request error: {e}, retry {attempt+1}/{retries}")
