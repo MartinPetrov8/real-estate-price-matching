@@ -271,7 +271,10 @@ if ! git diff --quiet || ! git diff --cached --quiet; then
     git add -A
     git commit -m "data: Daily pipeline run $DATE_STR" --allow-empty || true
     
-    if git push origin main; then
+    PUSH_TOKEN="${GITHUB_BACKUP_TOKEN:-${GITHUB_TOKEN:-}}"
+    PUSH_URL="https://github.com/MartinPetrov8/real-estate-price-matching.git"
+    [ -n "$PUSH_TOKEN" ] && PUSH_URL="https://${PUSH_TOKEN}@github.com/MartinPetrov8/real-estate-price-matching.git"
+    if git push "$PUSH_URL" main; then
         success "Pushed to GitHub"
     else
         EXIT_CODE=$?
