@@ -20,6 +20,21 @@
 
 set -uo pipefail
 
+# ── Load GitHub credentials from git-credentials ──────────────────────────────
+# In cron (isolated sessions), credential-cache is unavailable. credential-store
+# reads from ~/.git-credentials which contains working classic PATs.
+# Priority: GITHUB_TOKEN > GITHUB_BACKUP_TOKEN > first ghp_ PAT in store
+export GITHUB_TOKEN="${GITHUB_TOKEN:-}"
+export GITHUB_BACKUP_TOKEN="${GITHUB_BACKUP_TOKEN:-}"
+if [ -z "$GITHUB_TOKEN" ] && [ -z "$GITHUB_BACKUP_TOKEN" ] && [ -f "$HOME/.git-credentials" ]; then
+    # Extract first classic ghp_ PAT from git-credentials
+    GHP_PAT=$(grep 'ghp_' "$HOME/.git-credentials" | head -1 | sed 's|.*://[^:]*:||' | sed 's|@github.com||')
+    if [ -n "$GHP_PAT" ]; then
+        export GITHUB_TOKEN="$GHP_PAT"
+        log "Loaded GitHub credentials from git-credentials"
+    fi
+fi
+
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
@@ -271,9 +286,16 @@ if ! git diff --quiet || ! git diff --cached --quiet; then
     git add -A
     git commit -m "data: Daily pipeline run $DATE_STR" --allow-empty || true
     
-    PUSH_TOKEN="${GITHUB_BACKUP_TOKEN:-${GITHUB_TOKEN:-}}"
+    # Prefer GITHUB_TOKEN (classic PAT from git-credentials), fallback to GITHUB_BACKUP_TOKEN (fine-grained PAT)
+    PUSH_TOKEN="${GITHUB_TOKEN:-${GITHUB_BACKUP_TOKEN:-}}"
+    # Also ensure credential helper can find ghp_ classic PAT from git-credentials
+    git config --global credential.helper "store --file /home/node/.git-credentials"
     PUSH_URL="https://github.com/MartinPetrov8/real-estate-price-matching.git"
-    [ -n "$PUSH_TOKEN" ] && PUSH_URL="https://${PUSH_TOKEN}@github.com/MartinPetrov8/real-estate-price-matching.git"
+    if [ -n "$PUSH_TOKEN" ]; then
+        PUSH_URL="https://${PUSH_TOKEN}@github.com/MartinPetrov8/real-estate-price-matching.git"
+    else
+        PUSH_URL="https://github.com/MartinPetrov8/real-estate-price-matching.git"
+    fi
     if git push "$PUSH_URL" main; then
         success "Pushed to GitHub"
     else
