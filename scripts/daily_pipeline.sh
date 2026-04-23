@@ -153,7 +153,7 @@ DEP_CHECK_EXIT=$?
 if [ $DEP_CHECK_EXIT -ne 0 ]; then
     error "Dependency check FAILED: ${DEP_CHECK_OUTPUT}"
     log "Attempting to auto-restore deps via ensure-tools.sh..."
-    if bash /home/node/.openclaw/workspace/scripts/ensure-tools.sh 2>&1 | tail -5; then
+    if bash /Users/martin/.openclaw/workspace/scripts/ensure-tools.sh 2>&1 | tail -5; then
         log "ensure-tools.sh completed — retrying dep check..."
         if ! $PYTHON -c "import requests, bs4, lxml" 2>/dev/null; then
             send_failure_alert "Pre-flight dep check" "Missing: ${DEP_CHECK_OUTPUT}. ensure-tools.sh ran but deps still missing." "Run ensure-tools.sh manually"
