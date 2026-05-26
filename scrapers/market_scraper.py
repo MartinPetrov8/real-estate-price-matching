@@ -57,6 +57,9 @@ LOG_DIR = "data/logs"
 CHECKPOINT_DIR = "data"
 DATA_RETENTION_DAYS = 7
 MIN_LISTINGS_PER_SOURCE = 5
+FAST_CONNECT_TIMEOUT = 8
+FAST_READ_TIMEOUT = 20
+FAST_RETRIES = 1
 
 # Graceful shutdown
 SHUTDOWN_REQUESTED = False
@@ -360,7 +363,8 @@ def fetch_page(session: requests.Session, url: str, encoding: str = 'utf-8', ret
 # ============================================================================
 
 def scrape_imot_index(session: requests.Session, url: str) -> List[str]:
-    html = fetch_page(session, url, encoding='windows-1251')
+    html = fetch_page(session, url, encoding='windows-1251', retries=FAST_RETRIES,
+                      connect_timeout=FAST_CONNECT_TIMEOUT, read_timeout=FAST_READ_TIMEOUT)
     if not html:
         return []
 
@@ -380,7 +384,8 @@ def scrape_imot_index(session: requests.Session, url: str) -> List[str]:
     return links[:30]
 
 def parse_imot_listing(session: requests.Session, url: str, city: str) -> Optional[Listing]:
-    html = fetch_page(session, url, encoding='windows-1251')
+    html = fetch_page(session, url, encoding='windows-1251', retries=FAST_RETRIES,
+                      connect_timeout=FAST_CONNECT_TIMEOUT, read_timeout=FAST_READ_TIMEOUT)
     if not html:
         return None
 
@@ -481,7 +486,8 @@ def get_olx_districts(session: requests.Session, city_url: str) -> Dict[str, str
     Discover OLX district filter IDs from a city listing page.
     Returns {district_id: district_name} dict.
     """
-    html = fetch_page(session, city_url)
+    html = fetch_page(session, city_url, retries=FAST_RETRIES,
+                      connect_timeout=FAST_CONNECT_TIMEOUT, read_timeout=FAST_READ_TIMEOUT)
     if not html:
         return {}
     soup = BeautifulSoup(html, 'html.parser')
@@ -514,7 +520,8 @@ def scrape_olx_district(session: requests.Session, city_url: str, city: str,
         if page > 1:
             page_url += f"&page={page}"
 
-        html = fetch_page(session, page_url)
+        html = fetch_page(session, page_url, retries=FAST_RETRIES,
+                          connect_timeout=FAST_CONNECT_TIMEOUT, read_timeout=FAST_READ_TIMEOUT)
         if not html:
             break
 
@@ -563,7 +570,8 @@ def scrape_olx_search(session: requests.Session, city: str,
         if SHUTDOWN_REQUESTED:
             break
         page_url = base_url if page_num == 1 else f"{base_url}?page={page_num}"
-        html = fetch_page(session, page_url)
+        html = fetch_page(session, page_url, retries=FAST_RETRIES,
+                          connect_timeout=FAST_CONNECT_TIMEOUT, read_timeout=FAST_READ_TIMEOUT)
         if not html:
             break
 
@@ -654,7 +662,8 @@ def _scrape_olx_city_fallback(session: requests.Session, url: str, city: str) ->
         if SHUTDOWN_REQUESTED:
             return listings, False, "Interrupted by shutdown signal"
         page_url = url if page == 1 else f"{url}?page={page}"
-        html = fetch_page(session, page_url)
+        html = fetch_page(session, page_url, retries=FAST_RETRIES,
+                          connect_timeout=FAST_CONNECT_TIMEOUT, read_timeout=FAST_READ_TIMEOUT)
         if not html:
             if page == 1:
                 return [], False, "Failed to fetch page 1"

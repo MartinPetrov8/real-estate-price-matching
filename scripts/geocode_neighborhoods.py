@@ -14,6 +14,7 @@ Strategy:
 Usage:
   python3 scripts/geocode_neighborhoods.py          # Process all NULL neighborhoods
   python3 scripts/geocode_neighborhoods.py --dry-run  # Show what would be done
+  python3 scripts/geocode_neighborhoods.py --network-limit 15  # Daily-safe cap for Nominatim calls
 """
 
 import argparse
@@ -122,6 +123,7 @@ def main():
     parser = argparse.ArgumentParser(description='Geocode neighborhoods for КЧСИ auctions')
     parser.add_argument('--dry-run', action='store_true', help='Show what would be done, no DB writes')
     parser.add_argument('--limit', type=int, default=0, help='Max records to process (0 = all)')
+    parser.add_argument('--network-limit', type=int, default=0, help='Max Nominatim requests this run (0 = unlimited)')
     parser.add_argument('--city', type=str, default='', help='Only process specific city')
     args = parser.parse_args()
 
@@ -149,8 +151,9 @@ def main():
         print("DRY RUN — no writes")
     print()
 
-    stats = {'text_match': 0, 'photon_match': 0, 'no_match': 0, 'no_address': 0}
+    stats = {'text_match': 0, 'photon_match': 0, 'no_match': 0, 'no_address': 0, 'network_skipped': 0}
     updated = 0
+    network_attempts = 0
 
     for i, (auction_id, address, city, prop_type) in enumerate(rows):
         if not address or len(address) < 4:
@@ -167,12 +170,19 @@ def main():
             stats['text_match'] += 1
         else:
             # Step 2: Nominatim geocoding
-            neighborhood = nominatim_geocode(address, city)
-            if neighborhood:
-                method = 'nominatim'
-                stats['photon_match'] += 1
+            if args.network_limit and network_attempts >= args.network_limit:
+                stats['network_skipped'] += 1
             else:
-                stats['no_match'] += 1
+                network_attempts += 1
+                neighborhood = nominatim_geocode(address, city)
+                if neighborhood:
+                    method = 'nominatim'
+                    stats['photon_match'] += 1
+                else:
+                    stats['no_match'] += 1
+
+                # Rate limit every Nominatim request, not only successful matches.
+                time.sleep(REQUEST_DELAY)
 
         # Progress output
         if (i + 1) % 20 == 0 or neighborhood:
@@ -199,6 +209,8 @@ def main():
     print(f"  Total processed: {total}")
     print(f"  Text match:      {stats['text_match']}")
     print(f"  Nominatim match: {stats['photon_match']}")
+    print(f"  Nominatim calls: {network_attempts}")
+    print(f"  Network skipped: {stats['network_skipped']}")
     print(f"  No match:        {stats['no_match']}")
     print(f"  No address:      {stats['no_address']}")
     if not args.dry_run:

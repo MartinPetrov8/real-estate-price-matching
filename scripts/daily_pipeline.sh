@@ -43,8 +43,8 @@ NC='\033[0m'
 # Python interpreter with workspace-local packages (installed by ensure-tools.sh)
 # ensure-tools.sh installs to /home/node/.openclaw/workspace/.local via pip --break-system-packages
 # Set PYTHONPATH so python3 can find them regardless of pip install target
-export PYTHONPATH="/home/node/.openclaw/workspace/.local/lib/python3.11/site-packages:${PYTHONPATH:-}"
-PYTHON="python3"
+export PYTHONPATH="/Users/martin/.openclaw/workspace/.local/lib/python3.11/site-packages:${PYTHONPATH:-}"
+PYTHON="/opt/homebrew/bin/python3"
 
 log() { echo -e "[$(date +'%H:%M:%S')] $1"; }
 error() { echo -e "${RED}[$(date +'%H:%M:%S')] ERROR: $1${NC}" >&2; }
@@ -203,7 +203,7 @@ fi
 # Step 1.5: Geocode neighborhoods for new auctions (best-effort, non-blocking)
 log ""
 log "Step 1.5/5: Geocoding new auction neighborhoods..."
-if $PYTHON scripts/geocode_neighborhoods.py 2>&1 | tail -10; then
+if $PYTHON scripts/geocode_neighborhoods.py --network-limit 15 2>&1 | tail -10; then
     success "Geocoding complete"
 else
     warning "Geocoding failed (non-critical, continuing)"
@@ -289,7 +289,7 @@ if ! git diff --quiet || ! git diff --cached --quiet; then
     # Prefer GITHUB_TOKEN (classic PAT from git-credentials), fallback to GITHUB_BACKUP_TOKEN (fine-grained PAT)
     PUSH_TOKEN="${GITHUB_TOKEN:-${GITHUB_BACKUP_TOKEN:-}}"
     # Also ensure credential helper can find ghp_ classic PAT from git-credentials
-    git config --global credential.helper "store --file /home/node/.git-credentials"
+    git config --global credential.helper "store --file $HOME/.git-credentials"
     PUSH_URL="https://github.com/MartinPetrov8/real-estate-price-matching.git"
     if [ -n "$PUSH_TOKEN" ]; then
         PUSH_URL="https://${PUSH_TOKEN}@github.com/MartinPetrov8/real-estate-price-matching.git"
