@@ -20,21 +20,6 @@
 
 set -uo pipefail
 
-# ── Load GitHub credentials from git-credentials ──────────────────────────────
-# In cron (isolated sessions), credential-cache is unavailable. credential-store
-# reads from ~/.git-credentials which contains working classic PATs.
-# Priority: GITHUB_TOKEN > GITHUB_BACKUP_TOKEN > first ghp_ PAT in store
-export GITHUB_TOKEN="${GITHUB_TOKEN:-}"
-export GITHUB_BACKUP_TOKEN="${GITHUB_BACKUP_TOKEN:-}"
-if [ -z "$GITHUB_TOKEN" ] && [ -z "$GITHUB_BACKUP_TOKEN" ] && [ -f "$HOME/.git-credentials" ]; then
-    # Extract first classic ghp_ PAT from git-credentials
-    GHP_PAT=$(grep 'ghp_' "$HOME/.git-credentials" | head -1 | sed 's|.*://[^:]*:||' | sed 's|@github.com||')
-    if [ -n "$GHP_PAT" ]; then
-        export GITHUB_TOKEN="$GHP_PAT"
-        log "Loaded GitHub credentials from git-credentials"
-    fi
-fi
-
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
@@ -50,6 +35,25 @@ log() { echo -e "[$(date +'%H:%M:%S')] $1"; }
 error() { echo -e "${RED}[$(date +'%H:%M:%S')] ERROR: $1${NC}" >&2; }
 success() { echo -e "${GREEN}[$(date +'%H:%M:%S')] ✓ $1${NC}"; }
 warning() { echo -e "${YELLOW}[$(date +'%H:%M:%S')] ⚠ $1${NC}"; }
+
+# ── Load GitHub credentials ───────────────────────────────────────────────────
+# Cron sessions do not inherit the interactive shell. Prefer ~/.openclaw/.env,
+# then fall back to credential-store. Never embed tokens in git remote URLs.
+if [ -f "/Users/martin/.openclaw/.env" ]; then
+    set -a
+    # shellcheck disable=SC1091
+    . "/Users/martin/.openclaw/.env"
+    set +a
+fi
+export GITHUB_TOKEN="${GITHUB_TOKEN:-}"
+export GITHUB_BACKUP_TOKEN="${GITHUB_BACKUP_TOKEN:-}"
+if [ -z "$GITHUB_TOKEN" ] && [ -z "$GITHUB_BACKUP_TOKEN" ] && [ -f "$HOME/.git-credentials" ]; then
+    GHP_PAT=$(grep 'ghp_' "$HOME/.git-credentials" | head -1 | sed 's|.*://[^:]*:||' | sed 's|@github.com||')
+    if [ -n "$GHP_PAT" ]; then
+        export GITHUB_TOKEN="$GHP_PAT"
+        log "Loaded GitHub credentials from git-credentials"
+    fi
+fi
 
 cd "$(dirname "$0")/.."
 
@@ -286,23 +290,32 @@ if ! git diff --quiet || ! git diff --cached --quiet; then
     git add -A
     git commit -m "data: Daily pipeline run $DATE_STR" --allow-empty || true
     
-    # Prefer GITHUB_TOKEN (classic PAT from git-credentials), fallback to GITHUB_BACKUP_TOKEN (fine-grained PAT)
-    PUSH_TOKEN="${GITHUB_TOKEN:-${GITHUB_BACKUP_TOKEN:-}}"
-    # Also ensure credential helper can find ghp_ classic PAT from git-credentials
-    git config --global credential.helper "store --file $HOME/.git-credentials"
-    PUSH_URL="https://github.com/MartinPetrov8/real-estate-price-matching.git"
-    if [ -n "$PUSH_TOKEN" ]; then
-        PUSH_URL="https://${PUSH_TOKEN}@github.com/MartinPetrov8/real-estate-price-matching.git"
-    else
-        PUSH_URL="https://github.com/MartinPetrov8/real-estate-price-matching.git"
-    fi
-    if git push "$PUSH_URL" main; then
+    # First try normal git push without putting tokens in the process list.
+    ASKPASS_SCRIPT=$(mktemp /tmp/kchsi-git-askpass.XXXXXX)
+    cat > "$ASKPASS_SCRIPT" <<'EOF'
+#!/bin/sh
+case "$1" in
+  *Username*) printf '%s\n' 'x-access-token' ;;
+  *Password*) printf '%s\n' "${GITHUB_TOKEN:-${GITHUB_BACKUP_TOKEN:-}}" ;;
+  *) printf '\n' ;;
+esac
+EOF
+    chmod 700 "$ASKPASS_SCRIPT"
+    if GIT_ASKPASS="$ASKPASS_SCRIPT" GIT_TERMINAL_PROMPT=0 git -c credential.helper= push origin main; then
+        rm -f "$ASKPASS_SCRIPT"
         success "Pushed to GitHub"
     else
         EXIT_CODE=$?
-        warning "Git push failed with exit code $EXIT_CODE"
-        send_failure_alert "Step 4 — git push" "Push to GitHub failed (exit ${EXIT_CODE})" "Check git credentials / network"
-        exit 3
+        rm -f "$ASKPASS_SCRIPT"
+        warning "Git push failed with exit code $EXIT_CODE; trying GitHub API fallback"
+        if "$PYTHON" scripts/github_api_push.py "data: Daily pipeline run $DATE_STR"; then
+            git fetch origin main --quiet
+            git reset --hard origin/main
+            success "Pushed to GitHub via API fallback"
+        else
+            send_failure_alert "Step 4 — git push" "Push to GitHub failed (git exit ${EXIT_CODE}; API fallback failed)" "Check GitHub credentials / network"
+            exit 3
+        fi
     fi
 else
     log "No changes to commit"
