@@ -22,12 +22,18 @@ import sqlite3
 import sys
 import time
 import random
+import atexit
 from datetime import datetime, timedelta
 from dataclasses import dataclass
 from typing import Optional, List, Dict, Tuple
 
 import requests
 from bs4 import BeautifulSoup
+try:
+    from playwright.sync_api import sync_playwright, TimeoutError as PlaywrightTimeoutError
+except ImportError:
+    sync_playwright = None
+    PlaywrightTimeoutError = Exception
 
 # Injection hardening (REG-037 / security scan 2026-02-26)
 import sys as _sys, os as _os
@@ -60,6 +66,7 @@ MIN_LISTINGS_PER_SOURCE = 5
 FAST_CONNECT_TIMEOUT = 8
 FAST_READ_TIMEOUT = 20
 FAST_RETRIES = 1
+OLX_BROWSER_MAX_PAGES = 3
 
 # Graceful shutdown
 SHUTDOWN_REQUESTED = False
@@ -481,6 +488,169 @@ def scrape_imot_city(session: requests.Session, url: str, city: str) -> Tuple[Li
 # OLX.BG SCRAPER
 # ============================================================================
 
+_OLX_PLAYWRIGHT = None
+_OLX_BROWSER = None
+_OLX_CONTEXT = None
+_OLX_PAGE = None
+
+
+def close_olx_browser():
+    global _OLX_PLAYWRIGHT, _OLX_BROWSER, _OLX_CONTEXT, _OLX_PAGE
+    for obj in (_OLX_PAGE, _OLX_CONTEXT, _OLX_BROWSER):
+        if obj:
+            try:
+                obj.close()
+            except Exception:
+                pass
+    if _OLX_PLAYWRIGHT:
+        try:
+            _OLX_PLAYWRIGHT.stop()
+        except Exception:
+            pass
+    _OLX_PLAYWRIGHT = None
+    _OLX_BROWSER = None
+    _OLX_CONTEXT = None
+    _OLX_PAGE = None
+
+
+atexit.register(close_olx_browser)
+
+
+def get_olx_page():
+    global _OLX_PLAYWRIGHT, _OLX_BROWSER, _OLX_CONTEXT, _OLX_PAGE
+    if sync_playwright is None:
+        raise RuntimeError("Playwright is not installed")
+    if _OLX_PAGE:
+        return _OLX_PAGE
+
+    _OLX_PLAYWRIGHT = sync_playwright().start()
+    _OLX_BROWSER = _OLX_PLAYWRIGHT.chromium.launch(
+        headless=True,
+        args=['--disable-blink-features=AutomationControlled', '--no-sandbox', '--disable-dev-shm-usage'],
+    )
+    _OLX_CONTEXT = _OLX_BROWSER.new_context(
+        viewport={'width': random.choice([1366, 1440, 1920]), 'height': random.choice([768, 900, 1080])},
+        user_agent=random.choice(USER_AGENTS),
+        locale='bg-BG',
+        timezone_id='Europe/Sofia',
+    )
+    _OLX_CONTEXT.add_init_script("""
+Object.defineProperty(navigator, 'webdriver', { get: () => undefined });
+window.chrome = { runtime: {}, loadTimes: function(){}, csi: function(){} };
+Object.defineProperty(navigator, 'plugins', { get: () => [1,2,3,4,5] });
+Object.defineProperty(navigator, 'languages', { get: () => ['bg-BG','bg','en-US','en'] });
+""")
+    _OLX_PAGE = _OLX_CONTEXT.new_page()
+    return _OLX_PAGE
+
+
+def olx_delay(mean: float = 2.0, std: float = 0.7):
+    time.sleep(max(random.gauss(mean, std), 0.6))
+
+
+def parse_olx_card_text(text: str, city: str) -> Optional[Listing]:
+    eur_match = re.search(r'(\d[\d\s\xa0]*)\s*€', text)
+    if not eur_match:
+        return None
+    size_match = re.search(r'(\d+)\s*кв\.?м', text)
+    if not size_match:
+        return None
+    try:
+        price_eur = float(eur_match.group(1).replace(' ', '').replace('\xa0', ''))
+        size_sqm = float(size_match.group(1))
+    except ValueError:
+        return None
+
+    if not (10000 <= price_eur <= 2000000) or not (15 <= size_sqm <= 500):
+        return None
+
+    neighborhood = None
+    loc_match = re.search(r'гр\.\s*\S+,\s*([^-]+?)\s*-', text)
+    if loc_match:
+        raw_neighborhood = sanitize_text(loc_match.group(1).strip(), max_len=80)
+        neighborhood = normalize_neighborhood(raw_neighborhood) or raw_neighborhood.lower().strip()
+
+    rooms = None
+    rooms_match = re.search(r'(\d)-?стаен|(\d)-?стаи|Едностаен|Двустаен|Тристаен|Четиристаен|Многостаен', text, re.I)
+    if rooms_match:
+        if rooms_match.group(1):
+            rooms = int(rooms_match.group(1))
+        elif rooms_match.group(2):
+            rooms = int(rooms_match.group(2))
+        elif re.search(r'Едностаен', text, re.I):
+            rooms = 1
+        elif re.search(r'Двустаен', text, re.I):
+            rooms = 2
+        elif re.search(r'Тристаен', text, re.I):
+            rooms = 3
+        elif re.search(r'Четиристаен', text, re.I):
+            rooms = 4
+        elif re.search(r'Многостаен', text, re.I):
+            rooms = 5
+
+    return Listing(
+        city=city, neighborhood=neighborhood, size_sqm=size_sqm,
+        price_eur=round(price_eur, 2), price_per_sqm=round(price_eur / size_sqm, 2),
+        rooms=rooms, source='olx.bg', scraped_at=datetime.utcnow().isoformat()
+    )
+
+
+def scrape_olx_browser(url: str, city: str) -> Tuple[List[Listing], bool, str]:
+    """Browser-backed OLX fallback for request-level 403/CAPTCHA blocks."""
+    try:
+        page = get_olx_page()
+    except Exception as e:
+        return [], False, f"Playwright unavailable: {e}"
+
+    listings: List[Listing] = []
+    seen = set()
+    for page_num in range(1, OLX_BROWSER_MAX_PAGES + 1):
+        if SHUTDOWN_REQUESTED:
+            return listings, False, "Interrupted by shutdown signal"
+        page_url = url if page_num == 1 else f"{url}?page={page_num}"
+        try:
+            page.goto(page_url, wait_until='domcontentloaded', timeout=60000)
+            try:
+                page.wait_for_selector('[data-cy="l-card"], article', timeout=20000)
+            except PlaywrightTimeoutError:
+                logging.warning(f"  OLX browser found no listing cards for {city} page {page_num}")
+                if page_num == 1:
+                    return listings, False, "Browser found no listing cards"
+                break
+
+            cards = page.query_selector_all('[data-cy="l-card"], article')
+            logging.info(f"  OLX browser {city} page {page_num}: {len(cards)} cards")
+            if not cards:
+                break
+
+            before = len(listings)
+            for card in cards[:80]:
+                try:
+                    listing = parse_olx_card_text(card.inner_text(), city)
+                except Exception:
+                    continue
+                if not listing:
+                    continue
+                dedupe_key = (listing.city, listing.neighborhood, listing.size_sqm, listing.price_eur)
+                if dedupe_key in seen:
+                    continue
+                seen.add(dedupe_key)
+                listings.append(listing)
+
+            if len(listings) == before:
+                logging.info(f"  OLX browser {city} page {page_num}: no new parseable listings")
+                break
+            olx_delay()
+        except Exception as e:
+            logging.warning(f"  OLX browser failed for {city} page {page_num}: {e}")
+            if page_num == 1:
+                return listings, False, f"Browser failed: {e}"
+            break
+
+    if len(listings) < MIN_LISTINGS_PER_SOURCE:
+        return listings, False, f"Too few browser listings: {len(listings)}"
+    return listings, True, ""
+
 def get_olx_districts(session: requests.Session, city_url: str) -> Dict[str, str]:
     """
     Discover OLX district filter IDs from a city listing page.
@@ -621,8 +791,8 @@ def scrape_olx(session: requests.Session, url: str, city: str) -> Tuple[List[Lis
     # Step 1: discover districts
     districts = get_olx_districts(session, url)
     if not districts:
-        logging.warning(f"  OLX district discovery failed for {city}, falling back to city-level")
-        return _scrape_olx_city_fallback(session, url, city)
+        logging.warning(f"  OLX district discovery failed for {city}, falling back to browser")
+        return scrape_olx_browser(url, city)
 
     logging.info(f"  OLX: {len(districts)} districts found for {city}")
     all_listings = []
@@ -650,6 +820,10 @@ def scrape_olx(session: requests.Session, url: str, city: str) -> Tuple[List[Lis
             logging.info(f"  OLX search supplement '{hood_label}': {len(search_listings)} listings")
 
     if len(all_listings) < MIN_LISTINGS_PER_SOURCE:
+        logging.warning(f"  OLX district scrape returned {len(all_listings)} listings for {city}, falling back to browser")
+        browser_listings, browser_success, browser_error = scrape_olx_browser(url, city)
+        if browser_success or len(browser_listings) > len(all_listings):
+            return browser_listings, browser_success, browser_error
         return all_listings, False, f"Too few listings after district scrape: {len(all_listings)}"
 
     return all_listings, True, ""
